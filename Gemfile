@@ -17,7 +17,7 @@ gem "stimulus-rails"
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "cssbundling-rails"
 # Use HAML for views [https://github.com/haml/haml-rails]
-gem "haml-rails", "~> 2.1"
+gem "haml-rails", "~> 3.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
