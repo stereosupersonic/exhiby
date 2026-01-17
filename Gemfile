@@ -71,6 +71,8 @@ group :development, :test do
   gem "rubocop-capybara", "~> 2.22"
 
   gem "simplecov", "~> 0.22.0"
+  gem "annotaterb", "~> 4.20"
+  gem "pry-nav", "~> 1.0"
 end
 
 group :test do
@@ -88,5 +90,3 @@ group :development do
   # Convert ERB templates to HAML [https://github.com/haml/html2haml]
   gem "html2haml", require: false
 end
-
-gem "annotaterb", "~> 4.20"
