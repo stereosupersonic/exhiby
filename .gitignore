@@ -4,6 +4,12 @@
 # belong in git's global ignore instead:
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
+# OS files
+.DS_Store
+
+# Claude Code
+/.claude/
+
 # Ignore bundler config.
 /.bundle
 
