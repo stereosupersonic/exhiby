@@ -1,0 +1,21 @@
+.container.py-5
+  .row.justify-content-center
+    .col-md-6.col-lg-4
+      .card.shadow
+        .card-body.p-4
+          %h1.card-title.text-center.mb-4 Sign In
+
+          = form_with url: session_path, data: { testid: "login-form" } do |form|
+            .mb-3
+              = form.label :email_address, "Email address", class: "form-label"
+              = form.email_field :email_address, class: "form-control", required: true, autofocus: true, autocomplete: "email", data: { testid: "email-input" }
+
+            .mb-3
+              = form.label :password, "Password", class: "form-label"
+              = form.password_field :password, class: "form-control", required: true, autocomplete: "current-password", data: { testid: "password-input" }
+
+            .d-grid.gap-2.mb-3
+              = form.submit "Sign In", class: "btn btn-primary", data: { testid: "submit-button" }
+
+            .text-center
+              = link_to "Forgot your password?", new_password_path, class: "text-decoration-none"

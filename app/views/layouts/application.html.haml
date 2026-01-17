@@ -1,0 +1,27 @@
+!!!
+%html{ lang: "en" }
+  %head
+    %meta{ charset: "utf-8" }
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
+    %title Exhiby
+    %meta{ name: "turbo-refresh-method", content: "morph" }
+    %meta{ name: "turbo-refresh-scroll", content: "preserve" }
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag "application", data_turbo_track: "reload"
+    = javascript_importmap_tags
+
+  %body
+    - if flash[:notice]
+      .container.mt-3
+        .alert.alert-success.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-notice" } }
+          = flash[:notice]
+          %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, aria: { label: "Close" } }
+
+    - if flash[:alert]
+      .container.mt-3
+        .alert.alert-danger.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-alert" } }
+          = flash[:alert]
+          %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, aria: { label: "Close" } }
+
+    = yield

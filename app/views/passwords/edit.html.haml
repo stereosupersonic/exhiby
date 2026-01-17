@@ -1,0 +1,21 @@
+.container.py-5
+  .row.justify-content-center
+    .col-md-6.col-lg-4
+      .card.shadow
+        .card-body.p-4
+          %h1.card-title.text-center.mb-4 Set New Password
+
+          = form_with url: password_path(params[:token]), method: :patch, data: { testid: "new-password-form" } do |form|
+            .mb-3
+              = form.label :password, "New Password", class: "form-label"
+              = form.password_field :password, class: "form-control", required: true, autofocus: true, autocomplete: "new-password", data: { testid: "password-input" }
+
+            .mb-3
+              = form.label :password_confirmation, "Confirm New Password", class: "form-label"
+              = form.password_field :password_confirmation, class: "form-control", required: true, autocomplete: "new-password", data: { testid: "password-confirmation-input" }
+
+            .d-grid.gap-2.mb-3
+              = form.submit "Update Password", class: "btn btn-primary", data: { testid: "submit-button" }
+
+            .text-center
+              = link_to "Back to Sign In", new_session_path, class: "text-decoration-none"
