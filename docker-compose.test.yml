@@ -2,21 +2,25 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.test
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/exhiby_test
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
       RAILS_ENV: test
+      CI: true
+      RAILS_LOG_TO_STDOUT: true
+    # Chrome/Cuprite configuration
+      CHROME_URL: http://chrome:3333
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY:-}
-    volumes:
-      - .:/rails:cached
-      - bundle_cache:/usr/local/bundle
-      - node_modules_cache:/rails/node_modules
 
-  db:
-    image: postgres:16-alpine
+  postgres:
+    image: postgres:18-alpine
+    volumes:
+      - postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -26,9 +30,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    tmpfs:
-      - /var/lib/postgresql/data
+
+  chrome:
+    image: browserless/chrome:1.31-chrome-stable
+    ports:
+      - 3333:3333
+    # Mount application source code to support file uploading
+    # (otherwise Chrome won't be able to find files).
+    # NOTE: Make sure you use absolute paths in `#attach_file`.
+    volumes:
+      - .:/app:cached # change it for your rails' container directory
+    environment:
+      # By default, it uses 3000, which is typically used by Rails.
+      PORT: 3333
+      # Set connection timeout to avoid timeout exception during debugging
+      # https://docs.browserless.io/docs/docker.html#connection-timeout
+      CONNECTION_TIMEOUT: 600000
 
 volumes:
-  bundle_cache:
-  node_modules_cache:
+  postgres:

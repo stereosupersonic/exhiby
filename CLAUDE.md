@@ -84,7 +84,6 @@ app/
 - Use Bootstrap 5 components and utilities
 - Keep views simple - extract complex logic to presenters
 - Use `data-testid` attributes for test selectors
-
 ### Services
 
 Place in `app/services/` with verb + noun naming:
@@ -248,3 +247,7 @@ bin/rails db:seed          # Seed database
 bin/rails routes           # List all routes
 bin/rails c                # Rails console
 ```
+
+### don't do this
+
+* api (json) endpoints
