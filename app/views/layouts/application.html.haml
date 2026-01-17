@@ -1,0 +1,21 @@
+!!! 5
+%html{ lang: "de" }
+  %head
+    %meta{ charset: "utf-8" }
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
+    %title OnlineMuseum Wartenberg
+    %meta{ name: "description", content: "OnlineMuseum Wartenberg - ein Ort für Kunst und Kulturgeschichte" }
+    %meta{ name: "turbo-cache-control", content: "no-cache" }
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_importmap_tags
+  %body.d-flex.flex-column.min-vh-100
+    %main.flex-grow-1
+      = yield
+
+    %footer.site-footer
+      .container
+        .footer-content
+          = link_to "Impressum", impressum_path, class: "footer-link"
+          = link_to "Datenschutzerklärung", datenschutzerklaerung_path, class: "footer-link"

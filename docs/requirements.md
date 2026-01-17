@@ -69,6 +69,9 @@ https://fulghum.io/self-hosting via AI
 * Assests where ? (Server, S3, Cloundinary or https://www.hetzner.com/de/cloud/)
 * Hosting (netcup or https://www.hetzner.com/de/cloud/ )
 * Staging System for testing?
+* multi language (english)
+
+
 
 ############################################################################
 

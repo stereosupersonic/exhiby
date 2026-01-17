@@ -10,5 +10,9 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "welcome#index"
+
+  # Static pages
+  get "impressum", to: "welcome#impressum"
+  get "datenschutzerklaerung", to: "welcome#datenschutzerklaerung"
 end

@@ -1,0 +1,56 @@
+-# Header with Logo and Vignettes
+%header.site-header
+  .container
+    .header-row
+      .header-vignette.header-vignette-left
+        = image_tag "design/Kaffee_Hag_Vignette_WBc.png", alt: "Kaffee Hag Vignette", class: "vignette-img"
+      .header-logo
+        = link_to root_path do
+          %picture
+            %source{ media: "(min-width: 768px)", srcset: image_path("logo/Logo-Online-Museum-V10-250.png") }
+            %source{ media: "(min-width: 576px)", srcset: image_path("logo/Logo-Online-Museum-V10-180.png") }
+            = image_tag "logo/Logo-Online-Museum-V10-100.png", alt: "OnlineMuseum Wartenberg Logo", class: "logo-img"
+      .header-vignette.header-vignette-right
+        = image_tag "design/Kaffee_Hag_Vignette_WBc.png", alt: "Kaffee Hag Vignette", class: "vignette-img"
+
+-# Navigation
+%nav.main-navigation
+  .container
+    .nav-row.nav-row-primary
+      = link_to "Willkommen", root_path, class: "nav-pill active"
+      .nav-pill.dropdown
+        = link_to "Kunstschaffende", "#", class: "nav-pill-link"
+        %span.dropdown-arrow
+      .nav-pill.dropdown
+        = link_to "Land & Leute", "#", class: "nav-pill-link"
+        %span.dropdown-arrow
+    .nav-row.nav-row-secondary
+      = link_to "Ausstellungen", "#", class: "nav-pill"
+      = link_to "Team", "#", class: "nav-pill"
+      = link_to "Bild der Woche", "#", class: "nav-pill"
+      = link_to "Presseberichte", "#", class: "nav-pill"
+      = link_to "Archiv", "#", class: "nav-pill"
+
+-# Hero Section with Background Image
+%section.hero-section{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')" }
+  .hero-overlay
+    .container
+      %h1.hero-title OnlineMuseum Wartenberg -
+      %h1.hero-title ein Ort für Kunst und Kulturgeschichte
+
+-# Welcome Content
+%section.welcome-section
+  .container
+    .text-center.py-5
+      %h1.section-title Über uns
+      %h3.section-subtitle
+        %em
+          Kommen Sie mit auf eine Entdeckungsreise und erfahren Sie mehr über unsere Marktgemeinde
+          anhand vieler digitalisierter Exponate von Kunstwerken, Fotografien, Postkarten und
+          weiteren Archivalien.
+    %hr
+
+    .text-center.py-5
+      %h3.section-subtitle
+        %em
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed eveniet unde atque nisi, obcaecati enim sapiente mollitia dolorem vero dolor, sit repellendus molestiae, aliquam adipisci laboriosam voluptatum. Ratione, veniam enim?
