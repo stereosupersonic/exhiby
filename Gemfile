@@ -19,13 +19,16 @@ gem "cssbundling-rails"
 # Use HAML for views [https://github.com/haml/haml-rails]
 gem "haml-rails", "~> 3.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
+
+# Authorization [https://github.com/CanCanCommunity/cancancan]
+gem "cancancan", "~> 3.6"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
@@ -46,7 +49,7 @@ gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
 
   # Load environment variables from .env files [https://github.com/bkeepers/dotenv]
   gem "dotenv-rails"
@@ -59,16 +62,25 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-   gem "factory_bot_rails"
+  gem "factory_bot_rails"
   # Faker for generating test data
   gem "faker"
+  gem "rubocop-rails", "~> 2.34"
+  gem "rubocop-performance", "~> 1.26"
+  gem "rubocop-rspec", "~> 3.9"
+  gem "rubocop-capybara", "~> 2.22"
+
+  gem "simplecov", "~> 0.22.0"
+  gem "annotaterb", "~> 4.20"
+  gem "pry-nav", "~> 1.0"
 end
 
 group :test do
   gem "rspec-rails", "~> 8.0"
   gem "capybara"
   gem "selenium-webdriver"
-  gem "shoulda-matchers"
+  gem "shoulda-matchers", "~> 6.0"
+  gem "super_diff", "~> 0.18.0"
 end
 
 group :development do
