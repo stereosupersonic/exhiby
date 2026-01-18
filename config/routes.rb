@@ -2,8 +2,9 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
 
-  # Dashboard (root)
-  # root "dashboard#index"
+  # Dashboard (authenticated users)
+  get "dashboard", to: "dashboard#index"
+
   # Health check endpoint - always returns 200 OK
   get "up" => "rails/health#show", :as => :rails_health_check
 
