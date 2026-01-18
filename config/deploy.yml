@@ -102,7 +102,7 @@ ssh:
 accessories:
   postgres:
     image: postgres:17-alpine
-    port: 127.0.0.15433:5432
+    port: 127.0.0.1:5433:5432
     host: 37.120.188.157
     env:
       clear:
