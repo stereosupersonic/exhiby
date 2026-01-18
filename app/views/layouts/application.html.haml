@@ -12,6 +12,18 @@
     = javascript_importmap_tags
   %body.d-flex.flex-column.min-vh-100
     %main.flex-grow-1
+      - if flash[:notice]
+        .container.mt-3
+          .alert.alert-success.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-notice" } }
+            = flash[:notice]
+            %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, "aria-label": "Close" }
+
+      - if flash[:alert]
+        .container.mt-3
+          .alert.alert-danger.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-alert" } }
+            = flash[:alert]
+            %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, "aria-label": "Close" }
+
       = yield
 
     %footer.site-footer
