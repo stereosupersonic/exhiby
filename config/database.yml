@@ -94,8 +94,6 @@ production:
   primary: &primary_production
     <<: *default
     database: exhiby_production
-    username: exhiby
-    password: <%= ENV["EXHIBY_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: exhiby_production_cache

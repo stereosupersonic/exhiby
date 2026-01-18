@@ -2,12 +2,14 @@
 service: exhiby
 
 # Name of the container image (use your-user/app-name on external registries).
-image: stereosupersonic/exhiby
+image: exhiby
 
 # Deploy to these servers.
 servers:
   web:
-    - 37.120.188.157
+    hosts:
+    - 37.120.188.157 # sun
+    proxy: false
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -27,11 +29,12 @@ proxy:
 # Where you keep your container images.
 registry:
   # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  #server: localhost:5555
-  username: stereosupersonic
+  server: localhost:5555
+  #username: stereosupersonic
   # Always use an access token rather than real password when possible.
-  password:
-    - KAMAL_REGISTRY_PASSWORD
+  #password:
+  #  - KAMAL_REGISTRY_PASSWORD
+
 
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
@@ -40,6 +43,9 @@ env:
     - RAILS_MASTER_KEY
   clear:
     DATABASE_HOST: exhiby-postgres
+    DATABASE_PASSWORD: postgresdb
+    DATABASE_USERNAME: postgres
+    DATABASE_PORT: 5433
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
@@ -98,8 +104,8 @@ ssh:
 
 accessories:
   postgres:
-    image: postgres:18
-    port: 127.0.0.1:5432:5432
+    image: postgres:17-alpine
+    port: 5433:5432
     host: 37.120.188.157
     env:
       clear:
@@ -108,7 +114,7 @@ accessories:
       secret:
         - POSTGRES_PASSWORD
     directories:
-      - data:/var/lib/postgresql/data
+      - data2:/var/lib/postgresql/data
 
   # postgres_backup:
   #   image: kartoza/pg-backup:18-3.5
