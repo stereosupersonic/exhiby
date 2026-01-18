@@ -14,7 +14,7 @@
 /.bundle
 
 # Ignore all environment files.
-/.env*
+/.env
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -45,3 +45,4 @@
 
 /node_modules
 /coverage
+.kamal/secrets

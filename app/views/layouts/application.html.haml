@@ -1,27 +1,33 @@
-!!!
-%html{ lang: "en" }
+!!! 5
+%html{ lang: "de" }
   %head
     %meta{ charset: "utf-8" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
-    %title Exhiby
-    %meta{ name: "turbo-refresh-method", content: "morph" }
-    %meta{ name: "turbo-refresh-scroll", content: "preserve" }
+    %title OnlineMuseum Wartenberg
+    %meta{ name: "description", content: "OnlineMuseum Wartenberg - ein Ort für Kunst und Kulturgeschichte" }
+    %meta{ name: "turbo-cache-control", content: "no-cache" }
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag "application", data_turbo_track: "reload"
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
+  %body.d-flex.flex-column.min-vh-100
+    %main.flex-grow-1
+      - if flash[:notice]
+        .container.mt-3
+          .alert.alert-success.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-notice" } }
+            = flash[:notice]
+            %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, "aria-label": "Close" }
 
-  %body
-    - if flash[:notice]
-      .container.mt-3
-        .alert.alert-success.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-notice" } }
-          = flash[:notice]
-          %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, aria: { label: "Close" } }
+      - if flash[:alert]
+        .container.mt-3
+          .alert.alert-danger.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-alert" } }
+            = flash[:alert]
+            %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, "aria-label": "Close" }
 
-    - if flash[:alert]
-      .container.mt-3
-        .alert.alert-danger.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-alert" } }
-          = flash[:alert]
-          %button.btn-close{ type: "button", data: { bs_dismiss: "alert" }, aria: { label: "Close" } }
+      = yield
 
-    = yield
+    %footer.site-footer
+      .container
+        .footer-content
+          = link_to "Impressum", impressum_path, class: "footer-link"
+          = link_to "Datenschutzerklärung", datenschutzerklaerung_path, class: "footer-link"

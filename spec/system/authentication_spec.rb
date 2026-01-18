@@ -11,7 +11,7 @@ RSpec.describe "Authentication" do
       fill_in "Password", with: "password"
       click_button "Sign In"
 
-      expect(page).to have_current_path(root_path)
+      expect(page).to have_current_path(dashboard_path)
       expect(page).to have_selector("[data-testid='dashboard-heading']", text: "Dashboard")
       expect(page).to have_selector("[data-testid='user-email']", text: "admin@example.com")
     end
@@ -45,7 +45,7 @@ RSpec.describe "Authentication" do
     it "allows user to sign out" do
       sign_in_as(user)
 
-      expect(page).to have_current_path(root_path)
+      expect(page).to have_current_path(dashboard_path)
 
       click_button "Sign Out"
 
@@ -55,7 +55,7 @@ RSpec.describe "Authentication" do
 
   describe "protected routes" do
     it "redirects unauthenticated users to login" do
-      visit root_path
+      visit dashboard_path
       expect(page).to have_current_path(new_session_path)
     end
   end
