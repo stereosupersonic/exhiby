@@ -28,4 +28,11 @@ Rails.application.routes.draw do
   get "impressum", to: "welcome#impressum"
   get "datenschutzerklaerung", to: "welcome#datenschutzerklaerung"
   get "team", to: "welcome#team"
+  get "coming-soon", to: "welcome#coming_soon", as: :coming_soon
+
+  # Placeholder pages (coming soon)
+  get "kunstschaffende", to: "welcome#coming_soon", as: :kunstschaffende
+  get "land-und-leute", to: "welcome#coming_soon", as: :land_und_leute
+  get "ausstellungen", to: "welcome#coming_soon", as: :ausstellungen
+  get "bild-der-woche", to: "welcome#coming_soon", as: :bild_der_woche
 end

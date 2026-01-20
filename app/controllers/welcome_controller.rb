@@ -13,4 +13,7 @@ class WelcomeController < ApplicationController
 
   def team
   end
+
+  def coming_soon
+  end
 end

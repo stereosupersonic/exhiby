@@ -1,0 +1,17 @@
+= render "shared/site_header"
+
+%section.hero-section{ style: "background-image: url('#{image_path('design/coming-soon.jpg')}')", data: { testid: "coming-soon-hero" } }
+  .hero-overlay
+    .container
+      %h1.hero-title{ data: { testid: "coming-soon-title" } } Coming Soon
+
+%section.static-page.py-5{ data: { testid: "coming-soon-page" } }
+  .container
+    .row.justify-content-center
+      .col-lg-8.text-center
+        %p.lead.my-5
+          Diese Seite befindet sich noch im Aufbau.
+          %br
+          Schauen Sie bald wieder vorbei!
+
+        = link_to "Zur Startseite", root_path, class: "btn btn-primary"
