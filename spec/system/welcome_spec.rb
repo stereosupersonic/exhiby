@@ -39,7 +39,6 @@ RSpec.describe "Welcome Pages" do
         expect(page).to have_selector("[data-testid='nav-ausstellungen']", text: "Ausstellungen")
         expect(page).to have_selector("[data-testid='nav-team']", text: "Team")
         expect(page).to have_selector("[data-testid='nav-bild-der-woche']", text: "Bild der Woche")
-        expect(page).to have_selector("[data-testid='nav-aktuelles']", text: "Aktuelles")
         expect(page).to have_selector("[data-testid='nav-archiv']", text: "Archiv")
       end
     end

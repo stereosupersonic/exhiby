@@ -77,7 +77,7 @@ RSpec.describe Article do
       expect(article.slug).to eq("my-test-article")
     end
 
-    it "does not overwrite existing slug" do
+    it "does not overwrite existing slug on create" do
       article = create(:article, title: "My Test Article", slug: "custom-slug")
       expect(article.slug).to eq("custom-slug")
     end
@@ -86,6 +86,22 @@ RSpec.describe Article do
       create(:article, title: "Same Title")
       article2 = create(:article, title: "Same Title", slug: nil)
       expect(article2.slug).to eq("same-title-1")
+    end
+
+    it "updates slug when title changes" do
+      article = create(:article, title: "Original Title")
+      expect(article.slug).to eq("original-title")
+
+      article.update!(title: "New Title")
+      expect(article.slug).to eq("new-title")
+    end
+
+    it "does not change slug when title stays the same" do
+      article = create(:article, title: "My Title")
+      original_slug = article.slug
+
+      article.update!(status: "published")
+      expect(article.slug).to eq(original_slug)
     end
   end
 
@@ -127,18 +143,6 @@ RSpec.describe Article do
     it "returns false for published status" do
       article = build(:article, status: "published")
       expect(article.draft?).to be false
-    end
-  end
-
-  describe "#status_name" do
-    it "returns translated status name for draft" do
-      article = build(:article, status: "draft")
-      expect(article.status_name).to eq("Entwurf")
-    end
-
-    it "returns translated status name for published" do
-      article = build(:article, status: "published")
-      expect(article.status_name).to eq("Veröffentlicht")
     end
   end
 

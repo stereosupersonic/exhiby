@@ -34,8 +34,7 @@
       = link_to "Ausstellungen", "#", class: "nav-pill", data: { testid: "nav-ausstellungen" }
       = link_to "Team", "#", class: "nav-pill", data: { testid: "nav-team" }
       = link_to "Bild der Woche", "#", class: "nav-pill", data: { testid: "nav-bild-der-woche" }
-      = link_to "Aktuelles", articles_path, class: "nav-pill", data: { testid: "nav-aktuelles" }
-      = link_to "Archiv", "#", class: "nav-pill", data: { testid: "nav-archiv" }
+      = link_to "Archiv", articles_path, class: "nav-pill", data: { testid: "nav-archiv" }
 
 -# Hero Section with Background Image
 %section.hero-section{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "hero-section" } }
@@ -72,6 +71,7 @@
         %h2.section-title= t("welcome.recent_articles.title")
 
       - @recent_articles.each do |article|
+        - presenter = ArticlePresenter.new(article)
         .article-item.py-4{ data: { testid: "recent-article-card-#{article.slug}" } }
           .row
             - if article.cover_image.attached?
@@ -82,9 +82,9 @@
                 %h4
                   = link_to article.title, article_path(article.slug), class: "text-decoration-none"
                 - if article.published_at.present?
-                  %p.text-muted= l(article.published_at, format: :short)
+                  %p.text-muted= presenter.formatted_published_at_short
                 .article-excerpt
-                  = truncate(article.content.to_plain_text, length: 1000)
+                  = presenter.excerpt(length: 1000)
                 .mt-3
                   = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
             - else
@@ -92,9 +92,9 @@
                 %h4
                   = link_to article.title, article_path(article.slug), class: "text-decoration-none"
                 - if article.published_at.present?
-                  %p.text-muted= l(article.published_at, format: :short)
+                  %p.text-muted= presenter.formatted_published_at_short
                 .article-excerpt
-                  = truncate(article.content.to_plain_text, length: 300)
+                  = presenter.excerpt(length: 300)
                 .mt-3
                   = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
         %hr

@@ -22,13 +22,16 @@ The original implementation is under https://www.onlinemuseum-wartenberg.de/
 - **Rails**: 8.1.2
 - **Database**: PostgreSQL
 - **Frontend**: Hotwire (Turbo + Stimulus), Bootstrap 5.3.8
-- **Background Jobs**: Solid Queue
-- **Caching**: Solid Cache
+- **Background Jobs**: sidekiq
+- **Caching**: redis
 - **Deployment**: Kamal + Docker
 - **Project Type**: Full-stack Rails
 - **Test Framework**: RSpec
 - **Turbo/Stimulus**: Enabled
-- **Rich Editor**: use Lexxy https://basecamp.github.io/lexxy/installation.html
+- **Rich Editor**: use Lexxy https://basecamp.github.io/lexxy/installation.htmls
+- **authorisation**: cancancan
+- **authentication:**: build in rails 8 (bcrypt)
+- **pagination** :will_paginate
 
 ## Architect
 You are the lead Rails architect coordinating development across a team of specialized agents. Your role is to:
@@ -865,6 +868,7 @@ You are a Rails views and frontend specialist working in the app/views directory
 - **Use HAML** for all templates (add `haml-rails` gem)
 - Use Bootstrap 5 components and utilities
 - Keep views simple - extract complex logic to presenters
+- always use the presenter in the views and dont put view logic to the model
 - Use `data-testid` attributes for test selectors
 
 ### Core Responsibilities

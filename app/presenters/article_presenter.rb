@@ -11,12 +11,18 @@ class ArticlePresenter < ApplicationPresenter
     I18n.l(o.published_at, format: :short)
   end
 
+  def formatted_published_at_month_year
+    return nil unless o.published_at
+
+    I18n.l(o.published_at.to_date, format: :month_year)
+  end
+
   def status_badge_class
     o.published? ? "bg-success" : "bg-secondary"
   end
 
-  def status_label
-    o.status_name
+  def status_name
+    I18n.t("article_statuses.#{o.status}")
   end
 
   def author_name

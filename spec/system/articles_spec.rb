@@ -68,10 +68,10 @@ RSpec.describe "Public Articles" do
   end
 
   describe "navigation" do
-    it "has Aktuelles link in navigation" do
+    it "has Archiv link in navigation" do
       visit articles_path
 
-      expect(page).to have_selector("[data-testid='nav-aktuelles']")
+      expect(page).to have_selector("[data-testid='nav-archiv']")
     end
   end
 end

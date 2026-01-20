@@ -33,7 +33,7 @@ class Article < ApplicationRecord
   validates :slug, presence: true, uniqueness: true, length: { maximum: 255 }
   validates :status, presence: true, inclusion: { in: STATUSES }
 
-  before_validation :generate_slug, on: :create
+  before_validation :generate_slug
 
   scope :published, -> { where(status: "published").where("published_at IS NULL OR published_at <= ?", Time.current) }
   scope :recent, ->(limit = 3) { published.order(Arel.sql("COALESCE(published_at, created_at) DESC")).limit(limit) }
@@ -51,20 +51,18 @@ class Article < ApplicationRecord
     status == "draft"
   end
 
-  def status_name
-    I18n.t("article_statuses.#{status}")
-  end
-
   private
 
   def generate_slug
-    return if slug.present? || title.blank?
+    return if title.blank?
+    return if persisted? && !title_changed?
+    return if new_record? && slug.present?
 
     base_slug = title.parameterize
     self.slug = base_slug
 
     counter = 1
-    while Article.exists?(slug: slug)
+    while Article.where.not(id: id).exists?(slug: slug)
       self.slug = "#{base_slug}-#{counter}"
       counter += 1
     end

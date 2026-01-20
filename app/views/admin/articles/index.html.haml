@@ -17,12 +17,13 @@
                 %th= t("admin.articles.index.table.actions")
             %tbody
               - @articles.each do |article|
+                - presenter = ArticlePresenter.new(article)
                 %tr{ data: { testid: "article-row-#{article.slug}" } }
                   %td= link_to article.title, admin_article_path(article)
                   %td
-                    %span.badge{ class: article.published? ? "bg-success" : "bg-secondary" }
-                      = article.status_name
-                  %td= article.author.email_address
+                    %span.badge{ class: presenter.status_badge_class }
+                      = presenter.status_name
+                  %td= presenter.author_name
                   %td= l(article.created_at, format: :short)
                   %td
                     .btn-group.btn-group-sm

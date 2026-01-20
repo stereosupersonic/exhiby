@@ -36,6 +36,22 @@ RSpec.describe ArticlePresenter do
     end
   end
 
+  describe "#formatted_published_at_month_year" do
+    context "when article has published_at" do
+      it "returns formatted date with month and year" do
+        expect(presenter.formatted_published_at_month_year).to eq("März 2024")
+      end
+    end
+
+    context "when article has no published_at" do
+      let(:article) { build(:article, published_at: nil) }
+
+      it "returns nil" do
+        expect(presenter.formatted_published_at_month_year).to be_nil
+      end
+    end
+  end
+
   describe "#status_badge_class" do
     context "when article is published" do
       let(:article) { build(:article, :published) }
@@ -54,9 +70,17 @@ RSpec.describe ArticlePresenter do
     end
   end
 
-  describe "#status_label" do
-    it "returns translated status name" do
-      expect(presenter.status_label).to eq("Veröffentlicht")
+  describe "#status_name" do
+    it "returns translated status name for published" do
+      expect(presenter.status_name).to eq("Veröffentlicht")
+    end
+
+    context "when article is draft" do
+      let(:article) { build(:article, status: "draft") }
+
+      it "returns translated status name for draft" do
+        expect(presenter.status_name).to eq("Entwurf")
+      end
     end
   end
 

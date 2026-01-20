@@ -1,3 +1,4 @@
+- presenter = ArticlePresenter.new(@article)
 .admin-articles-show{ data: { testid: "admin-articles-show" } }
   .d-flex.justify-content-between.align-items-center.mb-4
     %h1{ data: { testid: "article-title" } }= @article.title
@@ -13,10 +14,10 @@
   .card.mb-4
     .card-header
       .d-flex.justify-content-between.align-items-center
-        %span.badge{ class: @article.published? ? "bg-success" : "bg-secondary" }
-          = @article.status_name
+        %span.badge{ class: presenter.status_badge_class }
+          = presenter.status_name
         - if @article.published_at.present?
-          %small.text-muted= l(@article.published_at, format: :long)
+          %small.text-muted= presenter.formatted_published_at
     .card-body
       .article-content{ data: { testid: "article-content" } }
         = @article.content
@@ -24,4 +25,4 @@
   .text-muted
     %small
       = t("activerecord.attributes.article.author")
-      = @article.author.email_address
+      = presenter.author_name
