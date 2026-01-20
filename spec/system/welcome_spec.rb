@@ -86,7 +86,7 @@ RSpec.describe "Welcome Pages" do
 
         within "[data-testid='recent-article-card-#{article_without_date.slug}']" do
           expect(page).to have_content("Article Without Date")
-          expect(page).not_to have_css(".text-muted", text: /\d{2}\.\d{2}\./)
+          expect(page).to have_no_css(".text-muted", text: /\d{2}\.\d{2}\./)
         end
       end
     end

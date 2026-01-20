@@ -1,4 +1,9 @@
 class ArticlePresenter < ApplicationPresenter
+  STATUS_BADGE_CLASSES = {
+    "published" => "bg-success",
+    "draft" => "bg-secondary"
+  }.freeze
+
   def formatted_published_at
     return I18n.t("common.not_published") unless o.published_at
 
@@ -18,7 +23,7 @@ class ArticlePresenter < ApplicationPresenter
   end
 
   def status_badge_class
-    o.published? ? "bg-success" : "bg-secondary"
+    STATUS_BADGE_CLASSES.fetch(o.status, "bg-secondary")
   end
 
   def status_name
