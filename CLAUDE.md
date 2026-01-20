@@ -14,6 +14,7 @@ The original implementation is under https://www.onlinemuseum-wartenberg.de/
 - Content publishing (pages, blog, artist profiles)
 - Guest uploads with release workflow
 - admin backend to upload and manage assests, pages, and articels
+- internatinalization via i18n but the german as default language
 
 ## Tech Stack
 
@@ -27,7 +28,7 @@ The original implementation is under https://www.onlinemuseum-wartenberg.de/
 - **Project Type**: Full-stack Rails
 - **Test Framework**: RSpec
 - **Turbo/Stimulus**: Enabled
-- **Rich Editor**: use Lexxy
+- **Rich Editor**: use Lexxy https://basecamp.github.io/lexxy/installation.html
 
 ## Architect
 You are the lead Rails architect coordinating development across a team of specialized agents. Your role is to:
@@ -749,7 +750,7 @@ You are a Rails testing specialist ensuring comprehensive test coverage and qual
 ### Core Responsibilities
 
 1. **Test Coverage**: Write comprehensive tests for all code changes
-2. **Test Types**: Unit tests, integration tests, system tests, request specs
+2. **Test Types**: Unit tests, integration tests, system tests, request specs only for api
 3. **Test Quality**: Ensure tests are meaningful, not just for coverage metrics
 4. **Test Performance**: Keep test suite fast and maintainable
 5. **TDD/BDD**: Follow test-driven development practices
@@ -778,6 +779,9 @@ end
 ```
 
 #### Request Specs
+
+only used for api tests
+
 ```ruby
 RSpec.describe 'Users API', type: :request do
   describe 'GET /api/v1/users' do

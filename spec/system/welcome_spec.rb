@@ -39,7 +39,7 @@ RSpec.describe "Welcome Pages" do
         expect(page).to have_selector("[data-testid='nav-ausstellungen']", text: "Ausstellungen")
         expect(page).to have_selector("[data-testid='nav-team']", text: "Team")
         expect(page).to have_selector("[data-testid='nav-bild-der-woche']", text: "Bild der Woche")
-        expect(page).to have_selector("[data-testid='nav-presseberichte']", text: "Presseberichte")
+        expect(page).to have_selector("[data-testid='nav-aktuelles']", text: "Aktuelles")
         expect(page).to have_selector("[data-testid='nav-archiv']", text: "Archiv")
       end
     end
@@ -59,6 +59,36 @@ RSpec.describe "Welcome Pages" do
       within ".site-footer" do
         expect(page).to have_link("Impressum", href: impressum_path)
         expect(page).to have_link("Datenschutzerklärung", href: datenschutzerklaerung_path)
+      end
+    end
+
+    context "with recent articles" do
+      let!(:article_with_date) { create(:article, :published, title: "Article With Date") }
+      let!(:article_without_date) { create(:article, status: "published", published_at: nil, title: "Article Without Date") }
+
+      it "displays recent articles section" do
+        visit root_path
+
+        expect(page).to have_selector("[data-testid='recent-articles-section']")
+        expect(page).to have_content("Aktuelles")
+      end
+
+      it "displays article with published_at date" do
+        visit root_path
+
+        within "[data-testid='recent-article-card-#{article_with_date.slug}']" do
+          expect(page).to have_content("Article With Date")
+          expect(page).to have_content(I18n.l(article_with_date.published_at, format: :short))
+        end
+      end
+
+      it "displays article without published_at date" do
+        visit root_path
+
+        within "[data-testid='recent-article-card-#{article_without_date.slug}']" do
+          expect(page).to have_content("Article Without Date")
+          expect(page).not_to have_css(".text-muted", text: /\d{2}\.\d{2}\./)
+        end
       end
     end
 
@@ -82,6 +112,52 @@ RSpec.describe "Welcome Pages" do
 
       expect(page).to have_current_path(datenschutzerklaerung_path)
       expect(page).to have_selector("[data-testid='datenschutz-page']")
+    end
+
+    context "when not authenticated" do
+      it "displays login link in header" do
+        visit root_path
+
+        within "[data-testid='header-login']" do
+          expect(page).to have_selector("[data-testid='login-link']", text: "Anmelden")
+        end
+      end
+
+      it "navigates to sign in page when clicking login" do
+        visit root_path
+
+        click_link "Anmelden"
+
+        expect(page).to have_current_path(new_session_path)
+      end
+    end
+
+    context "when authenticated as admin" do
+      let(:admin) { create(:user, :admin) }
+
+      before do
+        visit new_session_path
+        fill_in "Email address", with: admin.email_address
+        fill_in "Password", with: "password"
+        click_button "Sign In"
+      end
+
+      it "displays admin and logout links in header" do
+        visit root_path
+
+        within "[data-testid='header-login']" do
+          expect(page).to have_selector("[data-testid='admin-link']", text: "Admin")
+          expect(page).to have_selector("[data-testid='logout-link']", text: "Abmelden")
+        end
+      end
+
+      it "navigates to admin when clicking Admin link" do
+        visit root_path
+
+        click_link "Admin"
+
+        expect(page).to have_current_path(admin_root_path)
+      end
     end
   end
 

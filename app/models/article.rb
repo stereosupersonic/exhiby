@@ -1,0 +1,72 @@
+# == Schema Information
+#
+# Table name: articles
+#
+#  id           :bigint           not null, primary key
+#  published_at :datetime
+#  slug         :string           not null
+#  status       :string           default("draft"), not null
+#  title        :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  author_id    :bigint           not null
+#
+# Indexes
+#
+#  index_articles_on_author_id     (author_id)
+#  index_articles_on_published_at  (published_at)
+#  index_articles_on_slug          (slug) UNIQUE
+#  index_articles_on_status        (status)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (author_id => users.id)
+#
+class Article < ApplicationRecord
+  STATUSES = %w[draft published].freeze
+
+  belongs_to :author, class_name: "User"
+  has_rich_text :content
+  has_one_attached :cover_image
+
+  validates :title, presence: true, length: { maximum: 255 }
+  validates :slug, presence: true, uniqueness: true, length: { maximum: 255 }
+  validates :status, presence: true, inclusion: { in: STATUSES }
+
+  before_validation :generate_slug, on: :create
+
+  scope :published, -> { where(status: "published").where("published_at IS NULL OR published_at <= ?", Time.current) }
+  scope :recent, ->(limit = 3) { published.order(Arel.sql("COALESCE(published_at, created_at) DESC")).limit(limit) }
+  scope :by_publication_date, -> { order(published_at: :desc) }
+
+  def to_param
+    slug
+  end
+
+  def published?
+    status == "published" && (published_at.nil? || published_at <= Time.current)
+  end
+
+  def draft?
+    status == "draft"
+  end
+
+  def status_name
+    I18n.t("article_statuses.#{status}")
+  end
+
+  private
+
+  def generate_slug
+    return if slug.present? || title.blank?
+
+    base_slug = title.parameterize
+    self.slug = base_slug
+
+    counter = 1
+    while Article.exists?(slug: slug)
+      self.slug = "#{base_slug}-#{counter}"
+      counter += 1
+    end
+  end
+end

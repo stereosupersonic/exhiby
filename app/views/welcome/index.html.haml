@@ -1,6 +1,12 @@
 -# Header with Logo and Vignettes
 %header.site-header{ data: { testid: "site-header" } }
   .container
+    .header-login{ data: { testid: "header-login" } }
+      - if authenticated?
+        = link_to "Admin", admin_root_path, class: "header-login-link", data: { testid: "admin-link" }
+        = button_to "Abmelden", session_path, method: :delete, class: "header-login-link header-login-button", data: { testid: "logout-link" }
+      - else
+        = link_to "Anmelden", new_session_path, class: "header-login-link", data: { testid: "login-link" }
     .header-row
       .header-vignette.header-vignette-left
         = image_tag "design/Kaffee_Hag_Vignette_WBc.png", alt: "Kaffee Hag Vignette", class: "vignette-img"
@@ -28,7 +34,7 @@
       = link_to "Ausstellungen", "#", class: "nav-pill", data: { testid: "nav-ausstellungen" }
       = link_to "Team", "#", class: "nav-pill", data: { testid: "nav-team" }
       = link_to "Bild der Woche", "#", class: "nav-pill", data: { testid: "nav-bild-der-woche" }
-      = link_to "Presseberichte", "#", class: "nav-pill", data: { testid: "nav-presseberichte" }
+      = link_to "Aktuelles", articles_path, class: "nav-pill", data: { testid: "nav-aktuelles" }
       = link_to "Archiv", "#", class: "nav-pill", data: { testid: "nav-archiv" }
 
 -# Hero Section with Background Image
@@ -43,7 +49,7 @@
 -# Welcome Content
 %section.welcome-section{ data: { testid: "welcome-section" } }
   .container
-    .text-center.py-5
+    .text-center.py-2
       %h2.section-title Über uns
       %p.section-subtitle
         %em
@@ -52,9 +58,45 @@
           weiteren Archivalien.
     %hr
 
-    .text-center.py-5
+    .text-center.py-2
       %p.section-subtitle
         %em
           Das OnlineMuseum Wartenberg bewahrt und präsentiert die kulturelle Vielfalt unserer Region.
           Entdecken Sie historische Schätze, lokale Künstler und die Geschichte unserer Gemeinde
           in einer digitalen Sammlung, die stetig wächst.
+
+- if @recent_articles.any?
+  %section.articles-preview{ data: { testid: "recent-articles-section" } }
+    .container
+      .text-center.py-5
+        %h2.section-title= t("welcome.recent_articles.title")
+
+      - @recent_articles.each do |article|
+        .article-item.py-4{ data: { testid: "recent-article-card-#{article.slug}" } }
+          .row
+            - if article.cover_image.attached?
+              .col-md-2
+                = link_to article_path(article.slug) do
+                  = image_tag article.cover_image.variant(resize_to_limit: [400, 300]), class: "img-fluid", alt: article.title
+              .col-md-10
+                %h4
+                  = link_to article.title, article_path(article.slug), class: "text-decoration-none"
+                - if article.published_at.present?
+                  %p.text-muted= l(article.published_at, format: :short)
+                .article-excerpt
+                  = truncate(article.content.to_plain_text, length: 1000)
+                .mt-3
+                  = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
+            - else
+              .col-12
+                %h4
+                  = link_to article.title, article_path(article.slug), class: "text-decoration-none"
+                - if article.published_at.present?
+                  %p.text-muted= l(article.published_at, format: :short)
+                .article-excerpt
+                  = truncate(article.content.to_plain_text, length: 300)
+                .mt-3
+                  = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
+        %hr
+      .text-center.py-4
+        = link_to t("welcome.recent_articles.view_all"), articles_path, class: "btn btn-primary", data: { testid: "view-all-articles" }

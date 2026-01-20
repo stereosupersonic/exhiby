@@ -1,0 +1,54 @@
+-# Header with Logo and Vignettes
+%header.site-header{ data: { testid: "site-header" } }
+  .container
+    .header-row
+      .header-vignette.header-vignette-left
+        = image_tag "design/Kaffee_Hag_Vignette_WBc.png", alt: "Kaffee Hag Vignette", class: "vignette-img"
+      .header-logo
+        = link_to root_path, data: { testid: "logo-link" } do
+          %picture
+            %source{ media: "(min-width: 768px)", srcset: image_path("logo/Logo-Online-Museum-V10-250.png") }
+            %source{ media: "(min-width: 576px)", srcset: image_path("logo/Logo-Online-Museum-V10-180.png") }
+            = image_tag "logo/Logo-Online-Museum-V10-100.png", alt: "OnlineMuseum Wartenberg Logo", class: "logo-img"
+      .header-vignette.header-vignette-right
+        = image_tag "design/Kaffee_Hag_Vignette_WBc.png", alt: "Kaffee Hag Vignette", class: "vignette-img"
+
+-# Navigation
+%nav.main-navigation{ data: { testid: "main-navigation" } }
+  .container
+    .nav-row.nav-row-primary
+      = link_to "Willkommen", root_path, class: "nav-pill", data: { testid: "nav-willkommen" }
+      .nav-pill.dropdown
+        = link_to "Kunstschaffende", "#", class: "nav-pill-link", data: { testid: "nav-kunstschaffende" }
+        %span.dropdown-arrow
+      .nav-pill.dropdown
+        = link_to "Land & Leute", "#", class: "nav-pill-link", data: { testid: "nav-land-leute" }
+        %span.dropdown-arrow
+    .nav-row.nav-row-secondary
+      = link_to "Ausstellungen", "#", class: "nav-pill", data: { testid: "nav-ausstellungen" }
+      = link_to "Team", "#", class: "nav-pill", data: { testid: "nav-team" }
+      = link_to "Bild der Woche", "#", class: "nav-pill", data: { testid: "nav-bild-der-woche" }
+      = link_to "Aktuelles", articles_path, class: "nav-pill active", data: { testid: "nav-aktuelles" }
+      = link_to "Archiv", "#", class: "nav-pill", data: { testid: "nav-archiv" }
+
+%section.articles-section{ data: { testid: "articles-section" } }
+  .container.py-5
+    %h1.mb-4{ data: { testid: "articles-heading" } }= t("articles.index.title")
+
+    - if @articles.any?
+      .row
+        - @articles.each do |article|
+          .col-md-6.col-lg-4.mb-4
+            .card.h-100{ data: { testid: "article-card-#{article.slug}" } }
+              .card-body
+                %h5.card-title= link_to article.title, article_path(article.slug)
+                - if article.published_at.present?
+                  %p.card-text.text-muted
+                    = l(article.published_at, format: :long)
+                .article-excerpt
+                  = truncate(article.content.to_plain_text, length: 150)
+              .card-footer.bg-transparent
+                = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-outline-primary btn-sm"
+    - else
+      .text-center.text-muted.py-4{ data: { testid: "no-articles-message" } }
+        %p= t("articles.index.no_articles")

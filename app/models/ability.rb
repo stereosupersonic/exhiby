@@ -4,6 +4,9 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    # Public access - anyone can read published articles
+    can :read, Article, status: "published"
+
     return unless user.present?
 
     # All authenticated users can read content and manage their own profile
@@ -14,6 +17,8 @@ class Ability
       can :manage, :all
     elsif user.editor?
       can :manage, :content
+      can :manage, :admin_area
+      can :manage, Article
     end
   end
 end

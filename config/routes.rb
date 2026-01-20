@@ -2,6 +2,15 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
 
+  # Admin namespace
+  namespace :admin do
+    root to: "dashboard#index"
+    resources :articles
+  end
+
+  # Public articles
+  resources :articles, only: [ :index, :show ], param: :slug
+
   # Dashboard (authenticated users)
   get "dashboard", to: "dashboard#index"
 

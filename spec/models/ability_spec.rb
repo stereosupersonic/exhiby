@@ -12,6 +12,24 @@ RSpec.describe Ability do
     it "cannot manage users" do
       expect(ability).not_to be_able_to(:manage, User)
     end
+
+    it "can read published articles" do
+      published_article = build(:article, :published)
+      expect(ability).to be_able_to(:read, published_article)
+    end
+
+    it "cannot read draft articles" do
+      draft_article = build(:article, status: "draft")
+      expect(ability).not_to be_able_to(:read, draft_article)
+    end
+
+    it "cannot manage articles" do
+      expect(ability).not_to be_able_to(:manage, Article)
+    end
+
+    it "cannot access admin area" do
+      expect(ability).not_to be_able_to(:manage, :admin_area)
+    end
   end
 
   describe "regular user" do
@@ -43,6 +61,14 @@ RSpec.describe Ability do
     it "cannot manage content" do
       expect(ability).not_to be_able_to(:manage, :content)
     end
+
+    it "cannot manage articles" do
+      expect(ability).not_to be_able_to(:manage, Article)
+    end
+
+    it "cannot access admin area" do
+      expect(ability).not_to be_able_to(:manage, :admin_area)
+    end
   end
 
   describe "editor" do
@@ -70,6 +96,14 @@ RSpec.describe Ability do
     it "cannot manage all" do
       expect(ability).not_to be_able_to(:manage, :all)
     end
+
+    it "can manage admin area" do
+      expect(ability).to be_able_to(:manage, :admin_area)
+    end
+
+    it "can manage articles" do
+      expect(ability).to be_able_to(:manage, Article)
+    end
   end
 
   describe "admin" do
@@ -96,6 +130,14 @@ RSpec.describe Ability do
 
     it "can manage content" do
       expect(ability).to be_able_to(:manage, :content)
+    end
+
+    it "can manage admin area" do
+      expect(ability).to be_able_to(:manage, :admin_area)
+    end
+
+    it "can manage articles" do
+      expect(ability).to be_able_to(:manage, Article)
     end
   end
 end
