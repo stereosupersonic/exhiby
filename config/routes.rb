@@ -6,13 +6,19 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: "dashboard#index"
     resources :articles
+    resources :users, only: %i[index edit update] do
+      member do
+        patch :deactivate
+        patch :activate
+      end
+    end
   end
 
   # Public articles
   resources :articles, only: [ :index, :show ], param: :slug
 
-  # Dashboard (authenticated users)
-  get "dashboard", to: "dashboard#index"
+  # Dashboard redirects to admin
+  get "dashboard", to: redirect("/admin"), as: :dashboard
 
   # Health check endpoint - always returns 200 OK
   get "up" => "rails/health#show", :as => :rails_health_check

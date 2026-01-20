@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  active          :boolean          default(TRUE), not null
 #  email_address   :string           not null
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
@@ -11,6 +12,7 @@
 #
 # Indexes
 #
+#  index_users_on_active         (active)
 #  index_users_on_email_address  (email_address) UNIQUE
 #  index_users_on_role           (role)
 #
@@ -93,6 +95,46 @@ RSpec.describe User do
   describe "constants" do
     it "defines ROLES" do
       expect(User::ROLES).to eq(%w[admin editor user])
+    end
+  end
+
+  describe "scopes" do
+    describe ".active" do
+      it "returns only active users" do
+        active_user = create(:user, active: true)
+        create(:user, active: false)
+
+        expect(described_class.active).to contain_exactly(active_user)
+      end
+    end
+
+    describe ".inactive" do
+      it "returns only inactive users" do
+        create(:user, active: true)
+        inactive_user = create(:user, active: false)
+
+        expect(described_class.inactive).to contain_exactly(inactive_user)
+      end
+    end
+  end
+
+  describe "activation methods" do
+    describe "#deactivate!" do
+      it "sets active to false" do
+        user = create(:user, active: true)
+        user.deactivate!
+
+        expect(user.reload).not_to be_active
+      end
+    end
+
+    describe "#activate!" do
+      it "sets active to true" do
+        user = create(:user, active: false)
+        user.activate!
+
+        expect(user.reload).to be_active
+      end
     end
   end
 end

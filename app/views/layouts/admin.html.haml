@@ -20,7 +20,13 @@
           %ul.navbar-nav.me-auto.mb-2.mb-lg-0
             %li.nav-item
               = link_to t("admin.navigation.articles"), admin_articles_path, class: "nav-link"
+            - if can? :manage, User
+              %li.nav-item
+                = link_to t("admin.navigation.users"), admin_users_path, class: "nav-link"
           %ul.navbar-nav
+            %li.nav-item.d-flex.align-items-center
+              %span.nav-link.text-light{ data: { testid: "user-email" } }= current_user.email_address
+              %span.badge.bg-secondary.me-2{ data: { testid: "user-role" } }= current_user.role
             %li.nav-item
               = link_to t("admin.navigation.back_to_site"), root_path, class: "nav-link"
             %li.nav-item

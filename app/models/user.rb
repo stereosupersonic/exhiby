@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  active          :boolean          default(TRUE), not null
 #  email_address   :string           not null
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
@@ -11,6 +12,7 @@
 #
 # Indexes
 #
+#  index_users_on_active         (active)
 #  index_users_on_email_address  (email_address) UNIQUE
 #  index_users_on_role           (role)
 #
@@ -26,6 +28,17 @@ class User < ApplicationRecord
   validates :email_address, presence: true, uniqueness: true,
                             format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :role, presence: true, inclusion: { in: ROLES }
+
+  scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
+
+  def deactivate!
+    update!(active: false)
+  end
+
+  def activate!
+    update!(active: true)
+  end
 
   def admin?
     role == "admin"

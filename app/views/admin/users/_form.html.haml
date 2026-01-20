@@ -1,0 +1,21 @@
+= form_with model: [:admin, @user], class: "needs-validation", data: { testid: "user-form" } do |form|
+  - if @user.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @user.errors.full_messages.each do |message|
+          %li= message
+
+  .mb-3
+    = form.label :email_address, t("admin.users.form.email_label"), class: "form-label"
+    = form.email_field :email_address, class: "form-control #{'is-invalid' if @user.errors[:email_address].any?}", required: true, data: { testid: "user-email" }
+    - if @user.errors[:email_address].any?
+      .invalid-feedback= @user.errors[:email_address].first
+
+  .mb-3
+    = form.label :role, t("admin.users.form.role_label"), class: "form-label"
+    = form.select :role, User::ROLES.map { |r| [I18n.t("user_roles.#{r}"), r] }, {}, class: "form-select", data: { testid: "user-role" }
+    .form-text= t("admin.users.form.role_hint")
+
+  .d-flex.gap-2
+    = form.submit t("admin.users.form.submit_update"), class: "btn btn-primary", data: { testid: "submit-user" }
+    = link_to t("admin.users.form.cancel"), admin_users_path, class: "btn btn-outline-secondary"

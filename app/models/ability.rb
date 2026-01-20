@@ -9,8 +9,8 @@ class Ability
 
     return unless user.present?
 
-    # All authenticated users can read content and manage their own profile
-    can :read, :dashboard
+    # All authenticated users can access admin area (dashboard) and manage their own profile
+    can :manage, :admin_area
     can %i[read update], User, id: user.id
 
     if user.admin?

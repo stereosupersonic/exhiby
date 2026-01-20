@@ -1,0 +1,41 @@
+.admin-users{ data: { testid: "admin-users" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "users-heading" } }= t("admin.users.index.title")
+
+  .card
+    .card-body
+      - if @users.any?
+        .table-responsive
+          %table.table.table-hover{ data: { testid: "users-table" } }
+            %thead
+              %tr
+                %th= t("admin.users.index.table.email")
+                %th= t("admin.users.index.table.role")
+                %th= t("admin.users.index.table.status")
+                %th= t("admin.users.index.table.articles_count")
+                %th= t("admin.users.index.table.created_at")
+                %th= t("admin.users.index.table.actions")
+            %tbody
+              - @users.each do |user|
+                - presenter = UserPresenter.new(user)
+                %tr{ class: ("table-secondary" unless user.active?), data: { testid: "user-row-#{user.id}" } }
+                  %td= user.email_address
+                  %td
+                    %span.badge{ class: presenter.role_badge_class }
+                      = presenter.role_name
+                  %td
+                    %span.badge{ class: presenter.status_badge_class }
+                      = presenter.status_name
+                  %td= presenter.articles_count
+                  %td= presenter.formatted_created_at_short
+                  %td
+                    .btn-group.btn-group-sm
+                      = link_to t("admin.users.index.actions.edit"), edit_admin_user_path(user), class: "btn btn-outline-primary", data: { testid: "edit-user-#{user.id}" }
+                      - unless user == current_user
+                        - if user.active?
+                          = button_to t("admin.users.index.actions.deactivate"), deactivate_admin_user_path(user), method: :patch, class: "btn btn-outline-warning", data: { turbo_confirm: t("admin.users.index.actions.deactivate_confirm"), testid: "deactivate-user-#{user.id}" }
+                        - else
+                          = button_to t("admin.users.index.actions.activate"), activate_admin_user_path(user), method: :patch, class: "btn btn-outline-success", data: { testid: "activate-user-#{user.id}" }
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-users-message" } }
+          %p= t("admin.users.index.no_users")

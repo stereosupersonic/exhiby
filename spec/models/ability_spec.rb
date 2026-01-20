@@ -38,8 +38,8 @@ RSpec.describe Ability do
 
     subject(:ability) { described_class.new(user) }
 
-    it "can read dashboard" do
-      expect(ability).to be_able_to(:read, :dashboard)
+    it "can access admin area" do
+      expect(ability).to be_able_to(:manage, :admin_area)
     end
 
     it "can read own profile" do
@@ -65,10 +65,6 @@ RSpec.describe Ability do
     it "cannot manage articles" do
       expect(ability).not_to be_able_to(:manage, Article)
     end
-
-    it "cannot access admin area" do
-      expect(ability).not_to be_able_to(:manage, :admin_area)
-    end
   end
 
   describe "editor" do
@@ -77,8 +73,8 @@ RSpec.describe Ability do
 
     subject(:ability) { described_class.new(editor) }
 
-    it "can read dashboard" do
-      expect(ability).to be_able_to(:read, :dashboard)
+    it "can access admin area" do
+      expect(ability).to be_able_to(:manage, :admin_area)
     end
 
     it "can manage content" do

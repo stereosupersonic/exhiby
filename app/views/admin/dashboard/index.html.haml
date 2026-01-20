@@ -1,5 +1,5 @@
 .admin-dashboard{ data: { testid: "admin-dashboard" } }
-  %h1.mb-4{ data: { testid: "dashboard-title" } }= t("admin.dashboard.title")
+  %h1.mb-4{ data: { testid: "dashboard-heading" } }= t("admin.dashboard.title")
 
   .row.mb-4
     .col-md-6.col-lg-4.mb-3
@@ -12,6 +12,3 @@
         .card-body
           %h5.card-title= t("admin.dashboard.published_articles_count")
           %p.card-text.display-4= @published_articles_count
-
-  .alert.alert-info
-    = t("admin.dashboard.welcome")
