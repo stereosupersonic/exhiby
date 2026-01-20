@@ -16,6 +16,7 @@ services:
     # Chrome/Cuprite configuration
       CHROME_URL: http://chrome:3333
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme}
 
   postgres:
     image: postgres:18-alpine
