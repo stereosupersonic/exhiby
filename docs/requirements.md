@@ -2,7 +2,7 @@
 
 #################
 
-## current
+## current service
 
 * Joomla 4.4
 * MySQL
@@ -18,9 +18,9 @@ management of images, videos and pdfs, creating pages or Blog Posts
 
 ### features
 * Porject name: Exhiby
-* Testurl: museum-wartenberg.de (Hosteurope)
+* new url: museum-wartenberg.de (Hosteurope)
 
-* uploading images and add tags, description ...
+* uploading images and add tags, description in an admin backend
 * duplicate detection e.g. https://github.com/libvips/ruby-vips  https://claude.ai/chat/92ce96df-20b4-4b15-8471-b046b1c7b1b2
 * AI tagging (AWS Rekognition)
 * collections and albums
@@ -41,6 +41,19 @@ management of images, videos and pdfs, creating pages or Blog Posts
 * extracting the current style and images
 * rich text editor lexxy vs trix https://blog.saeloun.com/2025/10/14/lexxy-editor/
 
+### Tech stack
+
+* ruby on rails 8.1
+* ruby 3.3
+* database postgres
+* caching redis
+* background sidekiq
+* css: boostrap 5
+* authorisation: cancancan
+* authentication:  build in rails 8 (bcrypt)
+* pagination: will_paginate
+
+
 #### later stage
 
 * error logging via rollbar
@@ -50,7 +63,9 @@ management of images, videos and pdfs, creating pages or Blog Posts
 
 #### server monitoring
 
-https://fulghum.io/self-hosting via AI
+* newrelic
+* rollbar
+* https://fulghum.io/self-hosting via AI
 
 * https://github.com/nicolargo/glances
 
@@ -61,7 +76,9 @@ https://fulghum.io/self-hosting via AI
 
 ### seed data
 
-* where do i get a bunch of free images
+* where do i get a bunch of free images?
+
+
 ####
 
 ### open question
