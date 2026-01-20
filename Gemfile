@@ -27,6 +27,10 @@ gem "bcrypt", "~> 3.1.7"
 # Authorization [https://github.com/CanCanCommunity/cancancan]
 gem "cancancan", "~> 3.6"
 
+# Pagination [https://github.com/mislav/will_paginate]
+gem "will_paginate", "~> 4.0"
+gem "will_paginate-bootstrap-style"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[windows jruby]
 

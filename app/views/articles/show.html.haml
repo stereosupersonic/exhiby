@@ -1,0 +1,24 @@
+= render "shared/site_header", active: :archiv
+
+%section.article-section{ data: { testid: "article-section" } }
+  .container.py-5
+    .mb-4
+      = link_to t("articles.show.back"), articles_path, class: "btn btn-outline-secondary btn-sm"
+
+    %article.article-content{ data: { testid: "article-content" } }
+      %h1.mb-3{ data: { testid: "article-title" } }= @article.title
+
+      - if @article.published_at.present?
+        .article-meta.mb-4.text-muted
+          %span{ data: { testid: "article-published-at" } }
+            = t("articles.show.published_at", date: l(@article.published_at, format: :long))
+
+      - if @article.cover_image.attached?
+        .article-cover-image.mb-4
+          = image_tag @article.cover_image.variant(resize_to_limit: [800, 400]), class: "img-fluid rounded", alt: @article.title, data: { testid: "article-cover-image" }
+
+      .article-body{ data: { testid: "article-body" } }
+        = @article.content
+
+    .mt-5.pt-4.border-top
+      = link_to t("articles.show.back"), articles_path, class: "btn btn-outline-primary"

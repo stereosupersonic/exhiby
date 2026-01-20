@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  helper_method :current_user
+
   private
 
   # CanCanCan expects current_user method

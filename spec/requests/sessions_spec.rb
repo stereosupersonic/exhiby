@@ -14,7 +14,7 @@ RSpec.describe "Sessions" do
     context "with valid credentials" do
       it "creates a session and redirects" do
         post session_path, params: { email_address: "test@example.com", password: "password" }
-        expect(response).to redirect_to(dashboard_path)
+        expect(response).to redirect_to(admin_root_path)
       end
 
       it "creates a session record" do
@@ -54,9 +54,9 @@ RSpec.describe "Sessions" do
       sign_in(user)
     end
 
-    it "destroys the session and redirects to login" do
+    it "destroys the session and redirects to start page" do
       delete session_path
-      expect(response).to redirect_to(new_session_path)
+      expect(response).to redirect_to(root_path)
     end
   end
 end

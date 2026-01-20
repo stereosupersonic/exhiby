@@ -11,8 +11,8 @@ RSpec.describe "Authentication" do
       fill_in "Password", with: "password"
       click_button "Sign In"
 
-      expect(page).to have_current_path(dashboard_path)
-      expect(page).to have_selector("[data-testid='dashboard-heading']", text: "Dashboard")
+      expect(page).to have_current_path(admin_root_path)
+      expect(page).to have_selector("[data-testid='dashboard-heading']", text: "Admin Dashboard")
       expect(page).to have_selector("[data-testid='user-email']", text: "admin@example.com")
     end
 
@@ -37,6 +37,19 @@ RSpec.describe "Authentication" do
       expect(page).to have_current_path(new_session_path)
       expect(page).to have_selector("[data-testid='flash-alert']")
     end
+
+    it "shows error for inactive user" do
+      create(:user, email_address: "inactive@example.com", password: "password", active: false)
+
+      visit new_session_path
+
+      fill_in "Email address", with: "inactive@example.com"
+      fill_in "Password", with: "password"
+      click_button "Sign In"
+
+      expect(page).to have_current_path(new_session_path)
+      expect(page).to have_selector("[data-testid='flash-alert']", text: "Ihr Konto wurde deaktiviert")
+    end
   end
 
   describe "sign out" do
@@ -45,17 +58,17 @@ RSpec.describe "Authentication" do
     it "allows user to sign out" do
       sign_in_as(user)
 
-      expect(page).to have_current_path(dashboard_path)
+      expect(page).to have_current_path(admin_root_path)
 
-      click_button "Sign Out"
+      click_button "Abmelden"
 
-      expect(page).to have_current_path(new_session_path)
+      expect(page).to have_current_path(root_path)
     end
   end
 
   describe "protected routes" do
     it "redirects unauthenticated users to login" do
-      visit dashboard_path
+      visit admin_root_path
       expect(page).to have_current_path(new_session_path)
     end
   end

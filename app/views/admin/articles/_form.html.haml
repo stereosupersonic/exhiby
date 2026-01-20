@@ -1,0 +1,36 @@
+= form_with model: [:admin, @article], class: "needs-validation", data: { testid: "article-form" } do |form|
+  - if @article.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @article.errors.full_messages.each do |message|
+          %li= message
+
+  .mb-3
+    = form.label :title, t("admin.articles.form.title_label"), class: "form-label"
+    = form.text_field :title, class: "form-control #{'is-invalid' if @article.errors[:title].any?}", required: true, data: { testid: "article-title" }
+    - if @article.errors[:title].any?
+      .invalid-feedback= @article.errors[:title].first
+
+  .mb-3
+    = form.label :cover_image, t("admin.articles.form.cover_image_label"), class: "form-label"
+    = form.file_field :cover_image, class: "form-control", accept: "image/*", data: { testid: "article-cover-image" }
+    - if @article.cover_image.attached?
+      .mt-2
+        = image_tag @article.cover_image.variant(resize_to_limit: [200, 200]), class: "img-thumbnail"
+
+  .mb-3
+    = form.label :content, t("admin.articles.form.content_label"), class: "form-label"
+    = form.rich_text_area :content, data: { testid: "article-content" }
+
+  .row.mb-3
+    .col-md-6
+      = form.label :status, t("admin.articles.form.status_label"), class: "form-label"
+      = form.select :status, Article::STATUSES.map { |s| [I18n.t("article_statuses.#{s}"), s] }, {}, class: "form-select", data: { testid: "article-status" }
+
+    .col-md-6
+      = form.label :published_at, t("admin.articles.form.published_at_label"), class: "form-label"
+      = form.datetime_local_field :published_at, class: "form-control", data: { testid: "article-published-at" }
+
+  .d-flex.gap-2
+    = form.submit @article.persisted? ? t("admin.articles.form.submit_update") : t("admin.articles.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-article" }
+    = link_to t("admin.articles.form.cancel"), admin_articles_path, class: "btn btn-outline-secondary"

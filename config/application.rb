@@ -38,5 +38,10 @@ module Exhiby
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # I18n configuration - German as default
+    config.i18n.default_locale = :de
+    config.i18n.available_locales = [ :de, :en ]
+    config.i18n.fallbacks = [ :de, :en ]
   end
 end

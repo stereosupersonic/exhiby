@@ -27,7 +27,12 @@ module Authentication
   end
 
   def find_session_by_cookie
-    Session.find_by(id: cookies.signed[:session_id]) if cookies.signed[:session_id]
+    return unless cookies.signed[:session_id]
+
+    session = Session.find_by(id: cookies.signed[:session_id])
+    return unless session&.user&.active?
+
+    session
   end
 
   def request_authentication
@@ -36,7 +41,7 @@ module Authentication
   end
 
   def after_authentication_url
-    session.delete(:return_to_after_authenticating) || dashboard_url
+    session.delete(:return_to_after_authenticating) || admin_root_url
   end
 
   def start_new_session_for(user)

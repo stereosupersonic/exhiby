@@ -1,0 +1,88 @@
+= render "shared/site_header", active: :team
+
+%section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('team/team_om_1920.jpg')}')", data: { testid: "team-hero" } }
+  .hero-overlay
+    .container
+      %h1.hero-title{ data: { testid: "team-title" } } Wir sind ein Team
+
+%section.static-page.py-5{ data: { testid: "team-page" } }
+  .container
+    .row.justify-content-center
+      .col-lg-8
+        .team-intro.my-5
+          %p.lead.text-center
+            Das OnlineMuseum Wartenberg ist ein Gemeinschaftsprojekt engagierter Bürgerinnen und Bürger,
+            die sich der Bewahrung und Präsentation der kulturellen Vielfalt unserer Region verschrieben haben.
+
+        .text-center.my-5
+          = image_tag "team/team-foto.jpg", alt: "Das Team des OnlineMuseum Wartenberg", class: "img-fluid rounded shadow"
+          %p.text-muted.mt-2
+            %small v.l.n.r.: Mattias Kehm, Helmut Schneider (†), Dr. Heike Schmidt-Kronseder, Markus Allwang, Dr. Christoph Schnürer-Patschan
+
+        %h2.mt-5 Unser Team
+        .team-members.my-4
+          %ul.list-unstyled
+            %li.mb-2
+              %strong Mattias Kehm
+            %li.mb-2
+              %strong Dr. Heike Schmidt-Kronseder
+            %li.mb-2
+              %strong Dr. Christoph Schnürer-Patschan
+            %li.mb-2
+              %strong Markus Allwang
+            %li.mb-2
+              %strong Helmut Schneider
+              (†)
+
+        %h2.mt-5 Die Entstehung
+        %p
+          Die Initiative zum OnlineMuseum Wartenberg entstand im Frühjahr 2022. Dr. Heike Schmidt-Kronseder
+          hatte die Vision, "Kunstwerke und kulturelle Objekte im Besitz der Gemeinde einem breiten Publikum
+          zugänglich zu machen." Der Bürgermeister und der Gemeinderat unterstützten das Konzept sofort.
+
+        %h2.mt-5 Unsere Beiträge
+        %dl.row
+          %dt.col-sm-4 Helmut Schneider
+          %dd.col-sm-8 Website-Design, Logo-Erstellung, Barrierefreiheit
+
+          %dt.col-sm-4 Dr. Heike Schmidt-Kronseder
+          %dd.col-sm-8 Erste Aufbereitung der Kunstwerke
+
+          %dt.col-sm-4 Mattias Kehm
+          %dd.col-sm-8 Scannen und Katalogisieren historischer Postkarten
+
+          %dt.col-sm-4 Markus Allwang
+          %dd.col-sm-8 Bereitstellung historischer Fotografien
+
+          %dt.col-sm-4 Dr. Christoph Schnürer-Patschan
+          %dd.col-sm-8 Sortierung, Archivierung und Objektbeschreibungen
+
+        .memorial.my-5.p-4.bg-light.rounded
+          .row.align-items-center
+            .col-md-8
+              %h3 In Gedenken an Helmut Schneider
+              %p
+                Wir gedenken Helmut Schneider, der am 30. Dezember 2024 verstorben ist.
+                Sein Engagement und seine kreative Arbeit haben das OnlineMuseum Wartenberg maßgeblich geprägt.
+            .col-md-4.text-center
+              = image_tag "team/kirche-helmut-schneider.jpg", alt: "Pfarrkirche Wartenberg - Gemälde von Helmut Schneider", class: "img-fluid rounded"
+              %p.text-muted.mt-2
+                %small Pfarrkirche Wartenberg, Gemälde von Helmut Schneider
+
+        .mayor-greeting.my-5.p-4.border.rounded
+          .row.align-items-center
+            .col-md-3.text-center
+              = image_tag "team/buergermeister-proebst.jpg", alt: "Erster Bürgermeister Christian Pröbst", class: "img-fluid rounded-circle shadow", style: "max-width: 150px"
+            .col-md-9
+              %h3 Grußwort des Bürgermeisters
+              %p
+                Als Erster Bürgermeister der Marktgemeinde Wartenberg freue ich mich sehr über das Engagement
+                unserer Bürgerinnen und Bürger, die mit dem OnlineMuseum einen wichtigen Beitrag zur Bewahrung
+                unseres kulturellen Erbes leisten.
+              %p.text-muted
+                %em Christian Pröbst, Erster Bürgermeister
+
+        %h2.mt-5 Kontakt
+        %p
+          %strong Ansprechperson:
+          Dr. Heike Schmidt-Kronseder

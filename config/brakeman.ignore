@@ -1,0 +1,10 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "bd4cc6bdb83bb1478ae667941fdee9753c64cd17d898ddf0e501bf033ae9d76e",
+      "note": "False positive: status_badge_class returns only hardcoded Bootstrap class strings based on validated article status (draft/published)"
+    }
+  ],
+  "updated": "2026-01-20 17:01:47 +0100",
+  "brakeman_version": "7.1.2"
+}

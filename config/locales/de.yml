@@ -1,0 +1,223 @@
+de:
+  # Date/Time formats
+  date:
+    formats:
+      default: "%d.%m.%Y"
+      short: "%d.%m."
+      long: "%d. %B %Y"
+      month_year: "%B %Y"
+    day_names:
+      - Sonntag
+      - Montag
+      - Dienstag
+      - Mittwoch
+      - Donnerstag
+      - Freitag
+      - Samstag
+    abbr_day_names:
+      - So
+      - Mo
+      - Di
+      - Mi
+      - Do
+      - Fr
+      - Sa
+    month_names:
+      - ~
+      - Januar
+      - Februar
+      - März
+      - April
+      - Mai
+      - Juni
+      - Juli
+      - August
+      - September
+      - Oktober
+      - November
+      - Dezember
+    abbr_month_names:
+      - ~
+      - Jan
+      - Feb
+      - Mär
+      - Apr
+      - Mai
+      - Jun
+      - Jul
+      - Aug
+      - Sep
+      - Okt
+      - Nov
+      - Dez
+  time:
+    formats:
+      default: "%d.%m.%Y %H:%M"
+      short: "%d.%m. %H:%M"
+      long: "%d. %B %Y um %H:%M Uhr"
+
+  # ActiveRecord
+  activerecord:
+    models:
+      article:
+        one: Artikel
+        other: Artikel
+      user:
+        one: Benutzer
+        other: Benutzer
+    attributes:
+      article:
+        title: Titel
+        content: Inhalt
+        status: Status
+        published_at: Veröffentlicht am
+        author: Autor
+        slug: URL-Pfad
+      user:
+        email_address: E-Mail-Adresse
+        role: Rolle
+        created_at: Erstellt am
+    errors:
+      models:
+        article:
+          attributes:
+            title:
+              blank: muss ausgefüllt werden
+            slug:
+              taken: ist bereits vergeben
+
+  # Article statuses
+  article_statuses:
+    draft: Entwurf
+    published: Veröffentlicht
+
+  # User roles
+  user_roles:
+    admin: Administrator
+    editor: Redakteur
+    user: Benutzer
+
+  # User statuses
+  user_statuses:
+    active: Aktiv
+    inactive: Inaktiv
+
+  # Sessions
+  sessions:
+    invalid_credentials: Bitte überprüfen Sie E-Mail-Adresse oder Passwort.
+    account_inactive: Ihr Konto wurde deaktiviert. Bitte wenden Sie sich an den Administrator.
+
+  # Admin section
+  admin:
+    navigation:
+      dashboard: Dashboard
+      articles: Artikel
+      users: Benutzer
+      back_to_site: Zur Website
+      sign_out: Abmelden
+    dashboard:
+      title: Admin Dashboard
+      welcome: Willkommen im Administrationsbereich
+      articles_count: Artikel gesamt
+      published_articles_count: Veröffentlichte Artikel
+    articles:
+      index:
+        title: Artikel
+        new_article: Neuer Artikel
+        no_articles: Keine Artikel vorhanden.
+        table:
+          title: Titel
+          status: Status
+          author: Autor
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          edit: Bearbeiten
+          delete: Löschen
+          delete_confirm: Sind Sie sicher, dass Sie diesen Artikel löschen möchten?
+      new:
+        title: Neuer Artikel
+      edit:
+        title: Artikel bearbeiten
+      show:
+        title: Artikel
+        edit: Bearbeiten
+        back: Zurück zur Übersicht
+      form:
+        title_label: Titel
+        slug_label: URL-Pfad
+        slug_hint: Wird automatisch aus dem Titel generiert, falls leer
+        cover_image_label: Titelbild
+        content_label: Inhalt
+        status_label: Status
+        published_at_label: Veröffentlichungsdatum
+        submit_create: Artikel erstellen
+        submit_update: Artikel speichern
+        cancel: Abbrechen
+      messages:
+        created: Artikel wurde erfolgreich erstellt.
+        updated: Artikel wurde erfolgreich aktualisiert.
+        deleted: Artikel wurde erfolgreich gelöscht.
+    users:
+      index:
+        title: Benutzer
+        new_user: Neuer Benutzer
+        no_users: Keine Benutzer vorhanden.
+        table:
+          email: E-Mail
+          role: Rolle
+          status: Status
+          articles_count: Artikel
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          edit: Bearbeiten
+          deactivate: Deaktivieren
+          deactivate_confirm: Sind Sie sicher, dass Sie diesen Benutzer deaktivieren möchten? Der Benutzer kann sich dann nicht mehr anmelden.
+          activate: Aktivieren
+      new:
+        title: Neuer Benutzer
+      edit:
+        title: Benutzer bearbeiten
+      form:
+        email_label: E-Mail-Adresse
+        password_label: Passwort
+        password_confirmation_label: Passwort bestätigen
+        role_label: Rolle
+        role_hint: Die Rolle bestimmt die Berechtigungen des Benutzers.
+        submit_create: Benutzer erstellen
+        submit_update: Benutzer speichern
+        cancel: Abbrechen
+      messages:
+        created: Benutzer wurde erfolgreich erstellt.
+        updated: Benutzer wurde erfolgreich aktualisiert.
+        deactivated: Benutzer wurde deaktiviert.
+        activated: Benutzer wurde aktiviert.
+        cannot_deactivate_self: Sie können sich nicht selbst deaktivieren.
+
+  # Public articles
+  articles:
+    index:
+      title: Aktuelles
+      no_articles: Keine Artikel vorhanden.
+      read_more: Weiterlesen
+    show:
+      back: Zurück zur Übersicht
+      published_at: "Veröffentlicht am %{date}"
+      by_author: "von %{author}"
+
+  # Welcome/Start page
+  welcome:
+    recent_articles:
+      title: Aktuelles
+      view_all: Alle Artikel
+
+  # Common
+  common:
+    actions: Aktionen
+    save: Speichern
+    cancel: Abbrechen
+    delete: Löschen
+    edit: Bearbeiten
+    back: Zurück
+    not_published: Nicht veröffentlicht

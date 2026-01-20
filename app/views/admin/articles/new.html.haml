@@ -1,0 +1,6 @@
+.admin-articles-new{ data: { testid: "admin-articles-new" } }
+  %h1.mb-4{ data: { testid: "new-article-heading" } }= t("admin.articles.new.title")
+
+  .card
+    .card-body
+      = render "form"

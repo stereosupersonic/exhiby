@@ -1,0 +1,49 @@
+= render "shared/site_header", active: :archiv
+
+%section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/archiv_om_1920.jpg')}')", data: { testid: "articles-hero" } }
+  .hero-overlay
+    .container
+      %h1.hero-title{ data: { testid: "articles-heading" } }
+        Schöpfen Sie aus unserem
+        %br
+        Archiv
+
+%section.articles-section{ data: { testid: "articles-section" } }
+  .container
+
+    - if @articles.any?
+      %hr
+      - @articles.each do |article|
+        - presenter = ArticlePresenter.new(article)
+        .article-item.py-4{ data: { testid: "article-card-#{article.slug}" } }
+          .row
+            - if article.cover_image.attached?
+              .col-md-2
+                = link_to article_path(article.slug) do
+                  = image_tag article.cover_image.variant(resize_to_limit: [400, 300]), class: "img-fluid", alt: article.title
+              .col-md-10
+                %h4
+                  = link_to article.title, article_path(article.slug), class: "text-decoration-none"
+                - if article.published_at.present?
+                  %p.text-muted= presenter.formatted_published_at_month_year
+                .article-excerpt
+                  = presenter.excerpt(length: 500)
+                .mt-3
+                  = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
+            - else
+              .col-12
+                %h4
+                  = link_to article.title, article_path(article.slug), class: "text-decoration-none"
+                - if article.published_at.present?
+                  %p.text-muted= presenter.formatted_published_at_month_year
+                .article-excerpt
+                  = presenter.excerpt(length: 500)
+                .mt-3
+                  = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
+          %hr
+
+      .text-center.py-4
+        = will_paginate @articles
+    - else
+      .text-center.text-muted.py-4{ data: { testid: "no-articles-message" } }
+        %p= t("articles.index.no_articles")
