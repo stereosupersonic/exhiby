@@ -201,4 +201,24 @@ RSpec.describe "Welcome Pages" do
       end
     end
   end
+
+  describe "team page" do
+    it "displays the team content" do
+      visit team_path
+
+      expect(page).to have_selector("[data-testid='team-page']")
+      expect(page).to have_selector("[data-testid='team-title']", text: "Wir sind ein Team")
+      expect(page).to have_content("Dr. Heike Schmidt-Kronseder")
+      expect(page).to have_content("Mattias Kehm")
+    end
+
+    it "is accessible from navigation" do
+      visit root_path
+
+      click_link "Team"
+
+      expect(page).to have_current_path(team_path)
+      expect(page).to have_selector("[data-testid='team-page']")
+    end
+  end
 end

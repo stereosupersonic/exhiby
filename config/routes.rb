@@ -27,4 +27,5 @@ Rails.application.routes.draw do
   # Static pages
   get "impressum", to: "welcome#impressum"
   get "datenschutzerklaerung", to: "welcome#datenschutzerklaerung"
+  get "team", to: "welcome#team"
 end

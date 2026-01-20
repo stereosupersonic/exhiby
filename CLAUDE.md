@@ -5,7 +5,6 @@
 Exhiby is a digital museum content management system for museum-wartenberg.de, replacing a legacy Joomla installation.
 The original implementation is under https://www.onlinemuseum-wartenberg.de/
 
-
 **Key Features:**
 - Asset management (images, videos, PDFs)
 - Collections and albums organization

@@ -10,4 +10,7 @@ class WelcomeController < ApplicationController
 
   def datenschutzerklaerung
   end
+
+  def team
+  end
 end

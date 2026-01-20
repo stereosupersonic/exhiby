@@ -5,8 +5,9 @@ RSpec.describe "Public Articles" do
     it "displays the articles index page" do
       visit articles_path
 
+      expect(page).to have_selector("[data-testid='articles-hero']")
+      expect(page).to have_selector("[data-testid='articles-heading']", text: "Archiv")
       expect(page).to have_selector("[data-testid='articles-section']")
-      expect(page).to have_selector("[data-testid='articles-heading']", text: "Aktuelles")
     end
 
     it "displays published articles" do

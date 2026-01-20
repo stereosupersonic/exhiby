@@ -182,6 +182,26 @@ $text-orange: #ff6600;
       font-size: 3.5rem;
     }
   }
+
+  &.hero-section-small {
+    min-height: 250px;
+
+    @media (min-width: 768px) {
+      min-height: 300px;
+    }
+
+    .hero-title {
+      font-size: 1.75rem;
+
+      @media (min-width: 768px) {
+        font-size: 2.5rem;
+      }
+
+      @media (min-width: 992px) {
+        font-size: 3rem;
+      }
+    }
+  }
 }
 
 // Welcome Section
