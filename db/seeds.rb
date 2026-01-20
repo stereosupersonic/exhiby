@@ -4,7 +4,7 @@
 
 # Default admin user (all environments)
 admin = User.find_or_create_by!(email_address: "admin@museum-wartenberg.de") do |user|
-  user.password = ENV.fetch("ADMIN_PASSWORD")
+  user.password = ENV.fetch("ADMIN_PASSWORD", "changeme")
   user.role = "admin"
 end
 puts "Created admin user: #{admin.email_address}"
