@@ -3,7 +3,9 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  activated_at    :datetime
 #  active          :boolean          default(TRUE), not null
+#  deactivated_at  :datetime
 #  email_address   :string           not null
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
@@ -126,6 +128,15 @@ RSpec.describe User do
 
         expect(user.reload).not_to be_active
       end
+
+      it "sets deactivated_at timestamp" do
+        freeze_time do
+          user = create(:user, active: true)
+          user.deactivate!
+
+          expect(user.reload.deactivated_at).to eq(Time.current)
+        end
+      end
     end
 
     describe "#activate!" do
@@ -134,6 +145,15 @@ RSpec.describe User do
         user.activate!
 
         expect(user.reload).to be_active
+      end
+
+      it "sets activated_at timestamp" do
+        freeze_time do
+          user = create(:user, active: false)
+          user.activate!
+
+          expect(user.reload.activated_at).to eq(Time.current)
+        end
       end
     end
   end

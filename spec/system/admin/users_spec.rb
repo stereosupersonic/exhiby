@@ -39,6 +39,49 @@ RSpec.describe "Admin Users" do
     end
   end
 
+  describe "creating a user" do
+    it "shows new user button on index page" do
+      visit admin_users_path
+
+      expect(page).to have_link("Neuer Benutzer", href: new_admin_user_path)
+    end
+
+    it "allows creating a new user" do
+      visit admin_users_path
+      click_link "Neuer Benutzer"
+
+      expect(page).to have_selector("[data-testid='admin-users-new']")
+
+      fill_in "E-Mail-Adresse", with: "newuser@example.com"
+      fill_in "Passwort", with: "password123"
+      fill_in "Passwort bestätigen", with: "password123"
+      select "Redakteur", from: "Rolle"
+      click_button "Benutzer erstellen"
+
+      expect(page).to have_selector("[data-testid='flash-notice']", text: "Benutzer wurde erfolgreich erstellt")
+      expect(page).to have_content("newuser@example.com")
+    end
+
+    it "shows validation errors for invalid user" do
+      visit new_admin_user_path
+
+      click_button "Benutzer erstellen"
+
+      expect(page).to have_selector(".alert-danger")
+    end
+
+    it "shows error when passwords do not match" do
+      visit new_admin_user_path
+
+      fill_in "E-Mail-Adresse", with: "newuser@example.com"
+      fill_in "Passwort", with: "password123"
+      fill_in "Passwort bestätigen", with: "differentpassword"
+      click_button "Benutzer erstellen"
+
+      expect(page).to have_selector(".alert-danger")
+    end
+  end
+
   describe "editing a user" do
     let!(:user_to_edit) { create(:user, email_address: "user@example.com", role: "user") }
 

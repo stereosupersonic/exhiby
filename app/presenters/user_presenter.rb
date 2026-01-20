@@ -22,6 +22,20 @@ class UserPresenter < ApplicationPresenter
     I18n.t("user_statuses.#{o.active? ? 'active' : 'inactive'}")
   end
 
+  def status_changed_at
+    if o.active?
+      o.activated_at || o.created_at
+    else
+      o.deactivated_at
+    end
+  end
+
+  def formatted_status_changed_at
+    return nil unless status_changed_at
+
+    I18n.l(status_changed_at, format: :long)
+  end
+
   def role_name
     I18n.t("user_roles.#{o.role}")
   end

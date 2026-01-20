@@ -3,7 +3,9 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  activated_at    :datetime
 #  active          :boolean          default(TRUE), not null
+#  deactivated_at  :datetime
 #  email_address   :string           not null
 #  password_digest :string           not null
 #  role            :string           default("user"), not null

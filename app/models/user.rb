@@ -3,7 +3,9 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  activated_at    :datetime
 #  active          :boolean          default(TRUE), not null
+#  deactivated_at  :datetime
 #  email_address   :string           not null
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
@@ -33,11 +35,11 @@ class User < ApplicationRecord
   scope :inactive, -> { where(active: false) }
 
   def deactivate!
-    update!(active: false)
+    update!(active: false, deactivated_at: Time.current)
   end
 
   def activate!
-    update!(active: true)
+    update!(active: true, activated_at: Time.current)
   end
 
   def admin?

@@ -66,6 +66,50 @@ RSpec.describe UserPresenter do
     end
   end
 
+  describe "#status_changed_at" do
+    context "when user is active with activated_at" do
+      let(:user) { build(:user, active: true, activated_at: Time.zone.local(2024, 5, 10, 14, 0)) }
+
+      it "returns activated_at" do
+        expect(presenter.status_changed_at).to eq(user.activated_at)
+      end
+    end
+
+    context "when user is inactive with deactivated_at" do
+      let(:user) { build(:user, active: false, deactivated_at: Time.zone.local(2024, 5, 10, 14, 0)) }
+
+      it "returns deactivated_at" do
+        expect(presenter.status_changed_at).to eq(user.deactivated_at)
+      end
+    end
+
+    context "when user has no timestamp" do
+      let(:user) { build(:user, active: true, activated_at: nil) }
+
+      it "returns nil" do
+        expect(presenter.status_changed_at).to be_nil
+      end
+    end
+  end
+
+  describe "#formatted_status_changed_at" do
+    context "when user has status changed timestamp" do
+      let(:user) { build(:user, active: false, deactivated_at: Time.zone.local(2024, 5, 10, 14, 30)) }
+
+      it "returns formatted date in short format" do
+        expect(presenter.formatted_status_changed_at).to eq("10.05. 14:30")
+      end
+    end
+
+    context "when user has no status changed timestamp" do
+      let(:user) { build(:user, active: true, activated_at: nil) }
+
+      it "returns nil" do
+        expect(presenter.formatted_status_changed_at).to be_nil
+      end
+    end
+  end
+
   describe "#role_name" do
     context "when user is admin" do
       let(:user) { build(:user, :admin) }

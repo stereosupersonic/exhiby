@@ -1,6 +1,7 @@
 .admin-users{ data: { testid: "admin-users" } }
   .d-flex.justify-content-between.align-items-center.mb-4
     %h1{ data: { testid: "users-heading" } }= t("admin.users.index.title")
+    = link_to t("admin.users.index.new_user"), new_admin_user_path, class: "btn btn-primary", data: { testid: "new-user-button" }
 
   .card
     .card-body
@@ -26,8 +27,11 @@
                   %td
                     %span.badge{ class: presenter.status_badge_class }
                       = presenter.status_name
+                    - if presenter.formatted_status_changed_at
+                      %br
+                      %small.text-muted= presenter.formatted_status_changed_at
                   %td= presenter.articles_count
-                  %td= presenter.formatted_created_at_short
+                  %td= presenter.formatted_created_at
                   %td
                     .btn-group.btn-group-sm
                       = link_to t("admin.users.index.actions.edit"), edit_admin_user_path(user), class: "btn btn-outline-primary", data: { testid: "edit-user-#{user.id}" }

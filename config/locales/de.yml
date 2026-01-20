@@ -161,6 +161,7 @@ de:
     users:
       index:
         title: Benutzer
+        new_user: Neuer Benutzer
         no_users: Keine Benutzer vorhanden.
         table:
           email: E-Mail
@@ -174,15 +175,21 @@ de:
           deactivate: Deaktivieren
           deactivate_confirm: Sind Sie sicher, dass Sie diesen Benutzer deaktivieren möchten? Der Benutzer kann sich dann nicht mehr anmelden.
           activate: Aktivieren
+      new:
+        title: Neuer Benutzer
       edit:
         title: Benutzer bearbeiten
       form:
         email_label: E-Mail-Adresse
+        password_label: Passwort
+        password_confirmation_label: Passwort bestätigen
         role_label: Rolle
         role_hint: Die Rolle bestimmt die Berechtigungen des Benutzers.
+        submit_create: Benutzer erstellen
         submit_update: Benutzer speichern
         cancel: Abbrechen
       messages:
+        created: Benutzer wurde erfolgreich erstellt.
         updated: Benutzer wurde erfolgreich aktualisiert.
         deactivated: Benutzer wurde deaktiviert.
         activated: Benutzer wurde aktiviert.
