@@ -39,6 +39,7 @@ env:
   secret:
     - RAILS_MASTER_KEY
     - DATABASE_PASSWORD
+    - ADMIN_PASSWORD
   clear:
     DATABASE_HOST: exhiby-postgres
     DATABASE_USERNAME: postgres
