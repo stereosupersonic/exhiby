@@ -97,7 +97,7 @@ RSpec.describe UserPresenter do
       let(:user) { build(:user, active: false, deactivated_at: Time.zone.local(2024, 5, 10, 14, 30)) }
 
       it "returns formatted date in short format" do
-        expect(presenter.formatted_status_changed_at).to eq("10.05. 14:30")
+        expect(presenter.formatted_status_changed_at).to eq("10. Mai 2024 um 14:30 Uhr")
       end
     end
 
