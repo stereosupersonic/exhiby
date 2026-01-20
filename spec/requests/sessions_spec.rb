@@ -54,9 +54,9 @@ RSpec.describe "Sessions" do
       sign_in(user)
     end
 
-    it "destroys the session and redirects to login" do
+    it "destroys the session and redirects to start page" do
       delete session_path
-      expect(response).to redirect_to(new_session_path)
+      expect(response).to redirect_to(root_path)
     end
   end
 end
