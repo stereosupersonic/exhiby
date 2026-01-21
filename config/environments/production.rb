@@ -93,7 +93,7 @@ Rails.application.configure do
     address: ENV["SMTP_ADDRESS"],
     port: ENV["SMTP_PORT"],
     user_name: ENV["SMTP_USERNAME"],
-    password: ENV.fetch("SMTP_PASSWORD"),
+    password:  ENV["SMTP_PASSWORD"],
     authentication: :plain,
     tls: true,
     openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
