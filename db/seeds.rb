@@ -36,6 +36,7 @@ techniques.each_with_index do |name, index|
 end
 puts "Created #{Technique.count} techniques"
 
+
 # Default admin user (all environments)
 admin = User.find_or_create_by!(email_address: "admin@museum-wartenberg.de") do |user|
   user.password = ENV.fetch("ADMIN_PASSWORD")
