@@ -40,6 +40,10 @@ env:
     - RAILS_MASTER_KEY
     - DATABASE_PASSWORD
     - ADMIN_PASSWORD
+    - SMTP_ADDRESS
+    - SMTP_PORT
+    - SMTP_USERNAME
+    - SMTP_PASSWORD
   clear:
     DATABASE_HOST: exhiby-postgres
     DATABASE_USERNAME: postgres

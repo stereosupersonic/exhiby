@@ -9,6 +9,10 @@ ExceptionNotification.configure do |config|
   #   ActionController::RoutingError ActionController::UnknownFormat ActionController::UrlGenerationError
   #   ActionDispatch::Http::MimeNegotiation::InvalidType Rack::Utils::InvalidParameterError
   # config.ignored_exceptions += %w[ActionView::TemplateError CustomError]
+  config.ignored_exceptions += %w[
+    ActionController::BadRequest
+    ActionController::UnknownFormat
+  ]
 
   # Adds a condition to decide when an exception must be ignored or not.
   # The ignore_if method can be invoked multiple times to add extra conditions.
@@ -23,9 +27,9 @@ ExceptionNotification.configure do |config|
 
   # Email notifier sends notifications by email.
   config.add_notifier :email, {
-    email_prefix: "[ERROR] ",
-    sender_address: %("Notifier" <admin@museum-wartenberg.de>),
-    exception_recipients: %w[michael@deimel.de]
+    email_prefix: "[ERROR] online-museum",
+    sender_address: %("exhiby" <debug@deimel.de>),
+    exception_recipients: %w[debug@deimel.de]
   }
 
   # Campfire notifier sends notifications to your Campfire room. Requires "tinder" gem.
