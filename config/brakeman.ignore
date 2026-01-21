@@ -3,8 +3,24 @@
     {
       "fingerprint": "bd4cc6bdb83bb1478ae667941fdee9753c64cd17d898ddf0e501bf033ae9d76e",
       "note": "False positive: status_badge_class returns only hardcoded Bootstrap class strings based on validated article status (draft/published)"
+    },
+    {
+      "fingerprint": "2c498c7548e094983cf747a0aedacb8c612d5eec3d7e050a24f014ee0cd627e3",
+      "note": "False positive: ArtistPresenter#status_badge_class returns only hardcoded Bootstrap class strings from STATUS_BADGE_CLASSES hash"
+    },
+    {
+      "fingerprint": "0179a5c1c14091cf224bfc946e799a3274e12024ab184150bae2d0dcd9dd24e3",
+      "note": "False positive: CollectionPresenter#status_badge_class returns only hardcoded Bootstrap class strings from STATUS_BADGE_CLASSES hash"
+    },
+    {
+      "fingerprint": "6936e0d612ebe4cb9c0d8633b43220a8fc7e9d05934a25197808ba037756b13d",
+      "note": "False positive: MediaItemPresenter#status_badge_class returns only hardcoded Bootstrap class strings from STATUS_BADGE_CLASSES hash"
+    },
+    {
+      "fingerprint": "c327f298be156f2f4369d59f84434621e2f6cec96915f7e3b825d002d5c08ab3",
+      "note": "False positive: MediaItemPresenter#media_type_badge_class returns only hardcoded Bootstrap class strings from MEDIA_TYPE_BADGE_CLASSES hash"
     }
   ],
-  "updated": "2026-01-20 17:01:47 +0100",
+  "updated": "2026-01-21 16:25:00 +0100",
   "brakeman_version": "7.1.2"
 }
