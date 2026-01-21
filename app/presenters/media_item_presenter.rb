@@ -55,6 +55,12 @@ class MediaItemPresenter < ApplicationPresenter
     "#{filename} (#{size})"
   end
 
+  def file_size
+    return nil unless o.file.attached?
+
+    number_to_human_size(o.file.byte_size)
+  end
+
   def thumbnail_url(size: [ 300, 200 ])
     return nil unless o.file.attached? && o.image?
 

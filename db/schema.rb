@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_21_111818) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_113958) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,6 +54,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111818) do
 
   create_table "articles", force: :cascade do |t|
     t.bigint "author_id", null: false
+    t.bigint "cover_media_item_id"
     t.datetime "created_at", null: false
     t.datetime "published_at"
     t.string "slug", null: false
@@ -61,6 +62,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111818) do
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_articles_on_author_id"
+    t.index ["cover_media_item_id"], name: "index_articles_on_cover_media_item_id"
     t.index ["published_at"], name: "index_articles_on_published_at"
     t.index ["slug"], name: "index_articles_on_slug", unique: true
     t.index ["status"], name: "index_articles_on_status"
@@ -171,10 +173,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111818) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "articles", "media_items", column: "cover_media_item_id"
   add_foreign_key "articles", "users", column: "author_id"
   add_foreign_key "artists", "media_items", column: "profile_media_item_id"
   add_foreign_key "artists", "users", column: "created_by_id"
-  add_foreign_key "media_items", "artists"
+  add_foreign_key "media_items", "artists", on_delete: :restrict
   add_foreign_key "media_items", "techniques"
   add_foreign_key "media_items", "users", column: "reviewed_by_id"
   add_foreign_key "media_items", "users", column: "uploaded_by_id"

@@ -35,7 +35,7 @@ RSpec.describe Artist, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:created_by).class_name("User") }
     it { is_expected.to belong_to(:profile_media_item).class_name("MediaItem").optional }
-    it { is_expected.to have_many(:media_items).dependent(:nullify) }
+    it { is_expected.to have_many(:media_items).dependent(:restrict_with_error) }
     it { is_expected.to have_one_attached(:profile_image) }
     it { is_expected.to have_rich_text(:biography) }
     it { is_expected.to have_rich_text(:cv) }
@@ -182,6 +182,21 @@ RSpec.describe Artist, type: :model do
     it "clears published_at" do
       artist.unpublish!
       expect(artist.published_at).to be_nil
+    end
+  end
+
+  describe "deletion restrictions" do
+    let(:artist) { create(:artist) }
+
+    it "cannot be deleted when media items are assigned" do
+      create(:media_item, artist: artist)
+      expect(artist.destroy).to be false
+      expect(artist.errors[:base]).not_to be_empty
+    end
+
+    it "can be deleted when no media items are assigned" do
+      expect(artist.destroy).to be_truthy
+      expect(Artist.exists?(artist.id)).to be false
     end
   end
 

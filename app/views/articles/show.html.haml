@@ -13,9 +13,9 @@
           %span{ data: { testid: "article-published-at" } }
             = t("articles.show.published_at", date: l(@article.published_at, format: :long))
 
-      - if @article.cover_image.attached?
+      - if @article.cover_media_item&.file&.attached?
         .article-cover-image.mb-4
-          = image_tag @article.cover_image.variant(resize_to_limit: [800, 400]), class: "img-fluid rounded", alt: @article.title, data: { testid: "article-cover-image" }
+          = render "shared/zoomable_image", image: @article.cover_media_item.file.variant(resize_to_limit: [800, 400]), full_image_url: url_for(@article.cover_media_item.file), title: @article.title, image_class: "img-fluid rounded"
 
       .article-body{ data: { testid: "article-body" } }
         = @article.content

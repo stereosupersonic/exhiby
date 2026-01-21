@@ -36,8 +36,11 @@ module Admin
     end
 
     def destroy
-      @artist.destroy
-      redirect_to admin_artists_path, notice: t("admin.artists.messages.deleted")
+      if @artist.destroy
+        redirect_to admin_artists_path, notice: t("admin.artists.messages.deleted")
+      else
+        redirect_to admin_artist_path(@artist), alert: t("admin.artists.messages.cannot_delete_with_media_items")
+      end
     end
 
     def publish

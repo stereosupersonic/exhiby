@@ -34,7 +34,7 @@ class Artist < ApplicationRecord
 
   belongs_to :created_by, class_name: "User"
   belongs_to :profile_media_item, class_name: "MediaItem", optional: true
-  has_many :media_items, dependent: :nullify
+  has_many :media_items, dependent: :restrict_with_error
 
   has_one_attached :profile_image
   has_rich_text :biography

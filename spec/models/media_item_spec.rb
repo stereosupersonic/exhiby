@@ -35,7 +35,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (artist_id => artists.id)
+#  fk_rails_...  (artist_id => artists.id) ON DELETE => restrict
 #  fk_rails_...  (reviewed_by_id => users.id)
 #  fk_rails_...  (technique_id => techniques.id)
 #  fk_rails_...  (uploaded_by_id => users.id)

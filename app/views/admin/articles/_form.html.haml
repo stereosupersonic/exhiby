@@ -11,12 +11,14 @@
     - if @article.errors[:title].any?
       .invalid-feedback= @article.errors[:title].first
 
-  .mb-3
-    = form.label :cover_image, t("admin.articles.form.cover_image_label"), class: "form-label"
-    = form.file_field :cover_image, class: "form-control", accept: "image/*", data: { testid: "article-cover-image" }
-    - if @article.cover_image.attached?
-      .mt-2
-        = image_tag @article.cover_image.variant(resize_to_limit: [200, 200]), class: "img-thumbnail"
+  - cover_thumbnail = @article.cover_media_item&.file&.attached? ? url_for(@article.cover_media_item.file.variant(resize_to_limit: [100, 100])) : ""
+  .mb-3{ data: { controller: "media-item-selector", "media-item-selector-search-url-value": search_admin_media_items_path, "media-item-selector-selected-id-value": @article.cover_media_item_id.to_i, "media-item-selector-selected-title-value": @article.cover_media_item&.title.to_s, "media-item-selector-selected-thumbnail-value": cover_thumbnail } }
+    = form.label :cover_media_item_id, t("admin.articles.form.cover_image_label"), class: "form-label"
+    = form.hidden_field :cover_media_item_id, data: { "media-item-selector-target": "input" }
+    .position-relative{ data: { "media-item-selector-target": "selected" }, class: (@article.cover_media_item_id.present? ? "d-none" : "") }
+      %input.form-control{ type: "text", placeholder: t("admin.articles.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
+      .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "media-item-selector-target": "results" } }
+    .mt-2{ data: { "media-item-selector-target": "preview" }, class: (@article.cover_media_item_id.blank? ? "d-none" : "") }
 
   .mb-3
     = form.label :content, t("admin.articles.form.content_label"), class: "form-label"

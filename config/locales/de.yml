@@ -299,6 +299,7 @@ de:
         slug_label: URL-Pfad
         slug_hint: Wird automatisch aus dem Titel generiert, falls leer
         cover_image_label: Titelbild
+        search_media_items: Medien durchsuchen...
         content_label: Inhalt
         status_label: Status
         published_at_label: Veröffentlichungsdatum
@@ -366,6 +367,7 @@ de:
           title: Titel
           type: Typ
           status: Status
+          size: Größe
           uploaded_by: Hochgeladen von
           created_at: Erstellt
           actions: Aktionen
@@ -577,6 +579,7 @@ de:
         publish_failed: Künstler konnte nicht veröffentlicht werden.
         unpublished: Veröffentlichung wurde zurückgezogen.
         unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
+        cannot_delete_with_media_items: Künstler kann nicht gelöscht werden, da noch Werke zugeordnet sind.
 
   # Public articles
   articles:

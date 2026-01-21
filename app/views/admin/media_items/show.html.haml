@@ -77,7 +77,7 @@
 
             - if @media_item.technique.present?
               %dt.col-sm-5= t("admin.media_items.show.technique")
-              %dd.col-sm-7= @media_item.technique
+              %dd.col-sm-7= @media_item.technique.name
 
             - if @media_item.copyright.present?
               %dt.col-sm-5= t("admin.media_items.show.copyright")

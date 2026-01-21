@@ -2,31 +2,35 @@
 #
 # Table name: articles
 #
-#  id           :bigint           not null, primary key
-#  published_at :datetime
-#  slug         :string           not null
-#  status       :string           default("draft"), not null
-#  title        :string           not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  author_id    :bigint           not null
+#  id                  :bigint           not null, primary key
+#  published_at        :datetime
+#  slug                :string           not null
+#  status              :string           default("draft"), not null
+#  title               :string           not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  author_id           :bigint           not null
+#  cover_media_item_id :bigint
 #
 # Indexes
 #
-#  index_articles_on_author_id     (author_id)
-#  index_articles_on_published_at  (published_at)
-#  index_articles_on_slug          (slug) UNIQUE
-#  index_articles_on_status        (status)
+#  index_articles_on_author_id            (author_id)
+#  index_articles_on_cover_media_item_id  (cover_media_item_id)
+#  index_articles_on_published_at         (published_at)
+#  index_articles_on_slug                 (slug) UNIQUE
+#  index_articles_on_status               (status)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (author_id => users.id)
+#  fk_rails_...  (cover_media_item_id => media_items.id)
 #
 require "rails_helper"
 
 RSpec.describe Article do
   describe "associations" do
     it { is_expected.to belong_to(:author).class_name("User") }
+    it { is_expected.to belong_to(:cover_media_item).class_name("MediaItem").optional }
     it { is_expected.to have_rich_text(:content) }
     it { is_expected.to have_one_attached(:cover_image) }
   end
