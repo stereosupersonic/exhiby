@@ -2,7 +2,6 @@
 require "exception_notification/rails"
 require "exception_notification/rake"
 
-
 ExceptionNotification.configure do |config|
   # Ignore additional exception types. The default list of exception classes is:
   #   ActiveRecord::RecordNotFound Mongoid::Errors::DocumentNotFound AbstractController::ActionNotFound
