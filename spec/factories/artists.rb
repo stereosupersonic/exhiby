@@ -2,18 +2,32 @@
 #
 # Table name: artists
 #
-#  id            :bigint           not null, primary key
-#  birth_date    :date
-#  birth_place   :string
-#  death_date    :date
-#  death_place   :string
-#  name          :string           not null
-#  published_at  :datetime
-#  slug          :string           not null
-#  status        :string           default("draft"), not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  created_by_id :bigint           not null
+#  id                    :bigint           not null, primary key
+#  birth_date            :date
+#  birth_place           :string
+#  death_date            :date
+#  death_place           :string
+#  name                  :string           not null
+#  published_at          :datetime
+#  slug                  :string           not null
+#  status                :string           default("draft"), not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  created_by_id         :bigint           not null
+#  profile_media_item_id :bigint
+#
+# Indexes
+#
+#  index_artists_on_created_by_id          (created_by_id)
+#  index_artists_on_profile_media_item_id  (profile_media_item_id)
+#  index_artists_on_published_at           (published_at)
+#  index_artists_on_slug                   (slug) UNIQUE
+#  index_artists_on_status                 (status)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (created_by_id => users.id)
+#  fk_rails_...  (profile_media_item_id => media_items.id)
 #
 FactoryBot.define do
   factory :artist do
@@ -41,6 +55,10 @@ FactoryBot.define do
           content_type: "image/png"
         )
       end
+    end
+
+    trait :with_profile_media_item do
+      association :profile_media_item, factory: %i[media_item with_file]
     end
 
     trait :with_biography do

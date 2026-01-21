@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_21_111815) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_111818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,11 +74,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111815) do
     t.date "death_date"
     t.string "death_place"
     t.string "name", null: false
+    t.bigint "profile_media_item_id"
     t.datetime "published_at"
     t.string "slug", null: false
     t.string "status", default: "draft", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_artists_on_created_by_id"
+    t.index ["profile_media_item_id"], name: "index_artists_on_profile_media_item_id"
     t.index ["published_at"], name: "index_artists_on_published_at"
     t.index ["slug"], name: "index_artists_on_slug", unique: true
     t.index ["status"], name: "index_artists_on_status"
@@ -97,7 +99,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111815) do
     t.string "source"
     t.string "status", default: "draft", null: false
     t.datetime "submitted_at"
-    t.string "technique"
+    t.bigint "technique_id"
+    t.string "technique_legacy"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.bigint "uploaded_by_id", null: false
@@ -107,6 +110,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111815) do
     t.index ["published_at"], name: "index_media_items_on_published_at"
     t.index ["reviewed_by_id"], name: "index_media_items_on_reviewed_by_id"
     t.index ["status"], name: "index_media_items_on_status"
+    t.index ["technique_id"], name: "index_media_items_on_technique_id"
     t.index ["uploaded_by_id"], name: "index_media_items_on_uploaded_by_id"
     t.index ["year"], name: "index_media_items_on_year"
   end
@@ -140,6 +144,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111815) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "techniques", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_techniques_on_name", unique: true
+    t.index ["position"], name: "index_techniques_on_position"
+    t.index ["slug"], name: "index_techniques_on_slug", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "activated_at"
     t.boolean "active", default: true, null: false
@@ -157,8 +172,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_111815) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "users", column: "author_id"
+  add_foreign_key "artists", "media_items", column: "profile_media_item_id"
   add_foreign_key "artists", "users", column: "created_by_id"
   add_foreign_key "media_items", "artists"
+  add_foreign_key "media_items", "techniques"
   add_foreign_key "media_items", "users", column: "reviewed_by_id"
   add_foreign_key "media_items", "users", column: "uploaded_by_id"
   add_foreign_key "media_taggings", "media_items"

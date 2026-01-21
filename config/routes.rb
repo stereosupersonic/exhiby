@@ -8,6 +8,9 @@ Rails.application.routes.draw do
     resource :profile, only: %i[edit update]
     resources :articles
     resources :media_items do
+      collection do
+        get :search
+      end
       member do
         patch :submit_for_review
         patch :publish
@@ -16,6 +19,7 @@ Rails.application.routes.draw do
       end
     end
     resources :media_tags, path: "tags"
+    resources :techniques
     resources :artists do
       member do
         patch :publish

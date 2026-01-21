@@ -28,6 +28,9 @@
             - if can? :manage, MediaTag
               %li.nav-item
                 = link_to t("admin.navigation.tags"), admin_media_tags_path, class: "nav-link"
+            - if can? :manage, Technique
+              %li.nav-item
+                = link_to t("admin.navigation.techniques"), admin_techniques_path, class: "nav-link"
             - if can? :manage, User
               %li.nav-item
                 = link_to t("admin.navigation.users"), admin_users_path, class: "nav-link"

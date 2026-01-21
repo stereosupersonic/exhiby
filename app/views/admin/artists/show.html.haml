@@ -8,10 +8,14 @@
 
   .row
     .col-lg-8
-      - if @artist.profile_image.attached?
+      - if @artist.profile_media_item&.file&.attached?
         .card.mb-4
           .card-body.text-center
-            = image_tag @artist.profile_image.variant(resize_to_limit: [400, 400]), class: "img-fluid rounded", alt: @artist.name
+            = image_tag @artist.profile_media_item.file.variant(resize_to_fit: [400, 400]), class: "img-fluid rounded", alt: @artist.name
+      - elsif @artist.profile_image.attached?
+        .card.mb-4
+          .card-body.text-center
+            = image_tag @artist.profile_image.variant(resize_to_fit: [400, 400]), class: "img-fluid rounded", alt: @artist.name
 
       - if @artist.biography.present?
         .card.mb-4

@@ -18,6 +18,10 @@ module Admin
       # Tags
       @tags_count = MediaTag.count
 
+      # Artists
+      @artists_count = Artist.count
+      @published_artists_count = Artist.published.count
+
       # Recent items for quick access
       @recent_media_items = MediaItem.includes(:uploaded_by).recent.limit(5)
       @pending_review_items = MediaItem.includes(:uploaded_by).pending_review.recent.limit(5)

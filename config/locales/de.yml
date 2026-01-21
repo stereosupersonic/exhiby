@@ -219,6 +219,7 @@ de:
       media_items: Medien
       artists: Kunstschaffende
       tags: Tags
+      techniques: Techniken
       users: Benutzer
       back_to_site: Zur Website
       sign_out: Abmelden
@@ -231,7 +232,11 @@ de:
       sections:
         media_items: Medien
         articles: Artikel
+        artists: Kunstschaffende
         management: Verwaltung
+      # Artists
+      artists_count: Kunstschaffende gesamt
+      published_artists_count: Veröffentlicht
       # Media Items
       media_items_count: Medien gesamt
       draft_media_items_count: Entwürfe
@@ -472,6 +477,34 @@ de:
         created: Tag wurde erfolgreich erstellt.
         updated: Tag wurde erfolgreich aktualisiert.
         deleted: Tag wurde erfolgreich gelöscht.
+    techniques:
+      index:
+        title: Techniken
+        description: Techniken beschreiben die künstlerische Ausführungsart eines Werks, z.B. Öl auf Leinwand, Aquarell oder Bronze. Sie werden bei Medien-Einträgen zur Kategorisierung verwendet.
+        new_technique: Neue Technik
+        no_techniques: Keine Techniken vorhanden.
+        table:
+          position: Pos.
+          name: Name
+          media_items_count: Medien
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diese Technik löschen möchten?
+      new:
+        title: Neue Technik
+      edit:
+        title: Technik bearbeiten
+      form:
+        name_label: Name
+        position_label: Position
+        position_hint: Niedrigere Werte werden zuerst angezeigt.
+        submit_create: Technik erstellen
+        submit_update: Technik speichern
+        cancel: Abbrechen
+      messages:
+        created: Technik wurde erfolgreich erstellt.
+        updated: Technik wurde erfolgreich aktualisiert.
+        deleted: Technik wurde erfolgreich gelöscht.
     artists:
       index:
         title: Kunstschaffende
@@ -516,6 +549,7 @@ de:
         slug_label: URL-Pfad
         slug_hint: Wird automatisch aus dem Namen generiert, falls leer
         profile_image_label: Profilbild
+        search_media_items: Medien durchsuchen...
         biography_label: Biografie
         cv_label: Lebenslauf
         life_data: Lebensdaten

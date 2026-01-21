@@ -1,10 +1,25 @@
 module Admin
   class MediaItemsController < BaseController
-    before_action :set_media_item, only: [ :show, :edit, :update, :destroy, :submit_for_review, :publish, :reject, :unpublish ]
-    before_action :authorize_media_item, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_media_item, only: %i[show edit update destroy submit_for_review publish reject unpublish]
+    before_action :authorize_media_item, only: %i[show edit update destroy]
 
     def index
       @media_items = filtered_media_items.includes(:uploaded_by, :media_tags).recent.page(params[:page])
+    end
+
+    def search
+      items = accessible_media_items.where(media_type: "image")
+        .search(params[:q])
+        .limit(20)
+        .includes(file_attachment: :blob)
+
+      render json: items.map { |item|
+        {
+          id: item.id,
+          title: item.title,
+          thumbnail_url: item.file.attached? ? url_for(item.file.variant(resize_to_limit: [ 100, 100 ])) : nil
+        }
+      }
     end
 
     def show
@@ -91,8 +106,8 @@ module Admin
     end
 
     def media_item_params
-      params.expect(media_item: [ :title, :description, :media_type, :year, :source, :technique,
-                                 :copyright, :license, :file, :tag_list, :artist_id ])
+      params.expect(media_item: %i[title description media_type year source technique_id
+                                   copyright license file tag_list artist_id])
     end
 
     def filtered_media_items

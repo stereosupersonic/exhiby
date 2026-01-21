@@ -3,7 +3,8 @@ module Admin
     before_action :set_artist, only: %i[show edit update destroy publish unpublish]
 
     def index
-      @artists = filtered_artists.includes(:created_by).recent.page(params[:page])
+      @artists = filtered_artists.includes(:created_by, profile_media_item: { file_attachment: :blob })
+        .recent.page(params[:page])
     end
 
     def show
@@ -67,7 +68,7 @@ module Admin
 
     def artist_params
       params.expect(artist: %i[name slug birth_date death_date birth_place death_place
-                               status published_at profile_image biography cv])
+                               status published_at profile_image profile_media_item_id biography cv])
     end
 
     def filtered_artists

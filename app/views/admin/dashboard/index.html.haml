@@ -88,6 +88,33 @@
           %h5.card-title= t("admin.dashboard.published_articles_count")
           %p.card-text.display-5.mb-0= @published_articles_count
 
+  - if can? :manage, Artist
+    .row.mb-4
+      / Artists Section
+      .col-12
+        %h5.text-muted.mb-3
+          %i.bi.bi-person-badge.me-2
+          = t("admin.dashboard.sections.artists")
+
+    .row.mb-4
+      .col-md-6.col-lg-3.mb-3
+        .card.h-100
+          .card-body.text-center
+            .text-primary.mb-2
+              %i.bi.bi-person-badge{ style: "font-size: 2rem;" }
+            %h5.card-title= t("admin.dashboard.artists_count")
+            %p.card-text.display-5.mb-0= @artists_count
+          .card-footer.bg-transparent.border-0.text-center
+            = link_to t("admin.dashboard.view_all"), admin_artists_path, class: "text-primary text-decoration-none"
+
+      .col-md-6.col-lg-3.mb-3
+        .card.border-success.h-100
+          .card-body.text-center
+            .text-success.mb-2
+              %i.bi.bi-check-circle{ style: "font-size: 2rem;" }
+            %h5.card-title= t("admin.dashboard.published_artists_count")
+            %p.card-text.display-5.mb-0= @published_artists_count
+
   .row.mb-4
     / Users & Tags Section
     .col-12

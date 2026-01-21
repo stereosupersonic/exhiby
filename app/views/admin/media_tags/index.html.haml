@@ -22,9 +22,9 @@
                   %td
                     %span.badge.bg-secondary= tag.media_items_count
                   %td
-                    .btn-group.btn-group-sm
-                      = link_to t("common.edit"), edit_admin_media_tag_path(tag), class: "btn btn-outline-primary"
-                      = button_to t("common.delete"), admin_media_tag_path(tag), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: t("admin.media_tags.index.actions.delete_confirm") }
+                    .d-flex.gap-2
+                      = link_to t("common.edit"), edit_admin_media_tag_path(tag), class: "btn btn-sm btn-outline-primary"
+                      = button_to t("common.delete"), admin_media_tag_path(tag), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.media_tags.index.actions.delete_confirm") }
 
         = will_paginate @media_tags, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
       - else

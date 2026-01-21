@@ -50,8 +50,8 @@
         = form.text_field :source, class: "form-control", data: { testid: "media-item-source" }
 
       .mb-3
-        = form.label :technique, t("admin.media_items.form.technique_label"), class: "form-label"
-        = form.select :technique, MediaItem::TECHNIQUES.map { |t| [I18n.t("media_item_techniques.#{t}"), t] }, { include_blank: t("admin.media_items.form.select_technique") }, class: "form-select", data: { testid: "media-item-technique" }
+        = form.label :technique_id, t("admin.media_items.form.technique_label"), class: "form-label"
+        = form.select :technique_id, Technique.ordered.map { |t| [t.name, t.id] }, { include_blank: t("admin.media_items.form.select_technique") }, class: "form-select", data: { testid: "media-item-technique" }
 
       .mb-3
         = form.label :artist_id, t("admin.media_items.form.artist_label"), class: "form-label"

@@ -35,8 +35,10 @@
                 %tr{ data: { testid: "artist-row-#{artist.slug}" } }
                   %td
                     .d-flex.align-items-center
-                      - if artist.profile_image.attached?
-                        = image_tag artist.profile_image.variant(resize_to_limit: [40, 40]), class: "rounded-circle me-2", alt: artist.name
+                      - if artist.profile_media_item&.file&.attached?
+                        = image_tag artist.profile_media_item.file.variant(resize_to_fit: [40, 40]), class: "rounded-circle me-2", alt: artist.name
+                      - elsif artist.profile_image.attached?
+                        = image_tag artist.profile_image.variant(resize_to_fit: [40, 40]), class: "rounded-circle me-2", alt: artist.name
                       = link_to artist.name, admin_artist_path(artist)
                   %td= presenter.display_life_dates
                   %td
@@ -45,9 +47,9 @@
                   %td= presenter.media_items_count
                   %td= l(artist.created_at, format: :short)
                   %td
-                    .btn-group.btn-group-sm
-                      = link_to t("common.edit"), edit_admin_artist_path(artist), class: "btn btn-outline-primary", data: { testid: "edit-artist-#{artist.slug}" }
-                      = button_to t("common.delete"), admin_artist_path(artist), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: t("admin.artists.index.actions.delete_confirm"), testid: "delete-artist-#{artist.slug}" }
+                    .d-flex.gap-2
+                      = link_to t("common.edit"), edit_admin_artist_path(artist), class: "btn btn-sm btn-outline-primary", data: { testid: "edit-artist-#{artist.slug}" }
+                      = button_to t("common.delete"), admin_artist_path(artist), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.artists.index.actions.delete_confirm"), testid: "delete-artist-#{artist.slug}" }
         = will_paginate @artists if @artists.respond_to?(:total_pages)
       - else
         .text-center.text-muted.py-4{ data: { testid: "no-artists-message" } }

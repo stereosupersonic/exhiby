@@ -1,0 +1,23 @@
+= form_with model: [:admin, @technique], class: "needs-validation", data: { testid: "technique-form" } do |form|
+  - if @technique.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @technique.errors.full_messages.each do |message|
+          %li= message
+
+  .row
+    .col-md-8
+      .mb-3
+        = form.label :name, t("admin.techniques.form.name_label"), class: "form-label"
+        = form.text_field :name, class: "form-control #{'is-invalid' if @technique.errors[:name].any?}", required: true, data: { testid: "technique-name" }
+        - if @technique.errors[:name].any?
+          .invalid-feedback= @technique.errors[:name].first
+
+      .mb-3
+        = form.label :position, t("admin.techniques.form.position_label"), class: "form-label"
+        = form.number_field :position, class: "form-control", data: { testid: "technique-position" }
+        .form-text= t("admin.techniques.form.position_hint")
+
+  .d-flex.gap-2.mt-4
+    = form.submit @technique.persisted? ? t("admin.techniques.form.submit_update") : t("admin.techniques.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-technique" }
+    = link_to t("admin.techniques.form.cancel"), admin_techniques_path, class: "btn btn-outline-secondary"

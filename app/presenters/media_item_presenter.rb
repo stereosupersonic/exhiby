@@ -27,6 +27,10 @@ class MediaItemPresenter < ApplicationPresenter
     I18n.t("media_item_types.#{o.media_type}")
   end
 
+  def technique_name
+    o.technique&.name
+  end
+
   def uploader_name
     o.uploaded_by.email_address
   end

@@ -28,6 +28,7 @@ class Ability
       can :manage, Article
       can :manage, MediaItem
       can :manage, MediaTag
+      can :manage, Technique
       can :manage, Artist
       can %i[publish reject unpublish], MediaItem
       can %i[publish unpublish], Artist

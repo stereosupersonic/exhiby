@@ -1,0 +1,25 @@
+-# Renders an image with a magnifying glass overlay that opens a lightbox on click
+-# Required locals:
+-#   - image: The image to display (can be a variant or attached file)
+-#   - full_image_url: URL to the full-size image for the lightbox
+-# Optional locals:
+-#   - title: Image title
+-#   - description: Image description
+-#   - artist: Artist name
+-#   - year: Year of creation
+-#   - technique: Technique used
+-#   - image_class: CSS class for the image (default: "img-fluid")
+-#   - wrapper_class: Additional CSS class for the wrapper
+
+- image_class ||= "img-fluid"
+- wrapper_class ||= ""
+- title ||= nil
+- description ||= nil
+- artist ||= nil
+- year ||= nil
+- technique ||= nil
+
+.image-zoom-wrapper{ class: wrapper_class, data: { controller: "lightbox", "lightbox-image-url-value": full_image_url, "lightbox-title-value": title, "lightbox-description-value": description, "lightbox-artist-value": artist, "lightbox-year-value": year, "lightbox-technique-value": technique, action: "click->lightbox#open" } }
+  = image_tag image, class: image_class, alt: title
+  .zoom-overlay
+    %i.bi.bi-zoom-in.zoom-icon

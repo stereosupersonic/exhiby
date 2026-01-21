@@ -20,12 +20,14 @@
         - if @artist.errors[:slug].any?
           .invalid-feedback= @artist.errors[:slug].first
 
-      .mb-3
-        = form.label :profile_image, t("admin.artists.form.profile_image_label"), class: "form-label"
-        = form.file_field :profile_image, class: "form-control", accept: "image/*", data: { testid: "artist-profile-image" }
-        - if @artist.profile_image.attached?
-          .mt-2
-            = image_tag @artist.profile_image.variant(resize_to_limit: [150, 150]), class: "img-thumbnail"
+      - profile_thumbnail = @artist.profile_media_item&.file&.attached? ? url_for(@artist.profile_media_item.file.variant(resize_to_limit: [100, 100])) : ""
+      .mb-3{ data: { controller: "media-item-selector", "media-item-selector-search-url-value": search_admin_media_items_path, "media-item-selector-selected-id-value": @artist.profile_media_item_id.to_i, "media-item-selector-selected-title-value": @artist.profile_media_item&.title.to_s, "media-item-selector-selected-thumbnail-value": profile_thumbnail } }
+        = form.label :profile_media_item_id, t("admin.artists.form.profile_image_label"), class: "form-label"
+        = form.hidden_field :profile_media_item_id, data: { "media-item-selector-target": "input" }
+        .position-relative{ data: { "media-item-selector-target": "selected" }, class: (@artist.profile_media_item_id.present? ? "d-none" : "") }
+          %input.form-control{ type: "text", placeholder: t("admin.artists.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
+          .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "media-item-selector-target": "results" } }
+        .mt-2{ data: { "media-item-selector-target": "preview" }, class: (@artist.profile_media_item_id.blank? ? "d-none" : "") }
 
       .mb-3
         = form.label :biography, t("admin.artists.form.biography_label"), class: "form-label"

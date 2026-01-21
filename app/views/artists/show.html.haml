@@ -7,40 +7,53 @@
       = link_to t("artists.show.back"), artists_path, class: "btn btn-outline-secondary btn-sm"
 
     .row.mb-5
-      - if @artist.profile_image.attached?
+      - has_image = @artist.profile_media_item&.file&.attached? || @artist.profile_image.attached?
+      - if has_image
         .col-md-3
-          = image_tag @artist.profile_image.variant(resize_to_limit: [300, 400]), class: "img-fluid rounded", alt: @artist.name, data: { testid: "artist-profile-image" }
+          - if @artist.profile_media_item&.file&.attached?
+            = render "shared/zoomable_image", image: @artist.profile_media_item.file.variant(resize_to_fit: [300, 400]), full_image_url: url_for(@artist.profile_media_item.file), title: @artist.name, image_class: "img-fluid rounded"
+          - elsif @artist.profile_image.attached?
+            = render "shared/zoomable_image", image: @artist.profile_image.variant(resize_to_fit: [300, 400]), full_image_url: url_for(@artist.profile_image), title: @artist.name, image_class: "img-fluid rounded"
         .col-md-9
           %h1.mb-3{ data: { testid: "artist-name" } }= @artist.name
           - if presenter.full_life_info.present?
             %p.lead.text-muted{ data: { testid: "artist-life-info" } }= presenter.full_life_info
+          - if @artist.biography.present?
+            .artist-biography.mt-4{ data: { testid: "artist-biography" } }
+              %h2.h5.mb-3= t("artists.show.biography")
+              .content
+                = @artist.biography
+          - if @artist.cv.present?
+            .artist-cv.mt-4{ data: { testid: "artist-cv" } }
+              %h2.h5.mb-3= t("artists.show.cv")
+              .content
+                = @artist.cv
       - else
         .col-12
           %h1.mb-3{ data: { testid: "artist-name" } }= @artist.name
           - if presenter.full_life_info.present?
             %p.lead.text-muted{ data: { testid: "artist-life-info" } }= presenter.full_life_info
-
-    - if @artist.biography.present?
-      .artist-biography.mb-5{ data: { testid: "artist-biography" } }
-        %h2.h4.mb-3= t("artists.show.biography")
-        .content
-          = @artist.biography
-
-    - if @artist.cv.present?
-      .artist-cv.mb-5{ data: { testid: "artist-cv" } }
-        %h2.h4.mb-3= t("artists.show.cv")
-        .content
-          = @artist.cv
+          - if @artist.biography.present?
+            .artist-biography.mt-4{ data: { testid: "artist-biography" } }
+              %h2.h5.mb-3= t("artists.show.biography")
+              .content
+                = @artist.biography
+          - if @artist.cv.present?
+            .artist-cv.mt-4{ data: { testid: "artist-cv" } }
+              %h2.h5.mb-3= t("artists.show.cv")
+              .content
+                = @artist.cv
 
     - if @media_items.any?
       .artist-works{ data: { testid: "artist-works" } }
         %h2.h4.mb-4= t("artists.show.works")
         .row.g-3
           - @media_items.each do |media_item|
+            - media_presenter = MediaItemPresenter.new(media_item)
             .col-6.col-md-4.col-lg-3
               - if media_item.image? && media_item.file.attached?
                 .card
-                  = image_tag media_item.file.variant(resize_to_fill: [200, 200]), class: "card-img-top", alt: media_item.title
+                  = render "shared/zoomable_image", image: media_item.file.variant(resize_to_fill: [200, 200]), full_image_url: url_for(media_item.file), title: media_item.title, description: media_item.description, artist: @artist.name, year: media_item.year&.to_s, technique: media_presenter.technique_name, image_class: "card-img-top"
                   .card-body.p-2
                     %small.text-muted= media_item.title
               - else

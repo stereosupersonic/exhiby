@@ -26,9 +26,9 @@
                   %td= presenter.author_name
                   %td= l(article.created_at, format: :short)
                   %td
-                    .btn-group.btn-group-sm
-                      = link_to t("admin.articles.index.actions.edit"), edit_admin_article_path(article), class: "btn btn-outline-primary", data: { testid: "edit-article-#{article.slug}" }
-                      = button_to t("admin.articles.index.actions.delete"), admin_article_path(article), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: t("admin.articles.index.actions.delete_confirm"), testid: "delete-article-#{article.slug}" }
+                    .d-flex.gap-2
+                      = link_to t("admin.articles.index.actions.edit"), edit_admin_article_path(article), class: "btn btn-sm btn-outline-primary", data: { testid: "edit-article-#{article.slug}" }
+                      = button_to t("admin.articles.index.actions.delete"), admin_article_path(article), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.articles.index.actions.delete_confirm"), testid: "delete-article-#{article.slug}" }
       - else
         .text-center.text-muted.py-4{ data: { testid: "no-articles-message" } }
           %p= t("admin.articles.index.no_articles")
