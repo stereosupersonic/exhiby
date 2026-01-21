@@ -251,3 +251,18 @@
                       %td= l(media_item.created_at, format: :short)
           .card-footer.text-end
             = link_to t("admin.dashboard.view_all_media"), admin_media_items_path, class: "btn btn-outline-primary btn-sm"
+
+  - if current_user.admin?
+    .row.mt-4
+      .col-12
+        .card.border-danger
+          .card-header.bg-danger.text-white
+            %h6.mb-0
+              %i.bi.bi-bug.me-2
+              Developer Tools
+          .card-body
+            %p.text-muted.small.mb-2
+              Test error tracking and exception handling.
+            = link_to admin_root_path(test_exception: true), class: "btn btn-outline-danger btn-sm", data: { turbo: false } do
+              %i.bi.bi-exclamation-triangle.me-1
+              Trigger Test Exception

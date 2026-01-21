@@ -663,6 +663,7 @@ end
 - Handle errors gracefully
 - Provide meaningful error messages
 - Consider using Result objects
+- use exception_notification gem for notifing about exception in production
 
 #### Testing Services
 ```ruby

@@ -1,6 +1,8 @@
 module Admin
   class DashboardController < BaseController
     def index
+      raise "Test exception from admin dashboard" if params[:test_exception]
+
       # Articles
       @articles_count = Article.count
       @published_articles_count = Article.published.count
