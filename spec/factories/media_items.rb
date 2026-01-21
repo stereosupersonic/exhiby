@@ -95,9 +95,14 @@ FactoryBot.define do
     trait :with_metadata do
       year { 2020 }
       source { "Museum Archive" }
-      technique { "Oil on canvas" }
+      association :technique
       copyright { "Museum Wartenberg" }
       license { "CC BY-NC 4.0" }
+    end
+
+    trait :with_file do
+      # File is already attached by default in after(:build)
+      # This trait exists for explicit reference in other factories
     end
   end
 end
