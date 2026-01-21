@@ -26,6 +26,10 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :articles, foreign_key: :author_id, dependent: :destroy, inverse_of: :author
+  has_many :uploaded_media_items, class_name: "MediaItem", foreign_key: :uploaded_by_id,
+                                  dependent: :destroy, inverse_of: :uploaded_by
+  has_many :reviewed_media_items, class_name: "MediaItem", foreign_key: :reviewed_by_id,
+                                  dependent: :nullify, inverse_of: :reviewed_by
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

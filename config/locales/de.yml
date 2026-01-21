@@ -65,6 +65,12 @@ de:
       user:
         one: Benutzer
         other: Benutzer
+      media_item:
+        one: Medium
+        other: Medien
+      media_tag:
+        one: Tag
+        other: Tags
     attributes:
       article:
         title: Titel
@@ -77,6 +83,22 @@ de:
         email_address: E-Mail-Adresse
         role: Rolle
         created_at: Erstellt am
+      media_item:
+        title: Titel
+        description: Beschreibung
+        media_type: Medientyp
+        year: Jahr
+        source: Quelle
+        technique: Technik
+        copyright: Copyright
+        license: Lizenz
+        status: Status
+        published_at: Veröffentlicht am
+        file: Datei
+        uploaded_by: Hochgeladen von
+      media_tag:
+        name: Name
+        slug: Slug
     errors:
       models:
         article:
@@ -89,11 +111,62 @@ de:
           attributes:
             current_password:
               invalid: ist nicht korrekt
+        media_item:
+          attributes:
+            title:
+              blank: muss ausgefüllt werden
+            media_type:
+              blank: muss ausgewählt werden
+              inclusion: ist kein gültiger Typ
+            file:
+              blank: muss hochgeladen werden
+        media_tag:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
 
   # Article statuses
   article_statuses:
     draft: Entwurf
     published: Veröffentlicht
+
+  # Media item statuses
+  media_item_statuses:
+    draft: Entwurf
+    pending_review: In Prüfung
+    published: Veröffentlicht
+
+  # Media item types
+  media_item_types:
+    image: Bild
+    video: Video
+    pdf: PDF
+
+  # Media item techniques
+  media_item_techniques:
+    oil_on_canvas: Öl auf Leinwand
+    oil_on_wood: Öl auf Holz
+    acrylic: Acryl
+    watercolor: Aquarell
+    tempera: Tempera
+    pastel: Pastell
+    pencil_drawing: Bleistiftzeichnung
+    charcoal: Kohlezeichnung
+    ink: Tusche
+    mixed_media: Mischtechnik
+    woodcut: Holzschnitt
+    etching: Radierung
+    lithograph: Lithografie
+    screen_print: Siebdruck
+    digital_print: Digitaldruck
+    bronze: Bronze
+    marble: Marmor
+    wood_sculpture: Holzskulptur
+    ceramic: Keramik
+    photography: Fotografie
+    silver_gelatin: Silbergelatineabzug
+    other: Sonstige
 
   # User roles
   user_roles:
@@ -116,14 +189,54 @@ de:
     navigation:
       dashboard: Dashboard
       articles: Artikel
+      media_items: Medien
+      tags: Tags
       users: Benutzer
       back_to_site: Zur Website
       sign_out: Abmelden
     dashboard:
       title: Admin Dashboard
       welcome: Willkommen im Administrationsbereich
+      quick_upload: Medium hochladen
+      new_article: Neuer Artikel
+      sections:
+        media_items: Medien
+        articles: Artikel
+        management: Verwaltung
+      # Media Items
+      media_items_count: Medien gesamt
+      draft_media_items_count: Entwürfe
+      pending_media_items_count: In Prüfung
+      published_media_items_count: Veröffentlicht
+      view_all: Alle anzeigen
+      view_drafts: Entwürfe anzeigen
+      view_pending: Zu prüfen
+      view_published: Veröffentlichte
+      view_all_media: Alle Medien anzeigen
+      # Articles
       articles_count: Artikel gesamt
       published_articles_count: Veröffentlichte Artikel
+      # Users
+      users_count: Benutzer
+      active_users:
+        one: "%{count} aktiv"
+        other: "%{count} aktiv"
+      manage_users: Benutzer verwalten
+      # Tags
+      tags_count: Tags
+      manage_tags: Tags verwalten
+      # Tables
+      pending_review_title: Warten auf Prüfung
+      recent_media_items_title: Zuletzt hinzugefügt
+      review: Prüfen
+      table:
+        title: Titel
+        type: Typ
+        status: Status
+        uploaded_by: Hochgeladen von
+        submitted_at: Eingereicht am
+        created_at: Erstellt am
+        actions: Aktionen
     articles:
       index:
         title: Artikel
@@ -210,6 +323,124 @@ de:
         submit: Passwort ändern
       messages:
         password_updated: Ihr Passwort wurde erfolgreich geändert.
+    media_items:
+      index:
+        title: Medien
+        new_media_item: Neues Medium
+        no_media_items: Keine Medien vorhanden.
+        table:
+          title: Titel
+          type: Typ
+          status: Status
+          uploaded_by: Hochgeladen von
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie dieses Medium löschen möchten?
+      new:
+        title: Neues Medium
+      edit:
+        title: Medium bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        status: Status
+        details: Details
+        description: Beschreibung
+        tags: Tags
+        type: Typ
+        uploaded_by: Hochgeladen von
+        created_at: Erstellt am
+        year: Jahr
+        source: Quelle
+        technique: Technik
+        copyright: Copyright
+        license: Lizenz
+        file_info: Datei
+        review_info: Prüfungsinformationen
+        reviewed_by: Geprüft von
+        reviewed_at: Geprüft am
+        video_not_supported: Ihr Browser unterstützt keine Videodarstellung.
+        actions:
+          submit_for_review: Zur Prüfung einreichen
+          publish: Veröffentlichen
+          reject: Ablehnen
+          reject_confirm: Sind Sie sicher, dass Sie dieses Medium ablehnen möchten?
+          unpublish: Veröffentlichung zurückziehen
+          unpublish_confirm: Sind Sie sicher, dass Sie die Veröffentlichung zurückziehen möchten?
+      form:
+        title_label: Titel
+        description_label: Beschreibung
+        file_label: Datei
+        type_label: Medientyp
+        select_type: Bitte wählen
+        select_technique: Bitte wählen
+        year_label: Jahr
+        source_label: Quelle
+        technique_label: Technik
+        copyright_label: Copyright
+        license_label: Lizenz
+        tags_label: Tags
+        tags_hint: Tag1, Tag2, Tag3
+        tags_help: Mehrere Tags durch Komma getrennt eingeben
+        submit_create: Medium erstellen
+        submit_update: Medium speichern
+        cancel: Abbrechen
+      filters:
+        search: Suche
+        search_placeholder: Titel durchsuchen...
+        status: Status
+        all_statuses: Alle Status
+        type: Typ
+        all_types: Alle Typen
+        year: Jahr
+        all_years: Alle Jahre
+        apply: Filtern
+        reset: Zurücksetzen
+      messages:
+        created: Medium wurde erfolgreich erstellt.
+        updated: Medium wurde erfolgreich aktualisiert.
+        deleted: Medium wurde erfolgreich gelöscht.
+        submitted_for_review: Medium wurde zur Prüfung eingereicht.
+        submit_failed: Medium konnte nicht zur Prüfung eingereicht werden.
+        published: Medium wurde veröffentlicht.
+        publish_failed: Medium konnte nicht veröffentlicht werden.
+        rejected: Medium wurde abgelehnt.
+        reject_failed: Medium konnte nicht abgelehnt werden.
+        unpublished: Veröffentlichung wurde zurückgezogen.
+        unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
+    media_tags:
+      index:
+        title: Tags
+        new_tag: Neuer Tag
+        no_tags: Keine Tags vorhanden.
+        table:
+          name: Name
+          slug: Slug
+          media_items_count: Medien
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diesen Tag löschen möchten?
+      new:
+        title: Neuer Tag
+      edit:
+        title: Tag bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        details: Details
+        media_items: Medien mit diesem Tag
+        no_media_items: Keine Medien mit diesem Tag vorhanden.
+        slug: Slug
+        created_at: Erstellt am
+      form:
+        name_label: Name
+        name_hint: Der Slug wird automatisch aus dem Namen generiert.
+        submit_create: Tag erstellen
+        submit_update: Tag speichern
+        cancel: Abbrechen
+      messages:
+        created: Tag wurde erfolgreich erstellt.
+        updated: Tag wurde erfolgreich aktualisiert.
+        deleted: Tag wurde erfolgreich gelöscht.
 
   # Public articles
   articles:

@@ -1,0 +1,23 @@
+.card.mb-4{ data: { testid: "media-items-filters" } }
+  .card-body
+    = form_with url: admin_media_items_path, method: :get, class: "row g-3 align-items-end", data: { turbo_action: "advance" } do |f|
+      .col-md-3
+        = f.label :q, t("admin.media_items.filters.search"), class: "form-label"
+        = f.text_field :q, value: params[:q], class: "form-control", placeholder: t("admin.media_items.filters.search_placeholder"), data: { testid: "filter-search" }
+
+      .col-md-2
+        = f.label :status, t("admin.media_items.filters.status"), class: "form-label"
+        = f.select :status, options_for_select(MediaItem::STATUSES.map { |s| [t("media_item_statuses.#{s}"), s] }, params[:status]), { include_blank: t("admin.media_items.filters.all_statuses") }, class: "form-select", data: { testid: "filter-status" }
+
+      .col-md-2
+        = f.label :media_type, t("admin.media_items.filters.type"), class: "form-label"
+        = f.select :media_type, options_for_select(MediaItem::MEDIA_TYPES.map { |t| [I18n.t("media_item_types.#{t}"), t] }, params[:media_type]), { include_blank: t("admin.media_items.filters.all_types") }, class: "form-select", data: { testid: "filter-type" }
+
+      .col-md-2
+        = f.label :year, t("admin.media_items.filters.year"), class: "form-label"
+        = f.select :year, options_for_select(available_years, params[:year]), { include_blank: t("admin.media_items.filters.all_years") }, class: "form-select", data: { testid: "filter-year" }
+
+      .col-md-3
+        .d-flex.gap-2
+          = f.submit t("admin.media_items.filters.apply"), class: "btn btn-primary", data: { testid: "filter-apply" }
+          = link_to t("admin.media_items.filters.reset"), admin_media_items_path, class: "btn btn-outline-secondary", data: { testid: "filter-reset" }

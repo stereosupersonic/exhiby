@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_20_170711) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_085315) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,6 +66,51 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_20_170711) do
     t.index ["status"], name: "index_articles_on_status"
   end
 
+  create_table "media_items", force: :cascade do |t|
+    t.string "copyright"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "license"
+    t.string "media_type", null: false
+    t.datetime "published_at"
+    t.datetime "reviewed_at"
+    t.bigint "reviewed_by_id"
+    t.string "source"
+    t.string "status", default: "draft", null: false
+    t.datetime "submitted_at"
+    t.string "technique"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "uploaded_by_id", null: false
+    t.integer "year"
+    t.index ["media_type"], name: "index_media_items_on_media_type"
+    t.index ["published_at"], name: "index_media_items_on_published_at"
+    t.index ["reviewed_by_id"], name: "index_media_items_on_reviewed_by_id"
+    t.index ["status"], name: "index_media_items_on_status"
+    t.index ["uploaded_by_id"], name: "index_media_items_on_uploaded_by_id"
+    t.index ["year"], name: "index_media_items_on_year"
+  end
+
+  create_table "media_taggings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "media_item_id", null: false
+    t.bigint "media_tag_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["media_item_id", "media_tag_id"], name: "index_media_taggings_on_media_item_id_and_media_tag_id", unique: true
+    t.index ["media_item_id"], name: "index_media_taggings_on_media_item_id"
+    t.index ["media_tag_id"], name: "index_media_taggings_on_media_tag_id"
+  end
+
+  create_table "media_tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "media_items_count", default: 0
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_media_tags_on_name", unique: true
+    t.index ["slug"], name: "index_media_tags_on_slug", unique: true
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -92,5 +137,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_20_170711) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "users", column: "author_id"
+  add_foreign_key "media_items", "users", column: "reviewed_by_id"
+  add_foreign_key "media_items", "users", column: "uploaded_by_id"
+  add_foreign_key "media_taggings", "media_items"
+  add_foreign_key "media_taggings", "media_tags"
   add_foreign_key "sessions", "users"
 end

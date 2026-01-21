@@ -1,0 +1,17 @@
+= form_with model: [:admin, @media_tag], class: "needs-validation", data: { testid: "media-tag-form" } do |form|
+  - if @media_tag.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @media_tag.errors.full_messages.each do |message|
+          %li= message
+
+  .mb-3
+    = form.label :name, t("admin.media_tags.form.name_label"), class: "form-label"
+    = form.text_field :name, class: "form-control #{'is-invalid' if @media_tag.errors[:name].any?}", required: true, data: { testid: "media-tag-name" }
+    - if @media_tag.errors[:name].any?
+      .invalid-feedback= @media_tag.errors[:name].first
+    .form-text= t("admin.media_tags.form.name_hint")
+
+  .d-flex.gap-2
+    = form.submit @media_tag.persisted? ? t("admin.media_tags.form.submit_update") : t("admin.media_tags.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-media-tag" }
+    = link_to t("admin.media_tags.form.cancel"), admin_media_tags_path, class: "btn btn-outline-secondary"

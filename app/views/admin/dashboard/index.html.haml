@@ -1,14 +1,181 @@
 .admin-dashboard{ data: { testid: "admin-dashboard" } }
-  %h1.mb-4{ data: { testid: "dashboard-heading" } }= t("admin.dashboard.title")
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "dashboard-heading" } }= t("admin.dashboard.title")
+    .d-flex.gap-2
+      = link_to new_admin_media_item_path, class: "btn btn-primary" do
+        %i.bi.bi-cloud-upload.me-2
+        = t("admin.dashboard.quick_upload")
+      = link_to new_admin_article_path, class: "btn btn-outline-primary" do
+        %i.bi.bi-plus-lg.me-2
+        = t("admin.dashboard.new_article")
+
+  / Statistics Cards
+  .row.mb-4
+    / Media Items Section
+    .col-12
+      %h5.text-muted.mb-3
+        %i.bi.bi-images.me-2
+        = t("admin.dashboard.sections.media_items")
 
   .row.mb-4
-    .col-md-6.col-lg-4.mb-3
-      .card.text-center
-        .card-body
+    .col-md-6.col-lg-3.mb-3
+      .card.border-primary.h-100
+        .card-body.text-center
+          .text-primary.mb-2
+            %i.bi.bi-collection{ style: "font-size: 2rem;" }
+          %h5.card-title= t("admin.dashboard.media_items_count")
+          %p.card-text.display-5.mb-0= @media_items_count
+        .card-footer.bg-transparent.border-0.text-center
+          = link_to t("admin.dashboard.view_all"), admin_media_items_path, class: "text-primary text-decoration-none"
+
+    .col-md-6.col-lg-3.mb-3
+      .card.border-secondary.h-100
+        .card-body.text-center
+          .text-secondary.mb-2
+            %i.bi.bi-pencil-square{ style: "font-size: 2rem;" }
+          %h5.card-title= t("admin.dashboard.draft_media_items_count")
+          %p.card-text.display-5.mb-0= @draft_media_items_count
+        .card-footer.bg-transparent.border-0.text-center
+          = link_to t("admin.dashboard.view_drafts"), admin_media_items_path(status: "draft"), class: "text-secondary text-decoration-none"
+
+    .col-md-6.col-lg-3.mb-3
+      .card.border-warning.h-100
+        .card-body.text-center
+          .text-warning.mb-2
+            %i.bi.bi-hourglass-split{ style: "font-size: 2rem;" }
+          %h5.card-title= t("admin.dashboard.pending_media_items_count")
+          %p.card-text.display-5.mb-0= @pending_media_items_count
+        .card-footer.bg-transparent.border-0.text-center
+          = link_to t("admin.dashboard.view_pending"), admin_media_items_path(status: "pending_review"), class: "text-warning text-decoration-none"
+
+    .col-md-6.col-lg-3.mb-3
+      .card.border-success.h-100
+        .card-body.text-center
+          .text-success.mb-2
+            %i.bi.bi-check-circle{ style: "font-size: 2rem;" }
+          %h5.card-title= t("admin.dashboard.published_media_items_count")
+          %p.card-text.display-5.mb-0= @published_media_items_count
+        .card-footer.bg-transparent.border-0.text-center
+          = link_to t("admin.dashboard.view_published"), admin_media_items_path(status: "published"), class: "text-success text-decoration-none"
+
+  .row.mb-4
+    / Articles Section
+    .col-12
+      %h5.text-muted.mb-3
+        %i.bi.bi-newspaper.me-2
+        = t("admin.dashboard.sections.articles")
+
+  .row.mb-4
+    .col-md-6.col-lg-3.mb-3
+      .card.h-100
+        .card-body.text-center
+          .text-primary.mb-2
+            %i.bi.bi-file-text{ style: "font-size: 2rem;" }
           %h5.card-title= t("admin.dashboard.articles_count")
-          %p.card-text.display-4= @articles_count
-    .col-md-6.col-lg-4.mb-3
-      .card.text-center
-        .card-body
+          %p.card-text.display-5.mb-0= @articles_count
+        .card-footer.bg-transparent.border-0.text-center
+          = link_to t("admin.dashboard.view_all"), admin_articles_path, class: "text-primary text-decoration-none"
+
+    .col-md-6.col-lg-3.mb-3
+      .card.border-success.h-100
+        .card-body.text-center
+          .text-success.mb-2
+            %i.bi.bi-check-circle{ style: "font-size: 2rem;" }
           %h5.card-title= t("admin.dashboard.published_articles_count")
-          %p.card-text.display-4= @published_articles_count
+          %p.card-text.display-5.mb-0= @published_articles_count
+
+  .row.mb-4
+    / Users & Tags Section
+    .col-12
+      %h5.text-muted.mb-3
+        %i.bi.bi-gear.me-2
+        = t("admin.dashboard.sections.management")
+
+  .row.mb-4
+    - if can? :manage, User
+      .col-md-6.col-lg-3.mb-3
+        .card.h-100
+          .card-body.text-center
+            .text-info.mb-2
+              %i.bi.bi-people{ style: "font-size: 2rem;" }
+            %h5.card-title= t("admin.dashboard.users_count")
+            %p.card-text.display-5.mb-0= @users_count
+            %small.text-muted= t("admin.dashboard.active_users", count: @active_users_count)
+          .card-footer.bg-transparent.border-0.text-center
+            = link_to t("admin.dashboard.manage_users"), admin_users_path, class: "text-info text-decoration-none"
+
+    - if can? :manage, MediaTag
+      .col-md-6.col-lg-3.mb-3
+        .card.h-100
+          .card-body.text-center
+            .text-secondary.mb-2
+              %i.bi.bi-tags{ style: "font-size: 2rem;" }
+            %h5.card-title= t("admin.dashboard.tags_count")
+            %p.card-text.display-5.mb-0= @tags_count
+          .card-footer.bg-transparent.border-0.text-center
+            = link_to t("admin.dashboard.manage_tags"), admin_media_tags_path, class: "text-secondary text-decoration-none"
+
+  / Pending Review Section
+  - if @pending_review_items.any? && (can?(:publish, MediaItem) || can?(:reject, MediaItem))
+    .row.mb-4
+      .col-12
+        .card.border-warning
+          .card-header.bg-warning.text-dark
+            %h5.mb-0
+              %i.bi.bi-exclamation-triangle.me-2
+              = t("admin.dashboard.pending_review_title")
+          .card-body
+            .table-responsive
+              %table.table.table-hover.mb-0
+                %thead
+                  %tr
+                    %th= t("admin.dashboard.table.title")
+                    %th= t("admin.dashboard.table.type")
+                    %th= t("admin.dashboard.table.uploaded_by")
+                    %th= t("admin.dashboard.table.submitted_at")
+                    %th= t("admin.dashboard.table.actions")
+                %tbody
+                  - @pending_review_items.each do |media_item|
+                    - presenter = MediaItemPresenter.new(media_item)
+                    %tr
+                      %td= link_to media_item.title, admin_media_item_path(media_item)
+                      %td
+                        %span.badge{ class: presenter.media_type_badge_class }= presenter.media_type_name
+                      %td= presenter.uploader_name
+                      %td= l(media_item.submitted_at, format: :short) if media_item.submitted_at
+                      %td
+                        .btn-group.btn-group-sm
+                          = link_to t("admin.dashboard.review"), admin_media_item_path(media_item), class: "btn btn-outline-warning"
+
+  / Recent Media Items Section
+  - if @recent_media_items.any?
+    .row
+      .col-12
+        .card
+          .card-header
+            %h5.mb-0
+              %i.bi.bi-clock-history.me-2
+              = t("admin.dashboard.recent_media_items_title")
+          .card-body
+            .table-responsive
+              %table.table.table-hover.mb-0
+                %thead
+                  %tr
+                    %th= t("admin.dashboard.table.title")
+                    %th= t("admin.dashboard.table.type")
+                    %th= t("admin.dashboard.table.status")
+                    %th= t("admin.dashboard.table.uploaded_by")
+                    %th= t("admin.dashboard.table.created_at")
+                %tbody
+                  - @recent_media_items.each do |media_item|
+                    - presenter = MediaItemPresenter.new(media_item)
+                    %tr
+                      %td= link_to media_item.title, admin_media_item_path(media_item)
+                      %td
+                        %span.badge{ class: presenter.media_type_badge_class }= presenter.media_type_name
+                      %td
+                        %span.badge{ class: presenter.status_badge_class }= presenter.status_name
+                      %td= presenter.uploader_name
+                      %td= l(media_item.created_at, format: :short)
+          .card-footer.text-end
+            = link_to t("admin.dashboard.view_all_media"), admin_media_items_path, class: "btn btn-outline-primary btn-sm"

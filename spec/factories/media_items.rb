@@ -1,0 +1,83 @@
+# == Schema Information
+#
+# Table name: media_items
+#
+#  id             :bigint           not null, primary key
+#  copyright      :string
+#  description    :text
+#  license        :string
+#  media_type     :string           not null
+#  published_at   :datetime
+#  reviewed_at    :datetime
+#  source         :string
+#  status         :string           default("draft"), not null
+#  submitted_at   :datetime
+#  technique      :string
+#  title          :string           not null
+#  year           :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  reviewed_by_id :bigint
+#  uploaded_by_id :bigint           not null
+#
+FactoryBot.define do
+  factory :media_item do
+    sequence(:title) { |n| "Test Media Item #{n}" }
+    description { "This is a test media item description." }
+    media_type { "image" }
+    status { "draft" }
+    association :uploaded_by, factory: :user
+
+    after(:build) do |media_item|
+      media_item.file.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/test_image.png")),
+        filename: "test_image.png",
+        content_type: "image/png"
+      )
+    end
+
+    trait :published do
+      status { "published" }
+      published_at { 1.day.ago }
+      association :reviewed_by, factory: :user
+      reviewed_at { 1.day.ago }
+    end
+
+    trait :pending_review do
+      status { "pending_review" }
+      submitted_at { 1.hour.ago }
+    end
+
+    trait :video do
+      media_type { "video" }
+      after(:build) do |media_item|
+        media_item.file.detach
+        media_item.file.attach(
+          io: File.open(Rails.root.join("spec/fixtures/files/test_video.mp4")),
+          filename: "test_video.mp4",
+          content_type: "video/mp4"
+        )
+      end
+    end
+
+    trait :pdf do
+      media_type { "pdf" }
+      after(:build) do |media_item|
+        media_item.file.detach
+        media_item.file.attach(
+          io: File.open(Rails.root.join("spec/fixtures/files/test_document.pdf")),
+          filename: "test_document.pdf",
+          content_type: "application/pdf"
+        )
+      end
+    end
+
+    trait :with_metadata do
+      year { 2020 }
+      source { "Museum Archive" }
+      technique { "Oil on canvas" }
+      copyright { "Museum Wartenberg" }
+      license { "CC BY-NC 4.0" }
+    end
+  end
+end

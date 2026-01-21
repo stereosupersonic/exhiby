@@ -7,6 +7,15 @@ Rails.application.routes.draw do
     root to: "dashboard#index"
     resource :profile, only: %i[edit update]
     resources :articles
+    resources :media_items do
+      member do
+        patch :submit_for_review
+        patch :publish
+        patch :reject
+        patch :unpublish
+      end
+    end
+    resources :media_tags, path: "tags"
     resources :users, only: %i[index new create edit update] do
       member do
         patch :deactivate

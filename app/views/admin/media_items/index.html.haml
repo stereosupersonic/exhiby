@@ -1,0 +1,56 @@
+.admin-media-items{ data: { testid: "admin-media-items", controller: "view-toggle" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "media-items-heading" } }= t("admin.media_items.index.title")
+    .d-flex.gap-2
+      .btn-group{ data: { testid: "view-toggle" } }
+        %button.btn.btn-outline-secondary.active{ type: "button", data: { action: "click->view-toggle#showGrid", "view-toggle-target": "gridBtn" } }
+          %i.bi.bi-grid-3x3-gap-fill
+        %button.btn.btn-outline-secondary{ type: "button", data: { action: "click->view-toggle#showList", "view-toggle-target": "listBtn" } }
+          %i.bi.bi-list-ul
+      = link_to t("admin.media_items.index.new_media_item"), new_admin_media_item_path, class: "btn btn-primary", data: { testid: "new-media-item-button" }
+
+  = render "filters"
+
+  .card
+    .card-body
+      - if @media_items.any?
+        .media-items-grid{ data: { "view-toggle-target": "grid" } }
+          .row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4.g-4
+            - @media_items.each do |media_item|
+              .col
+                = render "card", media_item: media_item
+
+        .media-items-list.d-none{ data: { "view-toggle-target": "list" } }
+          .table-responsive
+            %table.table.table-hover{ data: { testid: "media-items-table" } }
+              %thead
+                %tr
+                  %th= t("admin.media_items.index.table.title")
+                  %th= t("admin.media_items.index.table.type")
+                  %th= t("admin.media_items.index.table.status")
+                  %th= t("admin.media_items.index.table.uploaded_by")
+                  %th= t("admin.media_items.index.table.created_at")
+                  %th= t("admin.media_items.index.table.actions")
+              %tbody
+                - @media_items.each do |media_item|
+                  - presenter = MediaItemPresenter.new(media_item)
+                  %tr{ data: { testid: "media-item-row-#{media_item.id}" } }
+                    %td= link_to media_item.title, admin_media_item_path(media_item)
+                    %td
+                      %span.badge{ class: presenter.media_type_badge_class }
+                        = presenter.media_type_name
+                    %td
+                      %span.badge{ class: presenter.status_badge_class }
+                        = presenter.status_name
+                    %td= presenter.uploader_name
+                    %td= l(media_item.created_at, format: :short)
+                    %td
+                      .btn-group.btn-group-sm
+                        = link_to t("common.edit"), edit_admin_media_item_path(media_item), class: "btn btn-outline-primary"
+                        = button_to t("common.delete"), admin_media_item_path(media_item), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: t("admin.media_items.index.actions.delete_confirm") }
+
+        = will_paginate @media_items, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-media-items-message" } }
+          %p= t("admin.media_items.index.no_media_items")
+          = link_to t("admin.media_items.index.new_media_item"), new_admin_media_item_path, class: "btn btn-primary"

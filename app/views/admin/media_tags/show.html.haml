@@ -1,0 +1,36 @@
+.admin-media-tag-show{ data: { testid: "admin-media-tag-show" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "media-tag-name" } }= @media_tag.name
+    .d-flex.gap-2
+      = link_to t("common.edit"), edit_admin_media_tag_path(@media_tag), class: "btn btn-primary"
+      = link_to t("admin.media_tags.show.back"), admin_media_tags_path, class: "btn btn-outline-secondary"
+
+  .row
+    .col-lg-8
+      .card
+        .card-header
+          %h5.mb-0
+            = t("admin.media_tags.show.media_items")
+            %span.badge.bg-secondary.ms-2= @media_tag.media_items_count
+        .card-body
+          - if @media_items.any?
+            .row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4
+              - @media_items.each do |media_item|
+                .col
+                  = render "admin/media_items/card", media_item: media_item
+            = will_paginate @media_items, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+          - else
+            .text-center.text-muted.py-4
+              %p= t("admin.media_tags.show.no_media_items")
+
+    .col-lg-4
+      .card
+        .card-header
+          %h5.mb-0= t("admin.media_tags.show.details")
+        .card-body
+          %dl.row.mb-0
+            %dt.col-sm-5= t("admin.media_tags.show.slug")
+            %dd.col-sm-7= @media_tag.slug
+
+            %dt.col-sm-5= t("admin.media_tags.show.created_at")
+            %dd.col-sm-7= l(@media_tag.created_at, format: :long)
