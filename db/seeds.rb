@@ -2,6 +2,8 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
+# import other seeds run bin/rails runner "load Rails.root.join('db/seeds/generated_seeds.rb')"
+
 # Default techniques (all environments)
 techniques = [
   "Öl auf Leinwand",

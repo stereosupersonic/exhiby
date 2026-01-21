@@ -3,9 +3,9 @@
     %h1{ data: { testid: "media-items-heading" } }= t("admin.media_items.index.title")
     .d-flex.gap-2
       .btn-group{ data: { testid: "view-toggle" } }
-        %button.btn.btn-outline-secondary.active{ type: "button", data: { action: "click->view-toggle#showGrid", "view-toggle-target": "gridBtn" } }
+        %button.btn.btn-outline-secondary{ type: "button", data: { action: "click->view-toggle#showGrid", "view-toggle-target": "gridBtn" } }
           %i.bi.bi-grid-3x3-gap-fill
-        %button.btn.btn-outline-secondary{ type: "button", data: { action: "click->view-toggle#showList", "view-toggle-target": "listBtn" } }
+        %button.btn.btn-outline-secondary.active{ type: "button", data: { action: "click->view-toggle#showList", "view-toggle-target": "listBtn" } }
           %i.bi.bi-list-ul
       = link_to t("admin.media_items.index.new_media_item"), new_admin_media_item_path, class: "btn btn-primary", data: { testid: "new-media-item-button" }
 
@@ -14,13 +14,13 @@
   .card
     .card-body
       - if @media_items.any?
-        .media-items-grid{ data: { "view-toggle-target": "grid" } }
+        .media-items-grid.d-none{ data: { "view-toggle-target": "grid" } }
           .row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4.g-4
             - @media_items.each do |media_item|
               .col
                 = render "card", media_item: media_item
 
-        .media-items-list.d-none{ data: { "view-toggle-target": "list" } }
+        .media-items-list{ data: { "view-toggle-target": "list" } }
           .table-responsive
             %table.table.table-hover{ data: { testid: "media-items-table" } }
               %thead

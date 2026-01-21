@@ -29,10 +29,10 @@ export default class extends Controller {
 
   loadPreference() {
     const preference = localStorage.getItem("mediaItemsView")
-    if (preference === "list") {
-      this.showList()
-    } else {
+    if (preference === "grid") {
       this.showGrid()
+    } else {
+      this.showList()
     }
   }
 }
