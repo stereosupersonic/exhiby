@@ -7,6 +7,7 @@
 #  active          :boolean          default(TRUE), not null
 #  deactivated_at  :datetime
 #  email_address   :string           not null
+#  last_login_at   :datetime
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
 #  created_at      :datetime         not null

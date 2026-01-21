@@ -12,6 +12,10 @@
         = link_to new_admin_artist_path, class: "btn btn-outline-primary" do
           %i.bi.bi-person-plus.me-2
           = t("admin.dashboard.new_artist")
+      - if can? :manage, Collection
+        = link_to new_admin_collection_path, class: "btn btn-outline-primary" do
+          %i.bi.bi-folder-plus.me-2
+          = t("admin.dashboard.new_collection")
 
   / Statistics Cards
   .row.mb-4
@@ -114,6 +118,43 @@
               %i.bi.bi-check-circle{ style: "font-size: 2rem;" }
             %h5.card-title= t("admin.dashboard.published_artists_count")
             %p.card-text.display-5.mb-0= @published_artists_count
+
+  - if can? :manage, Collection
+    .row.mb-4
+      / Collections Section
+      .col-12
+        %h5.text-muted.mb-3
+          %i.bi.bi-folder.me-2
+          = t("admin.dashboard.sections.collections")
+
+    .row.mb-4
+      .col-md-6.col-lg-3.mb-3
+        .card.h-100
+          .card-body.text-center
+            .text-primary.mb-2
+              %i.bi.bi-folder{ style: "font-size: 2rem;" }
+            %h5.card-title= t("admin.dashboard.collections_count")
+            %p.card-text.display-5.mb-0= @collections_count
+          .card-footer.bg-transparent.border-0.text-center
+            = link_to t("admin.dashboard.view_all"), admin_collections_path, class: "text-primary text-decoration-none"
+
+      .col-md-6.col-lg-3.mb-3
+        .card.border-success.h-100
+          .card-body.text-center
+            .text-success.mb-2
+              %i.bi.bi-check-circle{ style: "font-size: 2rem;" }
+            %h5.card-title= t("admin.dashboard.published_collections_count")
+            %p.card-text.display-5.mb-0= @published_collections_count
+
+      .col-md-6.col-lg-3.mb-3
+        .card.h-100
+          .card-body.text-center
+            .text-secondary.mb-2
+              %i.bi.bi-bookmark{ style: "font-size: 2rem;" }
+            %h5.card-title= t("admin.dashboard.collection_categories_count")
+            %p.card-text.display-5.mb-0= @collection_categories_count
+          .card-footer.bg-transparent.border-0.text-center
+            = link_to t("admin.dashboard.manage_categories"), admin_collection_categories_path, class: "text-secondary text-decoration-none"
 
   .row.mb-4
     / Users & Tags Section

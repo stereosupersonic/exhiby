@@ -1,0 +1,58 @@
+.admin-collections{ data: { testid: "admin-collections" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "collections-heading" } }= t("admin.collections.index.title")
+    = link_to t("admin.collections.index.new_collection"), new_admin_collection_path, class: "btn btn-primary", data: { testid: "new-collection-button" }
+
+  .card.mb-4
+    .card-body
+      = form_with url: admin_collections_path, method: :get, local: true, class: "row g-3", data: { testid: "collections-filter-form" } do |form|
+        .col-md-3
+          = form.label :q, t("admin.collections.filters.search"), class: "form-label"
+          = form.text_field :q, value: params[:q], class: "form-control", placeholder: t("admin.collections.filters.search_placeholder"), data: { testid: "collections-search-input" }
+        .col-md-3
+          = form.label :status, t("admin.collections.filters.status"), class: "form-label"
+          = form.select :status, Collection::STATUSES.map { |s| [I18n.t("collection_statuses.#{s}"), s] }, { include_blank: t("admin.collections.filters.all_statuses") }, class: "form-select", data: { testid: "collections-status-filter" }
+        .col-md-3
+          = form.label :category, t("admin.collections.filters.category"), class: "form-label"
+          = form.select :category, CollectionCategory.ordered.pluck(:name, :id), { include_blank: t("admin.collections.filters.all_categories") }, class: "form-select", data: { testid: "collections-category-filter" }
+        .col-md-3.d-flex.align-items-end
+          = form.submit t("admin.collections.filters.apply"), class: "btn btn-secondary me-2"
+          = link_to t("admin.collections.filters.reset"), admin_collections_path, class: "btn btn-outline-secondary"
+
+  .card
+    .card-body
+      - if @collections.any?
+        .table-responsive
+          %table.table.table-hover{ data: { testid: "collections-table" } }
+            %thead
+              %tr
+                %th= t("admin.collections.index.table.name")
+                %th= t("admin.collections.index.table.category")
+                %th= t("admin.collections.index.table.status")
+                %th= t("admin.collections.index.table.media_items_count")
+                %th= t("admin.collections.index.table.created_at")
+                %th= t("admin.collections.index.table.actions")
+            %tbody
+              - @collections.each do |collection|
+                - presenter = CollectionPresenter.new(collection)
+                %tr{ data: { testid: "collection-row-#{collection.slug}" } }
+                  %td
+                    .d-flex.align-items-center
+                      - if collection.cover_media_item&.file&.attached?
+                        = image_tag collection.cover_media_item.file.variant(resize_to_fit: [40, 40]), class: "rounded me-2", alt: collection.name
+                      = link_to collection.name, admin_collection_path(collection)
+                  %td= presenter.category_name
+                  %td
+                    %span.badge{ class: presenter.status_badge_class }
+                      = presenter.status_name
+                  %td= presenter.media_items_count
+                  %td= l(collection.created_at, format: :short)
+                  %td
+                    .d-flex.gap-2
+                      = link_to t("common.edit"), edit_admin_collection_path(collection), class: "btn btn-sm btn-outline-primary", data: { testid: "edit-collection-#{collection.slug}" }
+                      = button_to t("common.delete"), admin_collection_path(collection), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.collections.index.actions.delete_confirm"), testid: "delete-collection-#{collection.slug}" }
+        = will_paginate @collections if @collections.respond_to?(:total_pages)
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-collections-message" } }
+          %p= t("admin.collections.index.no_collections")
+          = link_to t("admin.collections.index.new_collection"), new_admin_collection_path, class: "btn btn-primary"

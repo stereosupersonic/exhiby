@@ -1,0 +1,87 @@
+= form_with model: [:admin, @collection], class: "needs-validation", data: { testid: "collection-form" } do |form|
+  - if @collection.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @collection.errors.full_messages.each do |message|
+          %li= message
+
+  .row
+    .col-md-8
+      .mb-3
+        = form.label :name, t("admin.collections.form.name_label"), class: "form-label"
+        = form.text_field :name, class: "form-control #{'is-invalid' if @collection.errors[:name].any?}", required: true, data: { testid: "collection-name" }
+        - if @collection.errors[:name].any?
+          .invalid-feedback= @collection.errors[:name].first
+
+      .mb-3
+        = form.label :slug, t("admin.collections.form.slug_label"), class: "form-label"
+        = form.text_field :slug, class: "form-control #{'is-invalid' if @collection.errors[:slug].any?}", data: { testid: "collection-slug" }
+        .form-text= t("admin.collections.form.slug_hint")
+        - if @collection.errors[:slug].any?
+          .invalid-feedback= @collection.errors[:slug].first
+
+      - cover_thumbnail = @collection.cover_media_item&.file&.attached? ? url_for(@collection.cover_media_item.file.variant(resize_to_limit: [100, 100])) : ""
+      .mb-3{ data: { controller: "media-item-selector", "media-item-selector-search-url-value": search_admin_media_items_path, "media-item-selector-selected-id-value": @collection.cover_media_item_id.to_i, "media-item-selector-selected-title-value": @collection.cover_media_item&.title.to_s, "media-item-selector-selected-thumbnail-value": cover_thumbnail } }
+        = form.label :cover_media_item_id, t("admin.collections.form.cover_image_label"), class: "form-label"
+        = form.hidden_field :cover_media_item_id, data: { "media-item-selector-target": "input" }
+        .position-relative{ data: { "media-item-selector-target": "selected" }, class: (@collection.cover_media_item_id.present? ? "d-none" : "") }
+          %input.form-control{ type: "text", placeholder: t("admin.collections.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
+          .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "media-item-selector-target": "results" } }
+        .mt-2{ data: { "media-item-selector-target": "preview" }, class: (@collection.cover_media_item_id.blank? ? "d-none" : "") }
+
+      .mb-3
+        = form.label :description, t("admin.collections.form.description_label"), class: "form-label"
+        = form.rich_text_area :description, data: { testid: "collection-description" }
+
+      - if @collection.persisted?
+        .card.mt-4{ data: { controller: "collection-items", "collection-items-search-url-value": search_admin_media_items_path, "collection-items-add-url-value": add_item_admin_collection_path(@collection), "collection-items-remove-url-value": remove_item_admin_collection_path(@collection) } }
+          .card-header
+            %h6.mb-0
+              = t("admin.collections.form.media_items_label")
+              %span.badge.bg-secondary.ms-2= @collection.media_items_count
+          .card-body
+            .mb-3
+              %label.form-label= t("admin.collections.form.add_media_item")
+              .position-relative
+                %input.form-control{ type: "text", placeholder: t("admin.collections.form.search_media_items_placeholder"), data: { action: "input->collection-items#search", "collection-items-target": "search" }, autocomplete: "off" }
+                .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "collection-items-target": "results" } }
+            %hr
+            %div{ data: { "collection-items-target": "items" } }
+              = render "collection_items", collection: @collection
+      - else
+        .card.mt-4
+          .card-header
+            %h6.mb-0= t("admin.collections.form.media_items_label")
+          .card-body
+            .text-muted
+              %i.bi.bi-info-circle.me-1
+              = t("admin.collections.form.media_items_hint")
+
+    .col-md-4
+      .card
+        .card-header
+          %h6.mb-0= t("admin.collections.form.settings")
+        .card-body
+          .mb-3
+            = form.label :collection_category_id, t("admin.collections.form.category_label"), class: "form-label"
+            = form.select :collection_category_id, CollectionCategory.ordered.pluck(:name, :id), { prompt: t("admin.collections.form.select_category") }, class: "form-select #{'is-invalid' if @collection.errors[:collection_category].any?}", required: true, data: { testid: "collection-category" }
+            - if @collection.errors[:collection_category].any?
+              .invalid-feedback= @collection.errors[:collection_category].first
+
+          .mb-3
+            = form.label :position, t("admin.collections.form.position_label"), class: "form-label"
+            = form.number_field :position, class: "form-control", data: { testid: "collection-position" }
+            .form-text= t("admin.collections.form.position_hint")
+
+      - if @collection.persisted?
+        .card.mt-3
+          .card-header
+            %h6.mb-0= t("admin.collections.form.publication")
+          .card-body
+            .mb-3
+              = form.label :status, t("admin.collections.form.status_label"), class: "form-label"
+              = form.select :status, Collection::STATUSES.map { |s| [I18n.t("collection_statuses.#{s}"), s] }, {}, class: "form-select", data: { testid: "collection-status" }
+
+  .d-flex.gap-2.mt-4
+    = form.submit @collection.persisted? ? t("admin.collections.form.submit_update") : t("admin.collections.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-collection" }
+    = link_to t("admin.collections.form.cancel"), @collection.persisted? ? admin_collection_path(@collection) : admin_collections_path, class: "btn btn-outline-secondary"

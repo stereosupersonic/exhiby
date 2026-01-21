@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_21_113958) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_140412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -88,6 +88,49 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_113958) do
     t.index ["status"], name: "index_artists_on_status"
   end
 
+  create_table "collection_categories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_collection_categories_on_name", unique: true
+    t.index ["position"], name: "index_collection_categories_on_position"
+    t.index ["slug"], name: "index_collection_categories_on_slug", unique: true
+  end
+
+  create_table "collection_items", force: :cascade do |t|
+    t.bigint "collection_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "media_item_id", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id", "media_item_id"], name: "index_collection_items_on_collection_id_and_media_item_id", unique: true
+    t.index ["collection_id", "position"], name: "index_collection_items_on_collection_id_and_position"
+    t.index ["collection_id"], name: "index_collection_items_on_collection_id"
+    t.index ["media_item_id"], name: "index_collection_items_on_media_item_id"
+  end
+
+  create_table "collections", force: :cascade do |t|
+    t.bigint "collection_category_id", null: false
+    t.bigint "cover_media_item_id"
+    t.datetime "created_at", null: false
+    t.bigint "created_by_id", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "published_at"
+    t.string "slug", null: false
+    t.string "status", default: "draft", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_category_id", "position"], name: "index_collections_on_collection_category_id_and_position"
+    t.index ["collection_category_id"], name: "index_collections_on_collection_category_id"
+    t.index ["cover_media_item_id"], name: "index_collections_on_cover_media_item_id"
+    t.index ["created_by_id"], name: "index_collections_on_created_by_id"
+    t.index ["published_at"], name: "index_collections_on_published_at"
+    t.index ["slug"], name: "index_collections_on_slug", unique: true
+    t.index ["status"], name: "index_collections_on_status"
+  end
+
   create_table "media_items", force: :cascade do |t|
     t.bigint "artist_id"
     t.string "copyright"
@@ -163,6 +206,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_113958) do
     t.datetime "created_at", null: false
     t.datetime "deactivated_at"
     t.string "email_address", null: false
+    t.datetime "last_login_at"
     t.string "password_digest", null: false
     t.string "role", default: "user", null: false
     t.datetime "updated_at", null: false
@@ -177,6 +221,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_113958) do
   add_foreign_key "articles", "users", column: "author_id"
   add_foreign_key "artists", "media_items", column: "profile_media_item_id"
   add_foreign_key "artists", "users", column: "created_by_id"
+  add_foreign_key "collection_items", "collections"
+  add_foreign_key "collection_items", "media_items"
+  add_foreign_key "collections", "collection_categories"
+  add_foreign_key "collections", "media_items", column: "cover_media_item_id"
+  add_foreign_key "collections", "users", column: "created_by_id"
   add_foreign_key "media_items", "artists", on_delete: :restrict
   add_foreign_key "media_items", "techniques"
   add_foreign_key "media_items", "users", column: "reviewed_by_id"

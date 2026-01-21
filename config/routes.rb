@@ -20,6 +20,15 @@ Rails.application.routes.draw do
     end
     resources :media_tags, path: "tags"
     resources :techniques
+    resources :collection_categories, path: "sammlungs-kategorien"
+    resources :collections, path: "sammlungen" do
+      member do
+        patch :publish
+        patch :unpublish
+        post :add_item
+        delete :remove_item
+      end
+    end
     resources :artists do
       member do
         patch :publish
@@ -59,8 +68,11 @@ Rails.application.routes.draw do
   # Public artists (German URL)
   resources :artists, only: %i[index show], path: "kunstschaffende", param: :slug
 
+  # Collections (Land & Leute)
+  get "land-und-leute", to: "collections#index", as: :land_und_leute
+  get "land-und-leute/:slug", to: "collections#show", as: :collection
+
   # Placeholder pages (coming soon)
-  get "land-und-leute", to: "welcome#coming_soon", as: :land_und_leute
   get "ausstellungen", to: "welcome#coming_soon", as: :ausstellungen
   get "bild-der-woche", to: "welcome#coming_soon", as: :bild_der_woche
 end

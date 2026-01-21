@@ -22,6 +22,11 @@ module Admin
       @artists_count = Artist.count
       @published_artists_count = Artist.published.count
 
+      # Collections
+      @collections_count = Collection.count
+      @published_collections_count = Collection.published.count
+      @collection_categories_count = CollectionCategory.count
+
       # Recent items for quick access
       @recent_media_items = MediaItem.includes(:uploaded_by).recent.limit(5)
       @pending_review_items = MediaItem.includes(:uploaded_by).pending_review.recent.limit(5)

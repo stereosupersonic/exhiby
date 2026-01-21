@@ -16,6 +16,14 @@ export default class extends Controller {
     }
   }
 
+  show() {
+    this.menuTarget.classList.add("show")
+  }
+
+  hide() {
+    this.menuTarget.classList.remove("show")
+  }
+
   open() {
     this.menuTarget.classList.add("show")
     document.addEventListener("click", this.closeOnClickOutside)

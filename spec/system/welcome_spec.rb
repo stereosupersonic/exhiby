@@ -223,12 +223,6 @@ RSpec.describe "Welcome Pages" do
   end
 
   describe "coming soon pages" do
-    it "displays coming soon page for Land & Leute" do
-      visit land_und_leute_path
-
-      expect(page).to have_selector("[data-testid='coming-soon-page']")
-    end
-
     it "displays coming soon page for Ausstellungen" do
       visit ausstellungen_path
 

@@ -25,6 +25,12 @@
             - if can? :manage, Artist
               %li.nav-item
                 = link_to t("admin.navigation.artists"), admin_artists_path, class: "nav-link"
+            - if can? :manage, Collection
+              %li.nav-item
+                = link_to t("admin.navigation.collections"), admin_collections_path, class: "nav-link"
+            - if can? :manage, CollectionCategory
+              %li.nav-item
+                = link_to t("admin.navigation.collection_categories"), admin_collection_categories_path, class: "nav-link"
             - if can? :manage, MediaTag
               %li.nav-item
                 = link_to t("admin.navigation.tags"), admin_media_tags_path, class: "nav-link"

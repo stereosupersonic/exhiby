@@ -68,7 +68,13 @@ class MediaItem < ApplicationRecord
   scope :by_year, ->(year) { where(year: year) if year.present? }
   scope :by_status, ->(status) { where(status: status) if status.present? }
   scope :recent, -> { order(created_at: :desc) }
-  scope :search, ->(query) { where("title ILIKE ?", "%#{query}%") if query.present? }
+  scope :search, ->(query) {
+    if query.present?
+      left_joins(:media_tags)
+        .where("media_items.title ILIKE :q OR media_tags.name ILIKE :q", q: "%#{query}%")
+        .distinct
+    end
+  }
 
   def draft?
     status == "draft"

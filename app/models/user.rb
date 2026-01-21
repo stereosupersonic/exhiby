@@ -7,6 +7,7 @@
 #  active          :boolean          default(TRUE), not null
 #  deactivated_at  :datetime
 #  email_address   :string           not null
+#  last_login_at   :datetime
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
 #  created_at      :datetime         not null
@@ -32,6 +33,8 @@ class User < ApplicationRecord
                                   dependent: :nullify, inverse_of: :reviewed_by
   has_many :created_artists, class_name: "Artist", foreign_key: :created_by_id,
                              dependent: :destroy, inverse_of: :created_by
+  has_many :created_collections, class_name: "Collection", foreign_key: :created_by_id,
+                                 dependent: :destroy, inverse_of: :created_by
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

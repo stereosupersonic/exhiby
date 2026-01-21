@@ -4,10 +4,12 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    # Public access - anyone can read published articles, media items, and artists
+    # Public access - anyone can read published articles, media items, artists, and collections
     can :read, Article, status: "published"
     can :read, MediaItem, status: "published"
     can :read, Artist, status: "published"
+    can :read, Collection, status: "published"
+    can :read, CollectionCategory
 
     return unless user.present?
 
@@ -30,8 +32,12 @@ class Ability
       can :manage, MediaTag
       can :manage, Technique
       can :manage, Artist
+      can :manage, CollectionCategory
+      can :manage, Collection
+      can :manage, CollectionItem
       can %i[publish reject unpublish], MediaItem
       can %i[publish unpublish], Artist
+      can %i[publish unpublish], Collection
     end
   end
 end

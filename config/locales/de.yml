@@ -74,6 +74,15 @@ de:
       artist:
         one: Künstler
         other: Künstler
+      collection_category:
+        one: Sammlungskategorie
+        other: Sammlungskategorien
+      collection:
+        one: Sammlung
+        other: Sammlungen
+      collection_item:
+        one: Sammlungselement
+        other: Sammlungselemente
     attributes:
       article:
         title: Titel
@@ -114,6 +123,24 @@ de:
         status: Status
         published_at: Veröffentlicht am
         profile_image: Profilbild
+      collection_category:
+        name: Name
+        slug: URL-Pfad
+        position: Position
+      collection:
+        name: Name
+        slug: URL-Pfad
+        description: Beschreibung
+        position: Position
+        status: Status
+        published_at: Veröffentlicht am
+        collection_category: Kategorie
+        cover_media_item: Titelbild
+        created_by: Erstellt von
+      collection_item:
+        collection: Sammlung
+        media_item: Medium
+        position: Position
     errors:
       models:
         article:
@@ -147,6 +174,24 @@ de:
             slug:
               blank: muss ausgefüllt werden
               taken: ist bereits vergeben
+        collection_category:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+            slug:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+        collection:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+            slug:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+            status:
+              blank: muss ausgefüllt werden
+              inclusion: ist kein gültiger Status
 
   # Article statuses
   article_statuses:
@@ -155,6 +200,11 @@ de:
 
   # Artist statuses
   artist_statuses:
+    draft: Entwurf
+    published: Veröffentlicht
+
+  # Collection statuses
+  collection_statuses:
     draft: Entwurf
     published: Veröffentlicht
 
@@ -218,6 +268,8 @@ de:
       articles: Artikel
       media_items: Medien
       artists: Kunstschaffende
+      collections: Sammlungen
+      collection_categories: Kategorien
       tags: Tags
       techniques: Techniken
       users: Benutzer
@@ -229,10 +281,12 @@ de:
       quick_upload: Medium hochladen
       new_article: Neuer Artikel
       new_artist: Neuer Künstler
+      new_collection: Neue Sammlung
       sections:
         media_items: Medien
         articles: Artikel
         artists: Kunstschaffende
+        collections: Sammlungen
         management: Verwaltung
       # Artists
       artists_count: Kunstschaffende gesamt
@@ -259,6 +313,11 @@ de:
       # Tags
       tags_count: Tags
       manage_tags: Tags verwalten
+      # Collections
+      collections_count: Sammlungen gesamt
+      published_collections_count: Veröffentlicht
+      collection_categories_count: Kategorien
+      manage_categories: Kategorien verwalten
       # Tables
       pending_review_title: Warten auf Prüfung
       recent_media_items_title: Zuletzt hinzugefügt
@@ -320,6 +379,8 @@ de:
           role: Rolle
           status: Status
           articles_count: Artikel
+          last_login_at: Letzter Login
+          never_logged_in: Nie
           created_at: Erstellt
           actions: Aktionen
         actions:
@@ -580,6 +641,114 @@ de:
         unpublished: Veröffentlichung wurde zurückgezogen.
         unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
         cannot_delete_with_media_items: Künstler kann nicht gelöscht werden, da noch Werke zugeordnet sind.
+    collection_categories:
+      index:
+        title: Sammlungskategorien
+        description: Sammlungskategorien dienen zur Gruppierung von Sammlungen, z.B. "Historische Ansichtskarten" oder "Historische Fotos".
+        new_category: Neue Kategorie
+        no_categories: Keine Kategorien vorhanden.
+        table:
+          position: Pos.
+          name: Name
+          collections_count: Sammlungen
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diese Kategorie löschen möchten?
+      new:
+        title: Neue Sammlungskategorie
+      edit:
+        title: Sammlungskategorie bearbeiten
+      form:
+        name_label: Name
+        position_label: Position
+        position_hint: Niedrigere Werte werden zuerst angezeigt.
+        submit_create: Kategorie erstellen
+        submit_update: Kategorie speichern
+        cancel: Abbrechen
+      messages:
+        created: Kategorie wurde erfolgreich erstellt.
+        updated: Kategorie wurde erfolgreich aktualisiert.
+        deleted: Kategorie wurde erfolgreich gelöscht.
+        cannot_delete_with_collections: Kategorie kann nicht gelöscht werden, da noch Sammlungen zugeordnet sind.
+    collections:
+      index:
+        title: Sammlungen
+        new_collection: Neue Sammlung
+        no_collections: Keine Sammlungen vorhanden.
+        table:
+          name: Name
+          category: Kategorie
+          status: Status
+          media_items_count: Medien
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diese Sammlung löschen möchten?
+      new:
+        title: Neue Sammlung
+      edit:
+        title: Sammlung bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        status: Status
+        details: Details
+        description: Beschreibung
+        media_items: Medien in der Sammlung
+        no_media_items: Noch keine Medien in dieser Sammlung.
+        add_media_item: Medium hinzufügen
+        search_media_items: Medien durchsuchen...
+        view_all_media_items: Alle Medien anzeigen
+        category: Kategorie
+        position: Position
+        created_by: Erstellt von
+        created_at: Erstellt am
+        published_at: Veröffentlicht am
+        slug: URL-Pfad
+        actions:
+          publish: Veröffentlichen
+          unpublish: Veröffentlichung zurückziehen
+          unpublish_confirm: Sind Sie sicher, dass Sie die Veröffentlichung zurückziehen möchten?
+      form:
+        name_label: Name
+        slug_label: URL-Pfad
+        slug_hint: Wird automatisch aus dem Namen generiert, falls leer
+        cover_image_label: Titelbild
+        search_media_items: Medien durchsuchen...
+        description_label: Beschreibung
+        settings: Einstellungen
+        category_label: Kategorie
+        select_category: Bitte wählen
+        position_label: Position
+        position_hint: Niedrigere Werte werden zuerst angezeigt.
+        publication: Veröffentlichung
+        status_label: Status
+        media_items_label: Medien in der Sammlung
+        add_media_item: Medium hinzufügen
+        search_media_items_placeholder: Medien durchsuchen...
+        media_items_hint: Medien können nach dem Speichern der Sammlung hinzugefügt werden.
+        submit_create: Sammlung erstellen
+        submit_update: Sammlung speichern
+        cancel: Abbrechen
+      filters:
+        search: Suche
+        search_placeholder: Name durchsuchen...
+        status: Status
+        all_statuses: Alle Status
+        category: Kategorie
+        all_categories: Alle Kategorien
+        apply: Filtern
+        reset: Zurücksetzen
+      messages:
+        created: Sammlung wurde erfolgreich erstellt.
+        updated: Sammlung wurde erfolgreich aktualisiert.
+        deleted: Sammlung wurde erfolgreich gelöscht.
+        published: Sammlung wurde veröffentlicht.
+        publish_failed: Sammlung konnte nicht veröffentlicht werden.
+        unpublished: Veröffentlichung wurde zurückgezogen.
+        unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
+        item_added: Medium wurde zur Sammlung hinzugefügt.
+        item_removed: Medium wurde aus der Sammlung entfernt.
+        item_already_added: Dieses Medium ist bereits in der Sammlung.
 
   # Public articles
   articles:
@@ -591,6 +760,19 @@ de:
       back: Zurück zur Übersicht
       published_at: "Veröffentlicht am %{date}"
       by_author: "von %{author}"
+
+  # Public collections
+  collections:
+    index:
+      title: Land & Leute
+      no_collections: Keine Sammlungen vorhanden.
+      media_items_count:
+        one: "%{count} Medium"
+        other: "%{count} Medien"
+    show:
+      back: Zurück zu Land & Leute
+      media_items: Medien in dieser Sammlung
+      click_to_enlarge: "(Zum Vergrößern Bilder bitte anklicken!)"
 
   # Public artists
   artists:

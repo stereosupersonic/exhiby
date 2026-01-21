@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   before_action :set_nav_artists
+  before_action :set_nav_collection_categories
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
@@ -26,5 +27,9 @@ class ApplicationController < ActionController::Base
 
   def set_nav_artists
     @nav_artists = Artist.published.alphabetical
+  end
+
+  def set_nav_collection_categories
+    @nav_collection_categories = CollectionCategory.ordered
   end
 end
