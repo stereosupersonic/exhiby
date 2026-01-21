@@ -10,9 +10,9 @@
 #
 # Indexes
 #
-#  index_media_taggings_on_media_item_id                    (media_item_id)
-#  index_media_taggings_on_media_item_id_and_media_tag_id   (media_item_id,media_tag_id) UNIQUE
-#  index_media_taggings_on_media_tag_id                     (media_tag_id)
+#  index_media_taggings_on_media_item_id                   (media_item_id)
+#  index_media_taggings_on_media_item_id_and_media_tag_id  (media_item_id,media_tag_id) UNIQUE
+#  index_media_taggings_on_media_tag_id                    (media_tag_id)
 #
 # Foreign Keys
 #

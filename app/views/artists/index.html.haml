@@ -1,0 +1,31 @@
+= render "shared/site_header", active: :kunstschaffende
+
+%section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "artists-hero" } }
+  .hero-overlay
+    .container
+      %h1.hero-title{ data: { testid: "artists-heading" } }
+        = t("artists.index.title")
+
+%section.artists-section.py-5{ data: { testid: "artists-section" } }
+  .container
+    - if @artists.any?
+      .row.g-4
+        - @artists.each do |artist|
+          - presenter = ArtistPresenter.new(artist)
+          .col-md-4.col-lg-3{ data: { testid: "artist-card-#{artist.slug}" } }
+            .card.h-100.artist-card
+              - if artist.profile_image.attached?
+                = link_to artist_path(artist.slug) do
+                  = image_tag artist.profile_image.variant(resize_to_fill: [300, 300]), class: "card-img-top", alt: artist.name
+              - else
+                = link_to artist_path(artist.slug) do
+                  .card-img-top.bg-light.d-flex.align-items-center.justify-content-center{ style: "height: 200px;" }
+                    %i.bi.bi-person.text-muted{ style: "font-size: 4rem;" }
+              .card-body.text-center
+                %h5.card-title
+                  = link_to artist.name, artist_path(artist.slug), class: "text-decoration-none"
+                - if presenter.display_life_dates.present?
+                  %p.card-text.text-muted.small= presenter.display_life_dates
+    - else
+      .text-center.text-muted.py-5{ data: { testid: "no-artists-message" } }
+        %p= t("artists.index.no_artists")

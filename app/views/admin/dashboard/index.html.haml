@@ -8,6 +8,10 @@
       = link_to new_admin_article_path, class: "btn btn-outline-primary" do
         %i.bi.bi-plus-lg.me-2
         = t("admin.dashboard.new_article")
+      - if can? :manage, Artist
+        = link_to new_admin_artist_path, class: "btn btn-outline-primary" do
+          %i.bi.bi-person-plus.me-2
+          = t("admin.dashboard.new_artist")
 
   / Statistics Cards
   .row.mb-4

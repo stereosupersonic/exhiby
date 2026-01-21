@@ -1,0 +1,70 @@
+= form_with model: [:admin, @artist], class: "needs-validation", data: { testid: "artist-form" } do |form|
+  - if @artist.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @artist.errors.full_messages.each do |message|
+          %li= message
+
+  .row
+    .col-md-8
+      .mb-3
+        = form.label :name, t("admin.artists.form.name_label"), class: "form-label"
+        = form.text_field :name, class: "form-control #{'is-invalid' if @artist.errors[:name].any?}", required: true, data: { testid: "artist-name" }
+        - if @artist.errors[:name].any?
+          .invalid-feedback= @artist.errors[:name].first
+
+      .mb-3
+        = form.label :slug, t("admin.artists.form.slug_label"), class: "form-label"
+        = form.text_field :slug, class: "form-control #{'is-invalid' if @artist.errors[:slug].any?}", data: { testid: "artist-slug" }
+        .form-text= t("admin.artists.form.slug_hint")
+        - if @artist.errors[:slug].any?
+          .invalid-feedback= @artist.errors[:slug].first
+
+      .mb-3
+        = form.label :profile_image, t("admin.artists.form.profile_image_label"), class: "form-label"
+        = form.file_field :profile_image, class: "form-control", accept: "image/*", data: { testid: "artist-profile-image" }
+        - if @artist.profile_image.attached?
+          .mt-2
+            = image_tag @artist.profile_image.variant(resize_to_limit: [150, 150]), class: "img-thumbnail"
+
+      .mb-3
+        = form.label :biography, t("admin.artists.form.biography_label"), class: "form-label"
+        = form.rich_text_area :biography, data: { testid: "artist-biography" }
+
+      .mb-3
+        = form.label :cv, t("admin.artists.form.cv_label"), class: "form-label"
+        = form.rich_text_area :cv, data: { testid: "artist-cv" }
+
+    .col-md-4
+      .card
+        .card-header
+          %h6.mb-0= t("admin.artists.form.life_data")
+        .card-body
+          .mb-3
+            = form.label :birth_date, t("admin.artists.form.birth_date_label"), class: "form-label"
+            = form.date_field :birth_date, class: "form-control", data: { testid: "artist-birth-date" }
+
+          .mb-3
+            = form.label :birth_place, t("admin.artists.form.birth_place_label"), class: "form-label"
+            = form.text_field :birth_place, class: "form-control", data: { testid: "artist-birth-place" }
+
+          .mb-3
+            = form.label :death_date, t("admin.artists.form.death_date_label"), class: "form-label"
+            = form.date_field :death_date, class: "form-control", data: { testid: "artist-death-date" }
+
+          .mb-3
+            = form.label :death_place, t("admin.artists.form.death_place_label"), class: "form-label"
+            = form.text_field :death_place, class: "form-control", data: { testid: "artist-death-place" }
+
+      - if @artist.persisted?
+        .card.mt-3
+          .card-header
+            %h6.mb-0= t("admin.artists.form.publication")
+          .card-body
+            .mb-3
+              = form.label :status, t("admin.artists.form.status_label"), class: "form-label"
+              = form.select :status, Artist::STATUSES.map { |s| [I18n.t("artist_statuses.#{s}"), s] }, {}, class: "form-select", data: { testid: "artist-status" }
+
+  .d-flex.gap-2.mt-4
+    = form.submit @artist.persisted? ? t("admin.artists.form.submit_update") : t("admin.artists.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-artist" }
+    = link_to t("admin.artists.form.cancel"), @artist.persisted? ? admin_artist_path(@artist) : admin_artists_path, class: "btn btn-outline-secondary"

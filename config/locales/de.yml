@@ -71,6 +71,9 @@ de:
       media_tag:
         one: Tag
         other: Tags
+      artist:
+        one: Künstler
+        other: Künstler
     attributes:
       article:
         title: Titel
@@ -99,6 +102,18 @@ de:
       media_tag:
         name: Name
         slug: Slug
+      artist:
+        name: Name
+        slug: URL-Pfad
+        birth_date: Geburtsdatum
+        death_date: Todesdatum
+        birth_place: Geburtsort
+        death_place: Sterbeort
+        biography: Biografie
+        cv: Lebenslauf
+        status: Status
+        published_at: Veröffentlicht am
+        profile_image: Profilbild
     errors:
       models:
         article:
@@ -125,9 +140,21 @@ de:
             name:
               blank: muss ausgefüllt werden
               taken: ist bereits vergeben
+        artist:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+            slug:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
 
   # Article statuses
   article_statuses:
+    draft: Entwurf
+    published: Veröffentlicht
+
+  # Artist statuses
+  artist_statuses:
     draft: Entwurf
     published: Veröffentlicht
 
@@ -190,6 +217,7 @@ de:
       dashboard: Dashboard
       articles: Artikel
       media_items: Medien
+      artists: Kunstschaffende
       tags: Tags
       users: Benutzer
       back_to_site: Zur Website
@@ -199,6 +227,7 @@ de:
       welcome: Willkommen im Administrationsbereich
       quick_upload: Medium hochladen
       new_article: Neuer Artikel
+      new_artist: Neuer Künstler
       sections:
         media_items: Medien
         articles: Artikel
@@ -382,6 +411,8 @@ de:
         tags_label: Tags
         tags_hint: Tag1, Tag2, Tag3
         tags_help: Mehrere Tags durch Komma getrennt eingeben
+        artist_label: Künstler
+        select_artist: Kein Künstler zugeordnet
         submit_create: Medium erstellen
         submit_update: Medium speichern
         cancel: Abbrechen
@@ -441,6 +472,77 @@ de:
         created: Tag wurde erfolgreich erstellt.
         updated: Tag wurde erfolgreich aktualisiert.
         deleted: Tag wurde erfolgreich gelöscht.
+    artists:
+      index:
+        title: Kunstschaffende
+        new_artist: Neuer Künstler
+        no_artists: Keine Künstler vorhanden.
+        table:
+          name: Name
+          life_dates: Lebensdaten
+          status: Status
+          media_items_count: Werke
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diesen Künstler löschen möchten?
+      new:
+        title: Neuer Künstler
+      edit:
+        title: Künstler bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        status: Status
+        details: Details
+        biography: Biografie
+        cv: Lebenslauf
+        media_items: Werke
+        view_all_media_items: Alle Werke anzeigen
+        life_info: Lebensdaten
+        birth_date: Geburtsdatum
+        birth_place: Geburtsort
+        death_date: Todesdatum
+        death_place: Sterbeort
+        created_by: Erstellt von
+        created_at: Erstellt am
+        published_at: Veröffentlicht am
+        slug: URL-Pfad
+        actions:
+          publish: Veröffentlichen
+          unpublish: Veröffentlichung zurückziehen
+          unpublish_confirm: Sind Sie sicher, dass Sie die Veröffentlichung zurückziehen möchten?
+      form:
+        name_label: Name
+        slug_label: URL-Pfad
+        slug_hint: Wird automatisch aus dem Namen generiert, falls leer
+        profile_image_label: Profilbild
+        biography_label: Biografie
+        cv_label: Lebenslauf
+        life_data: Lebensdaten
+        birth_date_label: Geburtsdatum
+        birth_place_label: Geburtsort
+        death_date_label: Todesdatum
+        death_place_label: Sterbeort
+        publication: Veröffentlichung
+        status_label: Status
+        submit_create: Künstler erstellen
+        submit_update: Künstler speichern
+        cancel: Abbrechen
+      filters:
+        search: Suche
+        search_placeholder: Name durchsuchen...
+        status: Status
+        all_statuses: Alle Status
+        apply: Filtern
+        reset: Zurücksetzen
+      messages:
+        created: Künstler wurde erfolgreich erstellt.
+        updated: Künstler wurde erfolgreich aktualisiert.
+        deleted: Künstler wurde erfolgreich gelöscht.
+        published: Künstler wurde veröffentlicht.
+        publish_failed: Künstler konnte nicht veröffentlicht werden.
+        unpublished: Veröffentlichung wurde zurückgezogen.
+        unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
 
   # Public articles
   articles:
@@ -452,6 +554,17 @@ de:
       back: Zurück zur Übersicht
       published_at: "Veröffentlicht am %{date}"
       by_author: "von %{author}"
+
+  # Public artists
+  artists:
+    index:
+      title: Kunstschaffende
+      no_artists: Keine Künstler vorhanden.
+    show:
+      back: Zurück zu Kunstschaffende
+      biography: Biografie
+      cv: Lebenslauf
+      works: Werke
 
   # Welcome/Start page
   welcome:

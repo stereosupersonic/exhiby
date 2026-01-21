@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_21_085315) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_111815) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,7 +66,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_085315) do
     t.index ["status"], name: "index_articles_on_status"
   end
 
+  create_table "artists", force: :cascade do |t|
+    t.date "birth_date"
+    t.string "birth_place"
+    t.datetime "created_at", null: false
+    t.bigint "created_by_id", null: false
+    t.date "death_date"
+    t.string "death_place"
+    t.string "name", null: false
+    t.datetime "published_at"
+    t.string "slug", null: false
+    t.string "status", default: "draft", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_artists_on_created_by_id"
+    t.index ["published_at"], name: "index_artists_on_published_at"
+    t.index ["slug"], name: "index_artists_on_slug", unique: true
+    t.index ["status"], name: "index_artists_on_status"
+  end
+
   create_table "media_items", force: :cascade do |t|
+    t.bigint "artist_id"
     t.string "copyright"
     t.datetime "created_at", null: false
     t.text "description"
@@ -83,6 +102,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_085315) do
     t.datetime "updated_at", null: false
     t.bigint "uploaded_by_id", null: false
     t.integer "year"
+    t.index ["artist_id"], name: "index_media_items_on_artist_id"
     t.index ["media_type"], name: "index_media_items_on_media_type"
     t.index ["published_at"], name: "index_media_items_on_published_at"
     t.index ["reviewed_by_id"], name: "index_media_items_on_reviewed_by_id"
@@ -137,6 +157,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_085315) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "users", column: "author_id"
+  add_foreign_key "artists", "users", column: "created_by_id"
+  add_foreign_key "media_items", "artists"
   add_foreign_key "media_items", "users", column: "reviewed_by_id"
   add_foreign_key "media_items", "users", column: "uploaded_by_id"
   add_foreign_key "media_taggings", "media_items"

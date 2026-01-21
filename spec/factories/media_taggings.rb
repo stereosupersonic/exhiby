@@ -8,6 +8,17 @@
 #  media_item_id :bigint           not null
 #  media_tag_id  :bigint           not null
 #
+# Indexes
+#
+#  index_media_taggings_on_media_item_id                   (media_item_id)
+#  index_media_taggings_on_media_item_id_and_media_tag_id  (media_item_id,media_tag_id) UNIQUE
+#  index_media_taggings_on_media_tag_id                    (media_tag_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (media_item_id => media_items.id)
+#  fk_rails_...  (media_tag_id => media_tags.id)
+#
 FactoryBot.define do
   factory :media_tagging do
     association :media_item

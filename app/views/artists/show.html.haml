@@ -1,0 +1,52 @@
+= render "shared/site_header", active: :kunstschaffende
+- presenter = ArtistPresenter.new(@artist)
+
+%section.artist-section.py-5{ data: { testid: "artist-section" } }
+  .container
+    .mb-4
+      = link_to t("artists.show.back"), artists_path, class: "btn btn-outline-secondary btn-sm"
+
+    .row.mb-5
+      - if @artist.profile_image.attached?
+        .col-md-3
+          = image_tag @artist.profile_image.variant(resize_to_limit: [300, 400]), class: "img-fluid rounded", alt: @artist.name, data: { testid: "artist-profile-image" }
+        .col-md-9
+          %h1.mb-3{ data: { testid: "artist-name" } }= @artist.name
+          - if presenter.full_life_info.present?
+            %p.lead.text-muted{ data: { testid: "artist-life-info" } }= presenter.full_life_info
+      - else
+        .col-12
+          %h1.mb-3{ data: { testid: "artist-name" } }= @artist.name
+          - if presenter.full_life_info.present?
+            %p.lead.text-muted{ data: { testid: "artist-life-info" } }= presenter.full_life_info
+
+    - if @artist.biography.present?
+      .artist-biography.mb-5{ data: { testid: "artist-biography" } }
+        %h2.h4.mb-3= t("artists.show.biography")
+        .content
+          = @artist.biography
+
+    - if @artist.cv.present?
+      .artist-cv.mb-5{ data: { testid: "artist-cv" } }
+        %h2.h4.mb-3= t("artists.show.cv")
+        .content
+          = @artist.cv
+
+    - if @media_items.any?
+      .artist-works{ data: { testid: "artist-works" } }
+        %h2.h4.mb-4= t("artists.show.works")
+        .row.g-3
+          - @media_items.each do |media_item|
+            .col-6.col-md-4.col-lg-3
+              - if media_item.image? && media_item.file.attached?
+                .card
+                  = image_tag media_item.file.variant(resize_to_fill: [200, 200]), class: "card-img-top", alt: media_item.title
+                  .card-body.p-2
+                    %small.text-muted= media_item.title
+              - else
+                .card
+                  .card-body.text-center.bg-light{ style: "height: 150px;" }
+                    %p.mb-0= media_item.title
+
+    .mt-5.pt-4.border-top
+      = link_to t("artists.show.back"), artists_path, class: "btn btn-outline-primary"

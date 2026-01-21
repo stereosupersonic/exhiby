@@ -24,9 +24,15 @@
   .container
     .nav-row.nav-row-primary
       = link_to "Willkommen", root_path, class: "nav-pill#{' active' if local_assigns[:active] == :willkommen}", data: { testid: "nav-willkommen" }
-      .nav-pill.dropdown
-        = link_to "Kunstschaffende", kunstschaffende_path, class: "nav-pill-link#{' active' if local_assigns[:active] == :kunstschaffende}", data: { testid: "nav-kunstschaffende" }
-        %span.dropdown-arrow
+      .nav-pill.dropdown{ data: { controller: "dropdown" } }
+        = link_to "Kunstschaffende", artists_path, class: "nav-pill-link#{' active' if local_assigns[:active] == :kunstschaffende}", data: { testid: "nav-kunstschaffende", action: "click->dropdown#toggle" }
+        %span.dropdown-arrow{ data: { action: "click->dropdown#toggle" } }
+        .dropdown-menu{ data: { dropdown_target: "menu" } }
+          = link_to "Alle Kunstschaffende", artists_path, class: "dropdown-item"
+          - if @nav_artists&.any?
+            .dropdown-divider
+            - @nav_artists.each do |artist|
+              = link_to artist.name, artist_path(artist.slug), class: "dropdown-item"
       .nav-pill.dropdown
         = link_to "Land & Leute", land_und_leute_path, class: "nav-pill-link#{' active' if local_assigns[:active] == :land_und_leute}", data: { testid: "nav-land-leute" }
         %span.dropdown-arrow

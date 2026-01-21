@@ -92,7 +92,7 @@ module Admin
 
     def media_item_params
       params.expect(media_item: [ :title, :description, :media_type, :year, :source, :technique,
-                                 :copyright, :license, :file, :tag_list ])
+                                 :copyright, :license, :file, :tag_list, :artist_id ])
     end
 
     def filtered_media_items

@@ -9,6 +9,11 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
+# Indexes
+#
+#  index_media_tags_on_name  (name) UNIQUE
+#  index_media_tags_on_slug  (slug) UNIQUE
+#
 require "rails_helper"
 
 RSpec.describe MediaTag do

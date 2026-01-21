@@ -1,0 +1,55 @@
+.admin-artists{ data: { testid: "admin-artists" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "artists-heading" } }= t("admin.artists.index.title")
+    = link_to t("admin.artists.index.new_artist"), new_admin_artist_path, class: "btn btn-primary", data: { testid: "new-artist-button" }
+
+  .card.mb-4
+    .card-body
+      = form_with url: admin_artists_path, method: :get, local: true, class: "row g-3", data: { testid: "artists-filter-form" } do |form|
+        .col-md-4
+          = form.label :q, t("admin.artists.filters.search"), class: "form-label"
+          = form.text_field :q, value: params[:q], class: "form-control", placeholder: t("admin.artists.filters.search_placeholder"), data: { testid: "artists-search-input" }
+        .col-md-3
+          = form.label :status, t("admin.artists.filters.status"), class: "form-label"
+          = form.select :status, Artist::STATUSES.map { |s| [I18n.t("artist_statuses.#{s}"), s] }, { include_blank: t("admin.artists.filters.all_statuses") }, class: "form-select", data: { testid: "artists-status-filter" }
+        .col-md-3.d-flex.align-items-end
+          = form.submit t("admin.artists.filters.apply"), class: "btn btn-secondary me-2"
+          = link_to t("admin.artists.filters.reset"), admin_artists_path, class: "btn btn-outline-secondary"
+
+  .card
+    .card-body
+      - if @artists.any?
+        .table-responsive
+          %table.table.table-hover{ data: { testid: "artists-table" } }
+            %thead
+              %tr
+                %th= t("admin.artists.index.table.name")
+                %th= t("admin.artists.index.table.life_dates")
+                %th= t("admin.artists.index.table.status")
+                %th= t("admin.artists.index.table.media_items_count")
+                %th= t("admin.artists.index.table.created_at")
+                %th= t("admin.artists.index.table.actions")
+            %tbody
+              - @artists.each do |artist|
+                - presenter = ArtistPresenter.new(artist)
+                %tr{ data: { testid: "artist-row-#{artist.slug}" } }
+                  %td
+                    .d-flex.align-items-center
+                      - if artist.profile_image.attached?
+                        = image_tag artist.profile_image.variant(resize_to_limit: [40, 40]), class: "rounded-circle me-2", alt: artist.name
+                      = link_to artist.name, admin_artist_path(artist)
+                  %td= presenter.display_life_dates
+                  %td
+                    %span.badge{ class: presenter.status_badge_class }
+                      = presenter.status_name
+                  %td= presenter.media_items_count
+                  %td= l(artist.created_at, format: :short)
+                  %td
+                    .btn-group.btn-group-sm
+                      = link_to t("common.edit"), edit_admin_artist_path(artist), class: "btn btn-outline-primary", data: { testid: "edit-artist-#{artist.slug}" }
+                      = button_to t("common.delete"), admin_artist_path(artist), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: t("admin.artists.index.actions.delete_confirm"), testid: "delete-artist-#{artist.slug}" }
+        = will_paginate @artists if @artists.respond_to?(:total_pages)
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-artists-message" } }
+          %p= t("admin.artists.index.no_artists")
+          = link_to t("admin.artists.index.new_artist"), new_admin_artist_path, class: "btn btn-primary"

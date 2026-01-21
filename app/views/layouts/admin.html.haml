@@ -22,6 +22,9 @@
               = link_to t("admin.navigation.articles"), admin_articles_path, class: "nav-link"
             %li.nav-item
               = link_to t("admin.navigation.media_items"), admin_media_items_path, class: "nav-link"
+            - if can? :manage, Artist
+              %li.nav-item
+                = link_to t("admin.navigation.artists"), admin_artists_path, class: "nav-link"
             - if can? :manage, MediaTag
               %li.nav-item
                 = link_to t("admin.navigation.tags"), admin_media_tags_path, class: "nav-link"

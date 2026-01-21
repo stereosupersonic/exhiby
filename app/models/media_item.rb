@@ -2,35 +2,38 @@
 #
 # Table name: media_items
 #
-#  id            :bigint           not null, primary key
-#  copyright     :string
-#  description   :text
-#  license       :string
-#  media_type    :string           not null
-#  published_at  :datetime
-#  reviewed_at   :datetime
-#  source        :string
-#  status        :string           default("draft"), not null
-#  submitted_at  :datetime
-#  technique     :string
-#  title         :string           not null
-#  year          :integer
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id             :bigint           not null, primary key
+#  copyright      :string
+#  description    :text
+#  license        :string
+#  media_type     :string           not null
+#  published_at   :datetime
+#  reviewed_at    :datetime
+#  source         :string
+#  status         :string           default("draft"), not null
+#  submitted_at   :datetime
+#  technique      :string
+#  title          :string           not null
+#  year           :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  artist_id      :bigint
 #  reviewed_by_id :bigint
 #  uploaded_by_id :bigint           not null
 #
 # Indexes
 #
-#  index_media_items_on_media_type     (media_type)
-#  index_media_items_on_published_at   (published_at)
-#  index_media_items_on_reviewed_by_id (reviewed_by_id)
-#  index_media_items_on_status         (status)
-#  index_media_items_on_uploaded_by_id (uploaded_by_id)
-#  index_media_items_on_year           (year)
+#  index_media_items_on_artist_id       (artist_id)
+#  index_media_items_on_media_type      (media_type)
+#  index_media_items_on_published_at    (published_at)
+#  index_media_items_on_reviewed_by_id  (reviewed_by_id)
+#  index_media_items_on_status          (status)
+#  index_media_items_on_uploaded_by_id  (uploaded_by_id)
+#  index_media_items_on_year            (year)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (artist_id => artists.id)
 #  fk_rails_...  (reviewed_by_id => users.id)
 #  fk_rails_...  (uploaded_by_id => users.id)
 #
@@ -64,6 +67,7 @@ class MediaItem < ApplicationRecord
 
   belongs_to :uploaded_by, class_name: "User"
   belongs_to :reviewed_by, class_name: "User", optional: true
+  belongs_to :artist, optional: true
 
   has_many :media_taggings, dependent: :destroy
   has_many :media_tags, through: :media_taggings

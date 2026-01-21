@@ -30,6 +30,8 @@ class User < ApplicationRecord
                                   dependent: :destroy, inverse_of: :uploaded_by
   has_many :reviewed_media_items, class_name: "MediaItem", foreign_key: :reviewed_by_id,
                                   dependent: :nullify, inverse_of: :reviewed_by
+  has_many :created_artists, class_name: "Artist", foreign_key: :created_by_id,
+                             dependent: :destroy, inverse_of: :created_by
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

@@ -17,8 +17,25 @@
 #  year           :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  artist_id      :bigint
 #  reviewed_by_id :bigint
 #  uploaded_by_id :bigint           not null
+#
+# Indexes
+#
+#  index_media_items_on_artist_id       (artist_id)
+#  index_media_items_on_media_type      (media_type)
+#  index_media_items_on_published_at    (published_at)
+#  index_media_items_on_reviewed_by_id  (reviewed_by_id)
+#  index_media_items_on_status          (status)
+#  index_media_items_on_uploaded_by_id  (uploaded_by_id)
+#  index_media_items_on_year            (year)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (artist_id => artists.id)
+#  fk_rails_...  (reviewed_by_id => users.id)
+#  fk_rails_...  (uploaded_by_id => users.id)
 #
 require "rails_helper"
 

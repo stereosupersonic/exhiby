@@ -16,6 +16,12 @@ Rails.application.routes.draw do
       end
     end
     resources :media_tags, path: "tags"
+    resources :artists do
+      member do
+        patch :publish
+        patch :unpublish
+      end
+    end
     resources :users, only: %i[index new create edit update] do
       member do
         patch :deactivate
@@ -46,8 +52,10 @@ Rails.application.routes.draw do
   get "team", to: "welcome#team"
   get "coming-soon", to: "welcome#coming_soon", as: :coming_soon
 
+  # Public artists (German URL)
+  resources :artists, only: %i[index show], path: "kunstschaffende", param: :slug
+
   # Placeholder pages (coming soon)
-  get "kunstschaffende", to: "welcome#coming_soon", as: :kunstschaffende
   get "land-und-leute", to: "welcome#coming_soon", as: :land_und_leute
   get "ausstellungen", to: "welcome#coming_soon", as: :ausstellungen
   get "bild-der-woche", to: "welcome#coming_soon", as: :bild_der_woche

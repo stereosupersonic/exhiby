@@ -54,6 +54,10 @@
         = form.select :technique, MediaItem::TECHNIQUES.map { |t| [I18n.t("media_item_techniques.#{t}"), t] }, { include_blank: t("admin.media_items.form.select_technique") }, class: "form-select", data: { testid: "media-item-technique" }
 
       .mb-3
+        = form.label :artist_id, t("admin.media_items.form.artist_label"), class: "form-label"
+        = form.select :artist_id, Artist.alphabetical.map { |a| [a.name, a.id] }, { include_blank: t("admin.media_items.form.select_artist") }, class: "form-select", data: { testid: "media-item-artist" }
+
+      .mb-3
         = form.label :copyright, t("admin.media_items.form.copyright_label"), class: "form-label"
         = form.text_field :copyright, class: "form-control", data: { testid: "media-item-copyright" }
 
