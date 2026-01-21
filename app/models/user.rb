@@ -21,6 +21,8 @@
 class User < ApplicationRecord
   ROLES = %w[admin editor user].freeze
 
+  attr_accessor :current_password
+
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :articles, foreign_key: :author_id, dependent: :destroy, inverse_of: :author

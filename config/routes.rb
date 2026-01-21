@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   # Admin namespace
   namespace :admin do
     root to: "dashboard#index"
+    resource :profile, only: %i[edit update]
     resources :articles
     resources :users, only: %i[index new create edit update] do
       member do
