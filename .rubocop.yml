@@ -1037,7 +1037,6 @@ Style/RescueModifier:
 
 Style/RescueStandardError:
   Enabled: true
-  EnforcedStyle: implicit
 
 Style/SafeNavigation:
   Enabled: true

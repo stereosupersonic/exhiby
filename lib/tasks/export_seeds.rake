@@ -95,7 +95,7 @@ namespace :db do
     end
 
     def generate_seed_file(media_item_files, artist_files, article_files)
-      content = <<~RUBY
+      <<~RUBY
         # Generated seeds from database export
         # Generated at: #{Time.current}
         #
@@ -350,8 +350,6 @@ namespace :db do
 
         puts "\\n✅ Generated seeds loaded successfully!"
       RUBY
-
-      content
     end
 
     def format_users_data

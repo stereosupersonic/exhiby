@@ -16,6 +16,6 @@ class CreateCollections < ActiveRecord::Migration[8.1]
     add_index :collections, :slug, unique: true
     add_index :collections, :status
     add_index :collections, :published_at
-    add_index :collections, [:collection_category_id, :position]
+    add_index :collections, [ :collection_category_id, :position ]
   end
 end

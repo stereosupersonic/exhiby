@@ -82,7 +82,7 @@ RSpec.describe Artist, type: :model do
       let!(:artist_a) { create(:artist, name: "Anna Artist") }
 
       it "returns artists ordered by name" do
-        expect(Artist.alphabetical.first(2)).to eq([artist_a, artist_b])
+        expect(Artist.alphabetical.first(2)).to eq([ artist_a, artist_b ])
       end
     end
 

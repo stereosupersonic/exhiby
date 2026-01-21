@@ -43,7 +43,7 @@ RSpec.describe CollectionItem, type: :model do
       let!(:item_3) { create(:collection_item, collection: collection, position: 3) }
 
       it "returns items ordered by position" do
-        expect(described_class.ordered).to eq([item_1, item_2, item_3])
+        expect(described_class.ordered).to eq([ item_1, item_2, item_3 ])
       end
     end
   end
@@ -61,7 +61,7 @@ RSpec.describe CollectionItem, type: :model do
     end
 
     it "updates positions based on array order" do
-      described_class.reorder(collection, [media_item_3.id, media_item_1.id, media_item_2.id])
+      described_class.reorder(collection, [ media_item_3.id, media_item_1.id, media_item_2.id ])
 
       expect(described_class.find_by(collection: collection, media_item: media_item_3).position).to eq(0)
       expect(described_class.find_by(collection: collection, media_item: media_item_1).position).to eq(1)

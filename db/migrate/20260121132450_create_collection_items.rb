@@ -8,7 +8,7 @@ class CreateCollectionItems < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :collection_items, [:collection_id, :media_item_id], unique: true
-    add_index :collection_items, [:collection_id, :position]
+    add_index :collection_items, [ :collection_id, :media_item_id ], unique: true
+    add_index :collection_items, [ :collection_id, :position ]
   end
 end

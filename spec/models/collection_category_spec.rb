@@ -47,13 +47,13 @@ RSpec.describe CollectionCategory, type: :model do
 
     describe ".ordered" do
       it "returns categories ordered by position and name" do
-        expect(described_class.ordered).to eq([category_a, category_b])
+        expect(described_class.ordered).to eq([ category_a, category_b ])
       end
     end
 
     describe ".alphabetical" do
       it "returns categories ordered by name" do
-        expect(described_class.alphabetical).to eq([category_a, category_b])
+        expect(described_class.alphabetical).to eq([ category_a, category_b ])
       end
     end
   end

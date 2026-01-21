@@ -83,8 +83,8 @@ RSpec.describe Collection, type: :model do
       let!(:collection_a) { create(:collection, name: "Alpha", position: 1) }
 
       it "returns collections ordered by position and name" do
-        result = described_class.where(id: [collection_a.id, collection_b.id]).ordered
-        expect(result).to eq([collection_a, collection_b])
+        result = described_class.where(id: [ collection_a.id, collection_b.id ]).ordered
+        expect(result).to eq([ collection_a, collection_b ])
       end
     end
 
