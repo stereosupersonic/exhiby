@@ -42,6 +42,13 @@ class Article < ApplicationRecord
   scope :published, -> { where(status: "published").where("published_at IS NULL OR published_at <= ?", Time.current) }
   scope :recent, ->(limit = 3) { published.order(Arel.sql("COALESCE(published_at, created_at) DESC")).limit(limit) }
   scope :by_publication_date, -> { order(published_at: :desc) }
+  scope :search, ->(query) {
+    if query.present?
+      joins("LEFT JOIN action_text_rich_texts ON action_text_rich_texts.record_id = articles.id AND action_text_rich_texts.record_type = 'Article' AND action_text_rich_texts.name = 'content'")
+        .where("articles.title ILIKE :q OR action_text_rich_texts.body ILIKE :q", q: "%#{query}%")
+        .distinct
+    end
+  }
 
   def to_param
     slug

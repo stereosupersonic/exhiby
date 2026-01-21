@@ -1,12 +1,22 @@
 -# Header with Logo and Vignettes
 %header.site-header{ data: { testid: "site-header" } }
   .container
-    .header-login{ data: { testid: "header-login" } }
-      - if authenticated?
-        = link_to "Admin", admin_root_path, class: "header-login-link", data: { testid: "admin-link" }
-        = button_to "Abmelden", session_path, method: :delete, class: "header-login-link header-login-button", data: { testid: "logout-link" }
-      - else
-        = link_to "Anmelden", new_session_path, class: "header-login-link", data: { testid: "login-link" }
+    .header-top-row{ data: { testid: "header-top-row" } }
+      .header-login{ data: { testid: "header-login" } }
+        - if authenticated?
+          = link_to admin_root_path, class: "header-login-icon", title: "Admin", data: { testid: "admin-link" } do
+            %i.bi.bi-gear
+          = button_to session_path, method: :delete, class: "header-login-icon header-login-button", title: "Abmelden", data: { testid: "logout-link" } do
+            %i.bi.bi-box-arrow-right
+        - else
+          = link_to new_session_path, class: "header-login-icon", title: "Anmelden", data: { testid: "login-link" } do
+            %i.bi.bi-person
+      .header-search{ class: "#{'expanded' if params[:q].present?}", data: { testid: "header-search", controller: "search-toggle", "search-toggle-expanded-value": params[:q].present? } }
+        = form_with url: search_path, method: :get, local: true, class: "header-search-form", data: { "search-toggle-target": "form" } do |f|
+          .input-group.input-group-sm
+            = text_field_tag :q, params[:q], class: "form-control header-search-input", placeholder: t("search.placeholder"), data: { testid: "header-search-input", "search-toggle-target": "input" }
+            %button.btn.header-search-btn{ type: "submit", data: { testid: "header-search-submit", "search-toggle-target": "icon", action: "click->search-toggle#handleClick" } }
+              %i.bi.bi-search
     .header-row
       .header-vignette.header-vignette-left
         = image_tag "design/Kaffee_Hag_Vignette_WBc.png", alt: "Kaffee Hag Vignette", class: "vignette-img"

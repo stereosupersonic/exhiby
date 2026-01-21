@@ -13,21 +13,107 @@ $text-orange: #ff6600;
   background: #fff;
   padding: 1rem 0;
 
-  .header-login {
+  .header-top-row {
     display: flex;
     justify-content: flex-end;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.25rem;
     margin-bottom: 0.5rem;
-    font-size: 0.85rem;
+    flex-wrap: wrap;
 
-    .header-login-link {
+    @media (max-width: 575px) {
+      justify-content: center;
+    }
+  }
+
+  .header-search {
+    .header-search-form {
+      display: flex;
+      align-items: center;
+    }
+
+    .input-group {
+      width: auto;
+      align-items: center;
+    }
+
+    .header-search-input {
+      width: 0;
+      padding: 0;
+      border: none;
+      opacity: 0;
+      transition: width 0.3s ease, opacity 0.3s ease, padding 0.3s ease, border 0.3s ease;
+      font-size: 0.85rem;
+
+      &:focus {
+        border-color: $nav-orange;
+        box-shadow: 0 0 0 0.2rem rgba($nav-orange, 0.25);
+      }
+    }
+
+    .header-search-btn {
+      background: none;
+      border: none;
       color: #666;
-      text-decoration: none;
-      padding: 0.25rem 0.5rem;
-      transition: color 0.2s ease;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease, background-color 0.2s ease;
 
       &:hover {
         color: $nav-orange;
+        background-color: rgba($nav-orange, 0.1);
+      }
+
+      .bi-search {
+        font-size: 1.1rem;
+      }
+    }
+
+    // Expanded state
+    &.expanded {
+      .header-search-input {
+        width: 180px;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        opacity: 1;
+        margin-right: 0.25rem;
+
+        @media (min-width: 768px) {
+          width: 220px;
+        }
+      }
+    }
+  }
+
+  .header-login {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .header-login-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      color: #666;
+      text-decoration: none;
+      border-radius: 50%;
+      transition: color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        color: $nav-orange;
+        background-color: rgba($nav-orange, 0.1);
+      }
+
+      .bi {
+        font-size: 1.1rem;
       }
     }
 
@@ -35,8 +121,7 @@ $text-orange: #ff6600;
       background: none;
       border: none;
       cursor: pointer;
-      font-size: inherit;
-      font-family: inherit;
+      padding: 0;
     }
   }
 

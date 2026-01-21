@@ -1,0 +1,125 @@
+= render "shared/site_header"
+
+%section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/archiv_om_1920.jpg')}')", data: { testid: "search-hero" } }
+  .hero-overlay
+    .container
+      %h1.hero-title{ data: { testid: "search-heading" } }
+        = t("search.title")
+
+%section.search-section.py-5{ data: { testid: "search-section" } }
+  .container
+    -# Search form
+    .row.justify-content-center.mb-5
+      .col-md-8.col-lg-6
+        = form_with url: search_path, method: :get, local: true, class: "d-flex gap-2", data: { testid: "search-form" } do |f|
+          = text_field_tag :q, @query, class: "form-control form-control-lg", placeholder: t("search.placeholder"), data: { testid: "search-input" }
+          = submit_tag t("search.button"), class: "btn btn-primary btn-lg", data: { testid: "search-submit" }
+
+    - if @query.blank?
+      .text-center.text-muted.py-4{ data: { testid: "no-query-message" } }
+        %p= t("search.no_query")
+    - else
+      %h2.h5.mb-4{ data: { testid: "results-heading" } }
+        = t("search.results_for", query: @query)
+
+      - has_results = @media_items.present? || @articles.present? || @collections.present? || @artists.present?
+
+      - if has_results
+        -# Media Items Section with Lightbox
+        - if @media_items.present?
+          .search-results-section.mb-5{ data: { testid: "media-items-results" } }
+            %h3.h6.text-muted.text-uppercase.mb-3
+              %i.bi.bi-images.me-2
+              = t("search.sections.media_items")
+              %span.badge.bg-secondary.ms-2= @media_items.size
+            %p.text-muted.fst-italic.small.mb-3= t("collections.show.click_to_enlarge")
+            .row.g-3
+              - @media_items.each do |media_item|
+                - presenter = MediaItemPresenter.new(media_item)
+                .col-6.col-md-4.col-lg-3{ data: { testid: "media-item-result-#{media_item.id}" } }
+                  .card.h-100
+                    - if media_item.file.attached? && media_item.image?
+                      = render "shared/zoomable_image", image: media_item.file.variant(resize_to_fill: [300, 200]), full_image_url: url_for(media_item.file), title: media_item.title, description: media_item.description, artist: media_item.artist&.name, year: media_item.year&.to_s, technique: presenter.technique_name, image_class: "card-img-top"
+                    - else
+                      .card-img-top.bg-light.d-flex.align-items-center.justify-content-center{ style: "height: 120px;" }
+                        %i.bi.bi-file-earmark.text-muted{ style: "font-size: 2rem;" }
+                    .card-body.p-2
+                      %p.card-text.small.mb-0.text-truncate{ title: media_item.title }
+                        = media_item.title
+                      - if media_item.media_tags.any?
+                        .mt-1
+                          - media_item.media_tags.first(2).each do |tag|
+                            %span.badge.bg-light.text-dark.small.me-1= tag.name
+
+        -# Artists Section
+        - if @artists.present?
+          .search-results-section.mb-5{ data: { testid: "artists-results" } }
+            %h3.h6.text-muted.text-uppercase.mb-3
+              %i.bi.bi-person-circle.me-2
+              = t("search.sections.artists")
+              %span.badge.bg-secondary.ms-2= @artists.size
+            .row.g-3
+              - @artists.each do |artist|
+                - presenter = ArtistPresenter.new(artist)
+                .col-md-4.col-lg-3{ data: { testid: "artist-result-#{artist.slug}" } }
+                  .card.h-100
+                    - if artist.profile_media_item&.file&.attached?
+                      = link_to artist_path(artist.slug) do
+                        = image_tag artist.profile_media_item.file.variant(resize_to_fill: [300, 200]), class: "card-img-top", alt: artist.name
+                    - else
+                      = link_to artist_path(artist.slug) do
+                        .card-img-top.bg-light.d-flex.align-items-center.justify-content-center{ style: "height: 120px;" }
+                          %i.bi.bi-person.text-muted{ style: "font-size: 2rem;" }
+                    .card-body.p-2
+                      %h6.card-title.mb-1
+                        = link_to artist.name, artist_path(artist.slug), class: "text-decoration-none"
+                      - if presenter.display_life_dates
+                        %p.card-text.text-muted.small.mb-0
+                          = presenter.display_life_dates
+
+        -# Articles Section
+        - if @articles.present?
+          .search-results-section.mb-5{ data: { testid: "articles-results" } }
+            %h3.h6.text-muted.text-uppercase.mb-3
+              %i.bi.bi-newspaper.me-2
+              = t("search.sections.articles")
+              %span.badge.bg-secondary.ms-2= @articles.size
+            .list-group
+              - @articles.each do |article|
+                - presenter = ArticlePresenter.new(article)
+                = link_to article_path(article.slug), class: "list-group-item list-group-item-action", data: { testid: "article-result-#{article.slug}" } do
+                  .d-flex.justify-content-between.align-items-start
+                    .me-auto
+                      %h5.mb-1= article.title
+                      %p.mb-1.text-muted.small= presenter.excerpt(length: 150)
+                    - if article.published_at
+                      %small.text-muted= presenter.formatted_published_at_month_year
+
+        -# Collections Section
+        - if @collections.present?
+          .search-results-section.mb-5{ data: { testid: "collections-results" } }
+            %h3.h6.text-muted.text-uppercase.mb-3
+              %i.bi.bi-collection.me-2
+              = t("search.sections.collections")
+              %span.badge.bg-secondary.ms-2= @collections.size
+            .row.g-3
+              - @collections.each do |collection|
+                - presenter = CollectionPresenter.new(collection)
+                .col-md-4.col-lg-3{ data: { testid: "collection-result-#{collection.slug}" } }
+                  .card.h-100
+                    - if collection.cover_media_item&.file&.attached?
+                      = link_to collection_path(collection.slug) do
+                        = image_tag collection.cover_media_item.file.variant(resize_to_fill: [300, 200]), class: "card-img-top", alt: collection.name
+                    - else
+                      = link_to collection_path(collection.slug) do
+                        .card-img-top.bg-light.d-flex.align-items-center.justify-content-center{ style: "height: 120px;" }
+                          %i.bi.bi-collection.text-muted{ style: "font-size: 2rem;" }
+                    .card-body.p-2
+                      %h6.card-title.mb-1
+                        = link_to collection.name, collection_path(collection.slug), class: "text-decoration-none"
+                      - if collection.media_items_count > 0
+                        %p.card-text.text-muted.small.mb-0
+                          = t("collections.index.media_items_count", count: collection.media_items_count)
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-results-message" } }
+          %p= t("search.no_results", query: @query)

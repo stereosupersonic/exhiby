@@ -65,6 +65,9 @@ Rails.application.routes.draw do
   get "team", to: "welcome#team"
   get "coming-soon", to: "welcome#coming_soon", as: :coming_soon
 
+  # Search
+  get "suche", to: "search#index", as: :search
+
   # Public artists (German URL)
   resources :artists, only: %i[index show], path: "kunstschaffende", param: :slug
 

@@ -50,7 +50,13 @@ class Artist < ApplicationRecord
   scope :published, -> { where(status: "published") }
   scope :recent, -> { order(created_at: :desc) }
   scope :alphabetical, -> { order(:name) }
-  scope :search, ->(query) { where("name ILIKE ?", "%#{query}%") if query.present? }
+  scope :search, ->(query) {
+    if query.present?
+      joins("LEFT JOIN action_text_rich_texts ON action_text_rich_texts.record_id = artists.id AND action_text_rich_texts.record_type = 'Artist' AND action_text_rich_texts.name = 'biography'")
+        .where("artists.name ILIKE :q OR action_text_rich_texts.body ILIKE :q", q: "%#{query}%")
+        .distinct
+    end
+  }
   scope :by_status, ->(status) { where(status: status) if status.present? }
 
   def to_param

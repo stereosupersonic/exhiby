@@ -800,3 +800,18 @@ de:
     edit: Bearbeiten
     back: Zurück
     not_published: Nicht veröffentlicht
+
+  # Search
+  search:
+    title: "Suche"
+    placeholder: "Suchbegriff eingeben..."
+    button: "Suchen"
+    no_query: "Bitte geben Sie einen Suchbegriff ein."
+    no_results: "Keine Ergebnisse gefunden für \"%{query}\"."
+    results_for: "Suchergebnisse für \"%{query}\""
+    sections:
+      media_items: "Medien"
+      artists: "Kunstschaffende"
+      articles: "Artikel"
+      collections: "Sammlungen"
+    view_all: "Alle anzeigen"
