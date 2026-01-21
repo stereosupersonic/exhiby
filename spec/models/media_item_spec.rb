@@ -43,6 +43,12 @@
 require "rails_helper"
 
 RSpec.describe MediaItem do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:media_item)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:uploaded_by).class_name("User") }
     it { is_expected.to belong_to(:reviewed_by).class_name("User").optional }

@@ -22,6 +22,12 @@
 require "rails_helper"
 
 RSpec.describe User do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:user)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to have_many(:sessions).dependent(:destroy) }
   end

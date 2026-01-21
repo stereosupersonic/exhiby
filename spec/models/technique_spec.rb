@@ -18,6 +18,12 @@
 require "rails_helper"
 
 RSpec.describe Technique, type: :model do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:technique)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to have_many(:media_items).dependent(:nullify) }
   end
@@ -49,25 +55,25 @@ RSpec.describe Technique, type: :model do
 
     describe ".ordered" do
       it "returns techniques ordered by position and name" do
-        expect(described_class.ordered).to eq([technique_c, technique_a, technique_b])
+        expect(described_class.ordered).to eq([ technique_c, technique_a, technique_b ])
       end
     end
 
     describe ".search" do
       it "returns techniques matching the query" do
-        expect(described_class.search("Aqua")).to eq([technique_b])
+        expect(described_class.search("Aqua")).to eq([ technique_b ])
       end
 
       it "is case insensitive" do
-        expect(described_class.search("aquarell")).to eq([technique_b])
+        expect(described_class.search("aquarell")).to eq([ technique_b ])
       end
 
       it "returns all techniques when query is blank" do
-        expect(described_class.search("")).to match_array([technique_a, technique_b, technique_c])
+        expect(described_class.search("")).to match_array([ technique_a, technique_b, technique_c ])
       end
 
       it "returns all techniques when query is nil" do
-        expect(described_class.search(nil)).to match_array([technique_a, technique_b, technique_c])
+        expect(described_class.search(nil)).to match_array([ technique_a, technique_b, technique_c ])
       end
 
       it "returns empty array when no match found" do

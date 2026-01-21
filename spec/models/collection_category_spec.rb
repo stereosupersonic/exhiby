@@ -18,6 +18,12 @@
 require "rails_helper"
 
 RSpec.describe CollectionCategory, type: :model do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:collection_category)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to have_many(:collections).dependent(:restrict_with_error) }
   end

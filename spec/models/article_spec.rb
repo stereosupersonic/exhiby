@@ -28,6 +28,12 @@
 require "rails_helper"
 
 RSpec.describe Article do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:article)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:author).class_name("User") }
     it { is_expected.to belong_to(:cover_media_item).class_name("MediaItem").optional }

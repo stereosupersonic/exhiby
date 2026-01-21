@@ -17,6 +17,12 @@
 require "rails_helper"
 
 RSpec.describe MediaTag do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:media_tag)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to have_many(:media_taggings).dependent(:destroy) }
     it { is_expected.to have_many(:media_items).through(:media_taggings) }

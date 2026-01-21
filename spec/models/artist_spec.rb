@@ -32,6 +32,12 @@
 require "rails_helper"
 
 RSpec.describe Artist, type: :model do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:artist)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:created_by).class_name("User") }
     it { is_expected.to belong_to(:profile_media_item).class_name("MediaItem").optional }

@@ -33,6 +33,12 @@
 require "rails_helper"
 
 RSpec.describe Collection, type: :model do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:collection)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:collection_category) }
     it { is_expected.to belong_to(:created_by).class_name("User") }
