@@ -25,7 +25,8 @@
         = form.label :profile_media_item_id, t("admin.artists.form.profile_image_label"), class: "form-label"
         = form.hidden_field :profile_media_item_id, data: { "media-item-selector-target": "input" }
         .position-relative{ data: { "media-item-selector-target": "selected" }, class: (@artist.profile_media_item_id.present? ? "d-none" : "") }
-          %input.form-control{ type: "text", placeholder: t("admin.artists.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
+          %label.visually-hidden{ for: "artist-profile-search" }= t("admin.artists.form.search_media_items")
+          %input#artist-profile-search.form-control{ type: "text", placeholder: t("admin.artists.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
           .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "media-item-selector-target": "results" } }
         .mt-2{ data: { "media-item-selector-target": "preview" }, class: (@artist.profile_media_item_id.blank? ? "d-none" : "") }
 

@@ -15,12 +15,12 @@
     .row.mb-3
       .col-md-6
         = form.label :password, t("admin.users.form.password_label"), class: "form-label"
-        = form.password_field :password, class: "form-control #{'is-invalid' if @user.errors[:password].any?}", required: true, data: { testid: "user-password" }
+        = form.password_field :password, class: "form-control #{'is-invalid' if @user.errors[:password].any?}", required: true, autocomplete: "new-password", data: { testid: "user-password" }
         - if @user.errors[:password].any?
           .invalid-feedback= @user.errors[:password].first
       .col-md-6
         = form.label :password_confirmation, t("admin.users.form.password_confirmation_label"), class: "form-label"
-        = form.password_field :password_confirmation, class: "form-control #{'is-invalid' if @user.errors[:password_confirmation].any?}", required: true, data: { testid: "user-password-confirmation" }
+        = form.password_field :password_confirmation, class: "form-control #{'is-invalid' if @user.errors[:password_confirmation].any?}", required: true, autocomplete: "new-password", data: { testid: "user-password-confirmation" }
         - if @user.errors[:password_confirmation].any?
           .invalid-feedback= @user.errors[:password_confirmation].first
 

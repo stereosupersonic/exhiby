@@ -19,7 +19,7 @@
 - year ||= nil
 - technique ||= nil
 
-.image-zoom-wrapper{ class: wrapper_class, data: { controller: "lightbox", "lightbox-image-url-value": full_image_url, "lightbox-title-value": title, "lightbox-description-value": description, "lightbox-artist-value": artist, "lightbox-year-value": year, "lightbox-technique-value": technique, action: "click->lightbox#open" } }
+.image-zoom-wrapper{ class: wrapper_class, tabindex: "0", role: "button", "aria-label": t("common.click_to_enlarge", title: title), data: { controller: "lightbox", "lightbox-image-url-value": full_image_url, "lightbox-title-value": title, "lightbox-description-value": description, "lightbox-artist-value": artist, "lightbox-year-value": year, "lightbox-technique-value": technique, action: "click->lightbox#open keydown.enter->lightbox#open keydown.space->lightbox#open" } }
   = image_tag image, class: image_class, alt: title
-  .zoom-overlay
+  .zoom-overlay{ "aria-hidden": "true" }
     %i.bi.bi-zoom-in.zoom-icon

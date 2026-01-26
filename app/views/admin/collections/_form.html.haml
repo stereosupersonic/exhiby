@@ -25,7 +25,8 @@
         = form.label :cover_media_item_id, t("admin.collections.form.cover_image_label"), class: "form-label"
         = form.hidden_field :cover_media_item_id, data: { "media-item-selector-target": "input" }
         .position-relative{ data: { "media-item-selector-target": "selected" }, class: (@collection.cover_media_item_id.present? ? "d-none" : "") }
-          %input.form-control{ type: "text", placeholder: t("admin.collections.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
+          %label.visually-hidden{ for: "collection-cover-search" }= t("admin.collections.form.search_media_items")
+          %input#collection-cover-search.form-control{ type: "text", placeholder: t("admin.collections.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
           .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "media-item-selector-target": "results" } }
         .mt-2{ data: { "media-item-selector-target": "preview" }, class: (@collection.cover_media_item_id.blank? ? "d-none" : "") }
 
@@ -41,9 +42,9 @@
               %span.badge.bg-secondary.ms-2= @collection.media_items_count
           .card-body
             .mb-3
-              %label.form-label= t("admin.collections.form.add_media_item")
+              %label.form-label{ for: "collection-items-search" }= t("admin.collections.form.add_media_item")
               .position-relative
-                %input.form-control{ type: "text", placeholder: t("admin.collections.form.search_media_items_placeholder"), data: { action: "input->collection-items#search", "collection-items-target": "search" }, autocomplete: "off" }
+                %input#collection-items-search.form-control{ type: "text", placeholder: t("admin.collections.form.search_media_items_placeholder"), data: { action: "input->collection-items#search", "collection-items-target": "search" }, autocomplete: "off" }
                 .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "collection-items-target": "results" } }
             %hr
             %div{ data: { "collection-items-target": "items" } }

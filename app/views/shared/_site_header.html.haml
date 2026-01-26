@@ -16,6 +16,7 @@
             %span.visually-hidden Anmelden
       .header-search{ class: "#{'expanded' if params[:q].present?}", data: { testid: "header-search", controller: "search-toggle", "search-toggle-expanded-value": params[:q].present? } }
         = form_with url: search_path, method: :get, local: true, class: "header-search-form", data: { "search-toggle-target": "form" } do |f|
+          = label_tag :q, t("search.placeholder"), class: "visually-hidden"
           .input-group.input-group-sm
             = text_field_tag :q, params[:q], class: "form-control header-search-input", placeholder: t("search.placeholder"), data: { testid: "header-search-input", "search-toggle-target": "input" }
             %button.btn.header-search-btn{ type: "submit", data: { testid: "header-search-submit", "search-toggle-target": "icon", action: "click->search-toggle#handleClick" } }

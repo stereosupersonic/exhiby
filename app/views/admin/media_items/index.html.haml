@@ -2,11 +2,11 @@
   .d-flex.justify-content-between.align-items-center.mb-4
     %h1{ data: { testid: "media-items-heading" } }= t("admin.media_items.index.title")
     .d-flex.gap-2
-      .btn-group{ data: { testid: "view-toggle" } }
-        %button.btn.btn-outline-secondary{ type: "button", data: { action: "click->view-toggle#showGrid", "view-toggle-target": "gridBtn" } }
-          %i.bi.bi-grid-3x3-gap-fill
-        %button.btn.btn-outline-secondary.active{ type: "button", data: { action: "click->view-toggle#showList", "view-toggle-target": "listBtn" } }
-          %i.bi.bi-list-ul
+      .btn-group{ data: { testid: "view-toggle" }, role: "group", "aria-label": t("admin.media_items.index.view_toggle") }
+        %button.btn.btn-outline-secondary{ type: "button", "aria-label": t("admin.media_items.index.grid_view"), data: { action: "click->view-toggle#showGrid", "view-toggle-target": "gridBtn" } }
+          %i.bi.bi-grid-3x3-gap-fill{ "aria-hidden": "true" }
+        %button.btn.btn-outline-secondary.active{ type: "button", "aria-label": t("admin.media_items.index.list_view"), data: { action: "click->view-toggle#showList", "view-toggle-target": "listBtn" } }
+          %i.bi.bi-list-ul{ "aria-hidden": "true" }
       = link_to t("admin.media_items.index.new_media_item"), new_admin_media_item_path, class: "btn btn-primary", data: { testid: "new-media-item-button" }
 
   = render "filters"

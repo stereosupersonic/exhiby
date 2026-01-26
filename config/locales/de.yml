@@ -424,6 +424,9 @@ de:
         title: Medien
         new_media_item: Neues Medium
         no_media_items: Keine Medien vorhanden.
+        view_toggle: Ansicht wechseln
+        grid_view: Rasteransicht
+        list_view: Listenansicht
         table:
           title: Titel
           type: Typ
@@ -798,8 +801,10 @@ de:
     cancel: Abbrechen
     delete: Löschen
     edit: Bearbeiten
+    view: Anzeigen
     back: Zurück
     not_published: Nicht veröffentlicht
+    click_to_enlarge: "%{title} vergrößern"
 
   # Search
   search:

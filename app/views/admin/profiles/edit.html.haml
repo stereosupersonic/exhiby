@@ -23,15 +23,15 @@
 
             .mb-3
               = label_tag :current_password, t("admin.profile.form.current_password"), class: "form-label"
-              = password_field_tag :current_password, nil, class: "form-control", required: true, data: { testid: "current-password" }
+              = password_field_tag :current_password, nil, class: "form-control", required: true, autocomplete: "current-password", data: { testid: "current-password" }
 
             .mb-3
               = f.label :password, t("admin.profile.form.new_password"), class: "form-label"
-              = f.password_field :password, class: "form-control", required: true, data: { testid: "new-password" }
+              = f.password_field :password, class: "form-control", required: true, autocomplete: "new-password", data: { testid: "new-password" }
 
             .mb-3
               = f.label :password_confirmation, t("admin.profile.form.password_confirmation"), class: "form-label"
-              = f.password_field :password_confirmation, class: "form-control", required: true, data: { testid: "password-confirmation" }
+              = f.password_field :password_confirmation, class: "form-control", required: true, autocomplete: "new-password", data: { testid: "password-confirmation" }
 
             .d-flex.justify-content-between.align-items-center
               = link_to t("common.cancel"), admin_root_path, class: "btn btn-outline-secondary"

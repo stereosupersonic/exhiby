@@ -27,10 +27,10 @@
       = l(media_item.created_at, format: :short)
 
   .card-footer.bg-transparent
-    .btn-group.btn-group-sm.w-100
-      = link_to admin_media_item_path(media_item), class: "btn btn-outline-primary" do
-        %i.bi.bi-eye
-      = link_to edit_admin_media_item_path(media_item), class: "btn btn-outline-secondary" do
-        %i.bi.bi-pencil
-      = button_to admin_media_item_path(media_item), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: t("admin.media_items.index.actions.delete_confirm") } do
-        %i.bi.bi-trash
+    .btn-group.btn-group-sm.w-100{ role: "group", "aria-label": t("admin.media_items.index.table.actions") }
+      = link_to admin_media_item_path(media_item), class: "btn btn-outline-primary", "aria-label": t("common.view") do
+        %i.bi.bi-eye{ "aria-hidden": "true" }
+      = link_to edit_admin_media_item_path(media_item), class: "btn btn-outline-secondary", "aria-label": t("common.edit") do
+        %i.bi.bi-pencil{ "aria-hidden": "true" }
+      = button_to admin_media_item_path(media_item), method: :delete, class: "btn btn-outline-danger", "aria-label": t("common.delete"), data: { turbo_confirm: t("admin.media_items.index.actions.delete_confirm") } do
+        %i.bi.bi-trash{ "aria-hidden": "true" }

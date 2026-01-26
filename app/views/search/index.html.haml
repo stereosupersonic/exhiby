@@ -12,6 +12,7 @@
     .row.justify-content-center.mb-5
       .col-md-8.col-lg-6
         = form_with url: search_path, method: :get, local: true, class: "d-flex gap-2", data: { testid: "search-form" } do |f|
+          = label_tag :q, t("search.placeholder"), class: "visually-hidden"
           = text_field_tag :q, @query, class: "form-control form-control-lg", placeholder: t("search.placeholder"), data: { testid: "search-input" }
           = submit_tag t("search.button"), class: "btn btn-primary btn-lg", data: { testid: "search-submit" }
 
