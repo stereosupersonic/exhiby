@@ -120,7 +120,13 @@ export default class extends Controller {
       return
     }
 
-    let html = `<small class="text-muted">${data.tags_count} EXIF-Tags gefunden</small>`
+    // Update header badge with tag count
+    const headerBadge = this.exifPreviewTarget.querySelector(".badge")
+    if (headerBadge) {
+      headerBadge.textContent = data.tags_count
+    }
+
+    let html = ""
 
     // Display grouped tags
     const groupLabels = {
@@ -136,19 +142,45 @@ export default class extends Controller {
     for (const [group, tags] of Object.entries(data.grouped_tags || {})) {
       if (!tags || Object.keys(tags).length === 0) continue
 
-      html += `<div class="mt-2"><strong class="small">${groupLabels[group] || group}</strong></div>`
-      html += '<dl class="row small mb-0">'
+      html += `<h6 class="text-muted border-bottom pb-1 mb-2 small">${groupLabels[group] || group}</h6>`
+      html += '<dl class="row small mb-2">'
 
       for (const [tag, value] of Object.entries(tags)) {
         html += `<dt class="col-sm-5 text-truncate" title="${tag}">${tag}</dt>`
-        html += `<dd class="col-sm-7 text-truncate" title="${value}">${value}</dd>`
+        html += `<dd class="col-sm-7 text-truncate" title="${this.escapeHtml(value)}">${this.escapeHtml(value)}</dd>`
       }
 
       html += '</dl>'
     }
 
+    // Add collapsible section for all tags
+    if (data.all_tags && Object.keys(data.all_tags).length > 0) {
+      html += `<details class="mt-2">
+        <summary class="text-muted small">
+          <i class="bi bi-list me-1"></i>
+          Alle ${data.tags_count} EXIF-Tags anzeigen
+        </summary>
+        <div class="mt-2 border-top pt-2">
+          <dl class="row small mb-0">`
+
+      for (const [tag, value] of Object.entries(data.all_tags)) {
+        html += `<dt class="col-sm-5 text-truncate" title="${tag}">${tag}</dt>`
+        html += `<dd class="col-sm-7 text-truncate" title="${this.escapeHtml(value)}">${this.escapeHtml(value)}</dd>`
+      }
+
+      html += '</dl></div></details>'
+    }
+
     this.exifContentTarget.innerHTML = html
     this.exifPreviewTarget.classList.remove("d-none")
+  }
+
+  escapeHtml(text) {
+    if (text === null || text === undefined) return ""
+    const str = String(text)
+    const div = document.createElement("div")
+    div.textContent = str
+    return div.innerHTML
   }
 
   hideExifPreview() {

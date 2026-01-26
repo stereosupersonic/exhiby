@@ -548,6 +548,7 @@ de:
         submit_update: Medium speichern
         cancel: Abbrechen
         exif_preview: EXIF-Daten aus Bild
+        stored_exif_data: Gespeicherte EXIF-Daten
       filters:
         search: Suche
         search_placeholder: Titel durchsuchen...

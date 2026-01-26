@@ -47,7 +47,7 @@ module Admin
     end
 
     def create
-      @media_item = current_user.uploaded_media_items.build(media_item_params)
+      @media_item = build_media_item_with_exif
 
       if @media_item.save
         redirect_to admin_media_item_path(@media_item), notice: t("admin.media_items.messages.created")
@@ -60,7 +60,9 @@ module Admin
     end
 
     def update
-      if @media_item.update(media_item_params)
+      update_media_item_with_exif
+
+      if @media_item.save
         redirect_to admin_media_item_path(@media_item), notice: t("admin.media_items.messages.updated")
       else
         render :edit, status: :unprocessable_entity
@@ -125,6 +127,35 @@ module Admin
     def media_item_params
       params.expect(media_item: %i[title description media_type year source technique_id
                                    copyright license file tag_list artist_id])
+    end
+
+    def media_item_params_without_file
+      params.expect(media_item: %i[title description media_type year source technique_id
+                                   copyright license tag_list artist_id])
+    end
+
+    def uploaded_file
+      params.dig(:media_item, :file)
+    end
+
+    def build_media_item_with_exif
+      if uploaded_file.present?
+        MediaItem.build_with_file(
+          file: uploaded_file,
+          uploaded_by: current_user,
+          **media_item_params_without_file
+        )
+      else
+        current_user.uploaded_media_items.build(media_item_params)
+      end
+    end
+
+    def update_media_item_with_exif
+      @media_item.assign_attributes(media_item_params_without_file)
+
+      if uploaded_file.present?
+        @media_item.attach_and_extract_exif(uploaded_file)
+      end
     end
 
     def filtered_media_items

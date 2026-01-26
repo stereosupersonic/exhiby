@@ -293,9 +293,36 @@ RSpec.describe MediaItem do
 
   describe "EXIF metadata" do
     describe "#exif_metadata" do
-      it "defaults to empty hash" do
-        media_item = create(:media_item)
+      it "defaults to empty hash for non-image types" do
+        media_item = create(:media_item, :video)
         expect(media_item.exif_metadata).to eq({})
+      end
+
+      it "extracts EXIF data automatically for images" do
+        user = create(:user)
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/fixtures/files/testbild_katze_exif_v2.jpg"),
+          "image/jpeg"
+        )
+        media_item = MediaItem.build_with_file(
+          file: file,
+          uploaded_by: user,
+          media_type: "image"
+        )
+        media_item.save!
+
+        expect(media_item.title).to eq("Testbild Katze")
+        # Note: EXIF extraction may have encoding issues with special characters
+        expect(media_item.description).to be_present
+        expect(media_item.description).to include("Testbild einer Katze")
+
+        expect(media_item.exif_metadata).to be_present
+        expect(media_item.exif_metadata["Artist"]).to eq("Testbild Katze")
+        expect(media_item.exif_metadata["XPTitle"]).to eq("Testbild Katze")
+        expect(media_item.exif_metadata["FileType"]).to eq("JPEG")
+        expect(media_item.exif_metadata["MIMEType"]).to eq("image/jpeg")
+        expect(media_item.exif_metadata["ImageWidth"]).to eq("512")
+        expect(media_item.exif_metadata["ImageHeight"]).to eq("512")
       end
 
       it "stores EXIF data as JSONB" do
@@ -324,7 +351,7 @@ RSpec.describe MediaItem do
         expect(media_item.reload.exif_metadata["Title"]).to eq("EXIF Title")
       end
 
-    it "persists title and store it to EXIF data" do
+      it "persists title and store it to EXIF data" do
         media_item = create(:media_item)
         media_item.update!(exif_metadata: { "Title" => "EXIF Title" })
 
@@ -356,7 +383,7 @@ RSpec.describe MediaItem do
 
     describe "#has_exif_data?" do
       it "returns false when exif_metadata is empty" do
-        media_item = create(:media_item, exif_metadata: {})
+        media_item = create(:media_item, :video)
         expect(media_item.has_exif_data?).to be false
       end
 
@@ -379,6 +406,65 @@ RSpec.describe MediaItem do
       it "returns true when exif_metadata contains description" do
         media_item = create(:media_item, exif_metadata: { "Description" => "Photo description" })
         expect(media_item.has_exif_data?).to be true
+      end
+    end
+
+    describe "EXIF sync on update" do
+      it "syncs title to all EXIF title fields" do
+        media_item = create(:media_item, exif_metadata: { "Title" => "Old Title", "Make" => "Canon" })
+        media_item.update!(title: "New Title")
+
+        expect(media_item.exif_metadata["Title"]).to eq("New Title")
+        expect(media_item.exif_metadata["ObjectName"]).to eq("New Title")
+        expect(media_item.exif_metadata["Headline"]).to eq("New Title")
+        expect(media_item.exif_metadata["Make"]).to eq("Canon")
+      end
+
+      it "syncs description to all EXIF description fields" do
+        media_item = create(:media_item, exif_metadata: { "Description" => "Old Desc", "Make" => "Canon" })
+        media_item.update!(description: "New Description")
+
+        expect(media_item.exif_metadata["Description"]).to eq("New Description")
+        expect(media_item.exif_metadata["ImageDescription"]).to eq("New Description")
+        expect(media_item.exif_metadata["Caption-Abstract"]).to eq("New Description")
+        expect(media_item.exif_metadata["Make"]).to eq("Canon")
+      end
+
+      it "syncs both title and description when both change" do
+        media_item = create(:media_item, exif_metadata: { "Title" => "Old", "Description" => "Old" })
+        media_item.update!(title: "New Title", description: "New Description")
+
+        expect(media_item.exif_metadata["Title"]).to eq("New Title")
+        expect(media_item.exif_metadata["Description"]).to eq("New Description")
+      end
+
+      it "does not sync when exif_metadata is empty" do
+        media_item = create(:media_item, :video)
+        media_item.update!(title: "New Title")
+
+        expect(media_item.exif_metadata).to eq({})
+      end
+
+      it "does not sync for non-image media types" do
+        media_item = create(:media_item, :video, exif_metadata: { "Title" => "Old" })
+        media_item.update!(title: "New Title")
+
+        expect(media_item.exif_metadata["Title"]).to eq("Old")
+      end
+
+      it "preserves other EXIF fields when syncing" do
+        media_item = create(:media_item, exif_metadata: {
+          "Title" => "Old Title",
+          "Make" => "Canon",
+          "Model" => "EOS 5D",
+          "DateTimeOriginal" => "2024-01-01"
+        })
+        media_item.update!(title: "New Title")
+
+        expect(media_item.exif_metadata["Title"]).to eq("New Title")
+        expect(media_item.exif_metadata["Make"]).to eq("Canon")
+        expect(media_item.exif_metadata["Model"]).to eq("EOS 5D")
+        expect(media_item.exif_metadata["DateTimeOriginal"]).to eq("2024-01-01")
       end
     end
   end

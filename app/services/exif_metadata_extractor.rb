@@ -25,8 +25,8 @@ class ExifMetadataExtractor < BaseService
       CopyrightNotice Credit
     ],
     description: %w[
-      Title Description Subject Keywords
-      Caption-Abstract Headline ObjectName
+      Title Description Subject Keywords ImageDescription
+      Caption-Abstract Headline ObjectName XPTitle
     ]
   }.freeze
 
@@ -34,8 +34,8 @@ class ExifMetadataExtractor < BaseService
 
   # Mapping EXIF tags to MediaItem fields for auto-fill
   FIELD_MAPPINGS = {
-    title: %w[Title ObjectName Headline],
-    description: %w[Description Caption-Abstract Subject],
+    title: %w[Title ObjectName Headline XPTitle],
+    description: %w[Description Caption-Abstract Subject ImageDescription],
     year: %w[DateTimeOriginal CreateDate],
     copyright: %w[Copyright CopyrightNotice Rights Credit],
     source: %w[Artist Creator]

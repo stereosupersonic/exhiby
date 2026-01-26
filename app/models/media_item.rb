@@ -55,7 +55,26 @@ class MediaItem < ApplicationRecord
 
   has_one_attached :file
 
-  after_commit :extract_exif_metadata, if: :should_extract_exif?
+  before_save :sync_exif_metadata, if: :should_sync_exif?
+
+  # Build a MediaItem with file and extract EXIF metadata before saving
+  # @param file [ActionDispatch::Http::UploadedFile, File, Tempfile] the file to attach
+  # @param attributes [Hash] additional attributes for the MediaItem
+  # @return [MediaItem] unsaved MediaItem with EXIF data populated
+  def self.build_with_file(file:, **attributes)
+    media_item = new(attributes)
+    media_item.attach_and_extract_exif(file)
+    media_item
+  end
+
+  # Attach file and extract EXIF metadata
+  # @param uploaded_file [ActionDispatch::Http::UploadedFile, File, Tempfile] the file to attach
+  def attach_and_extract_exif(uploaded_file)
+    return if uploaded_file.blank?
+
+    file.attach(uploaded_file)
+    extract_exif_from_uploaded_file(uploaded_file)
+  end
 
   validates :title, presence: true, length: { maximum: 255 }
   validates :media_type, presence: true, inclusion: { in: MEDIA_TYPES }
@@ -157,17 +176,81 @@ class MediaItem < ApplicationRecord
 
   private
 
-  def extract_exif_metadata
-    ExtractExifMetadataJob.perform_later(id)
+  def extract_exif_from_uploaded_file(uploaded_file)
+    return unless image?
+
+    file_path = extract_file_path(uploaded_file)
+    return if file_path.blank?
+
+    result = ExifMetadataExtractor.call(file_path)
+    self.exif_metadata = result[:all_tags]
+    apply_suggested_values(result[:suggested_values])
+    apply_tags_from_exif(result[:all_tags])
+  rescue StandardError => e
+    Rails.logger.error("Failed to extract EXIF: #{e.message}")
   end
 
-  def should_extract_exif?
-    image? && file.attached? && file_attachment_changed?
+  def extract_file_path(uploaded_file)
+    case uploaded_file
+    when ActionDispatch::Http::UploadedFile
+      uploaded_file.tempfile.path
+    when Rack::Test::UploadedFile
+      uploaded_file.path
+    when File, Tempfile
+      uploaded_file.path
+    end
   end
 
-  def file_attachment_changed?
-    return true if previously_new_record?
+  def apply_suggested_values(suggested)
+    return if suggested.blank?
 
-    file.attachment&.previously_new_record? || false
+    self.title = suggested[:title] if suggested[:title].present? && title.blank?
+    self.description = suggested[:description] if suggested[:description].present? && description.blank?
+    self.year = suggested[:year] if suggested[:year].present? && year.blank?
+    self.copyright = suggested[:copyright] if suggested[:copyright].present? && copyright.blank?
+    self.source = suggested[:source] if suggested[:source].present? && source.blank?
+  end
+
+  def apply_tags_from_exif(all_tags)
+    return if all_tags.blank?
+
+    keywords = extract_keywords_from_exif(all_tags)
+    return if keywords.blank?
+
+    self.media_tags = keywords.map { |name| MediaTag.find_or_create_by_name(name) }
+  end
+
+  def extract_keywords_from_exif(all_tags)
+    keywords_value = all_tags["Keywords"] || all_tags["Subject"]
+    return [] if keywords_value.blank?
+
+    case keywords_value
+    when Array
+      keywords_value.map(&:strip).reject(&:blank?)
+    when String
+      keywords_value.split(/[,;]/).map(&:strip).reject(&:blank?)
+    else
+      []
+    end
+  end
+
+  def should_sync_exif?
+    image? && has_exif_data? && (title_changed? || description_changed?)
+  end
+
+  def sync_exif_metadata
+    return unless exif_metadata.is_a?(Hash)
+
+    if title_changed?
+      exif_metadata["Title"] = title
+      exif_metadata["ObjectName"] = title
+      exif_metadata["Headline"] = title
+    end
+
+    if description_changed?
+      exif_metadata["Description"] = description
+      exif_metadata["ImageDescription"] = description
+      exif_metadata["Caption-Abstract"] = description
+    end
   end
 end

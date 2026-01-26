@@ -1,3 +1,4 @@
+- presenter = MediaItemPresenter.new(@media_item) if @media_item.persisted?
 = form_with model: [:admin, @media_item], class: "needs-validation", data: { testid: "media-item-form", controller: "exif-extractor", exif_extractor_url_value: extract_exif_admin_media_items_path } do |form|
   - if @media_item.errors.any?
     .alert.alert-danger
@@ -39,13 +40,43 @@
         - if @media_item.errors[:file].any?
           .invalid-feedback.d-block= @media_item.errors[:file].first
 
-      -# EXIF Preview Card (shown after file selection)
-      .card.mb-3.d-none{ data: { exif_extractor_target: "exifPreview" } }
-        .card-header.py-2
-          %h6.mb-0
-            %i.bi.bi-info-circle.me-1
-            = t("admin.media_items.form.exif_preview")
-        .card-body.py-2{ data: { exif_extractor_target: "exifContent" } }
+      -# EXIF Data Card (shown after file selection OR for stored EXIF data)
+      - if @media_item.persisted? && @media_item.image? && presenter&.has_exif_data?
+        -# Stored EXIF Data (edit page)
+        .card.mb-3{ data: { exif_extractor_target: "exifPreview" } }
+          .card-header.bg-light.py-2
+            %h6.mb-0
+              %i.bi.bi-camera.me-2
+              = t("admin.media_items.form.stored_exif_data")
+              %span.badge.bg-secondary.ms-2= presenter.exif_all_tags.count
+          .card-body.py-2{ data: { exif_extractor_target: "exifContent" } }
+            - presenter.exif_grouped_tags.each do |group, tags|
+              - next if tags.blank?
+              %h6.text-muted.border-bottom.pb-1.mb-2.small
+                = t("admin.media_items.show.exif_groups.#{group}", default: group.to_s.titleize)
+              %dl.row.small.mb-2
+                - tags.each do |tag, value|
+                  %dt.col-sm-5.text-truncate{ title: tag }= tag
+                  %dd.col-sm-7.text-truncate{ title: value }= value
+
+            %details.mt-2
+              %summary.text-muted.small
+                %i.bi.bi-list.me-1
+                = t("admin.media_items.show.show_all_exif_tags", count: presenter.exif_all_tags.count)
+              .mt-2.border-top.pt-2
+                %dl.row.small.mb-0
+                  - presenter.exif_all_tags.each do |tag, value|
+                    %dt.col-sm-5.text-truncate{ title: tag }= tag
+                    %dd.col-sm-7.text-truncate{ title: value }= value
+      - else
+        -# EXIF Preview for new uploads (populated via JavaScript)
+        .card.mb-3.d-none{ data: { exif_extractor_target: "exifPreview" } }
+          .card-header.bg-light.py-2
+            %h6.mb-0
+              %i.bi.bi-camera.me-2
+              = t("admin.media_items.form.exif_preview")
+              %span.badge.bg-secondary.ms-2 0
+          .card-body.py-2{ data: { exif_extractor_target: "exifContent" } }
 
       .mb-3
         = form.label :tag_list, t("admin.media_items.form.tags_label"), class: "form-label"
