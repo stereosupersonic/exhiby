@@ -15,6 +15,7 @@
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 # SimpleCov must be started before any application code is loaded
+
 require "simplecov"
 SimpleCov.start "rails" do
   enable_coverage :branch
