@@ -1,6 +1,23 @@
+require "sidekiq/web"
+
+# Constraint to check if user is admin for Sidekiq Web UI
+class AdminConstraint
+  def matches?(request)
+    return false unless request.cookie_jar.signed[:session_id]
+
+    session = Session.find_by(id: request.cookie_jar.signed[:session_id])
+    session&.user&.active? && session&.user.admin?
+  end
+end
+
 Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
+
+  # Sidekiq Web UI (admin only)
+  constraints AdminConstraint.new do
+    mount Sidekiq::Web => "/admin/sidekiq"
+  end
 
   # Admin namespace
   namespace :admin do
@@ -10,6 +27,7 @@ Rails.application.routes.draw do
     resources :media_items do
       collection do
         get :search
+        post :extract_exif
       end
       member do
         patch :submit_for_review

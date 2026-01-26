@@ -22,6 +22,23 @@ module Admin
       }
     end
 
+    def extract_exif
+      file = params[:file]
+
+      unless file.present? && file.content_type.start_with?("image/")
+        return render json: { error: "Invalid file" }, status: :unprocessable_entity
+      end
+
+      result = ExifMetadataExtractor.call(file.tempfile.path)
+
+      render json: {
+        suggested_values: result[:suggested_values],
+        grouped_tags: result[:grouped_tags],
+        all_tags: result[:all_tags],
+        tags_count: result[:raw_tags_count]
+      }
+    end
+
     def show
     end
 

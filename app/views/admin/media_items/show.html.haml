@@ -91,6 +91,35 @@
               %dt.col-sm-5= t("admin.media_items.show.file_info")
               %dd.col-sm-7= presenter.file_info
 
+      -# EXIF Metadata Card (shown for images with EXIF data)
+      - if @media_item.image? && presenter.has_exif_data?
+        .card.mb-4
+          .card-header.bg-light
+            %h5.mb-0
+              %i.bi.bi-camera.me-2
+              = t("admin.media_items.show.exif_data")
+              %span.badge.bg-secondary.ms-2= presenter.exif_all_tags.count
+          .card-body
+            - presenter.exif_grouped_tags.each do |group, tags|
+              - next if tags.blank?
+              %h6.text-muted.border-bottom.pb-1.mb-2
+                = t("admin.media_items.show.exif_groups.#{group}", default: group.to_s.titleize)
+              %dl.row.small.mb-3
+                - tags.each do |tag, value|
+                  %dt.col-sm-5.text-truncate{ title: tag }= tag
+                  %dd.col-sm-7.text-truncate{ title: value }= value
+
+            -# Collapsible section for all tags
+            %details.mt-3
+              %summary.text-muted.small
+                %i.bi.bi-list.me-1
+                = t("admin.media_items.show.show_all_exif_tags", count: presenter.exif_all_tags.count)
+              .mt-2.border-top.pt-2
+                %dl.row.small.mb-0
+                  - presenter.exif_all_tags.each do |tag, value|
+                    %dt.col-sm-5.text-truncate{ title: tag }= tag
+                    %dd.col-sm-7.text-truncate{ title: value }= value
+
       - if @media_item.reviewed_by.present?
         .card
           .card-header

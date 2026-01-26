@@ -5,6 +5,7 @@
 #  id               :bigint           not null, primary key
 #  copyright        :string
 #  description      :text
+#  exif_metadata    :jsonb
 #  license          :string
 #  media_type       :string           not null
 #  published_at     :datetime
@@ -53,6 +54,8 @@ class MediaItem < ApplicationRecord
   has_many :media_tags, through: :media_taggings
 
   has_one_attached :file
+
+  after_commit :extract_exif_metadata, if: :should_extract_exif?
 
   validates :title, presence: true, length: { maximum: 255 }
   validates :media_type, presence: true, inclusion: { in: MEDIA_TYPES }
@@ -146,5 +149,25 @@ class MediaItem < ApplicationRecord
     self.media_tags = names.split(",").map(&:strip).reject(&:blank?).uniq.map do |name|
       MediaTag.find_or_create_by_name(name)
     end
+  end
+
+  def has_exif_data?
+    exif_metadata.present? && exif_metadata.any?
+  end
+
+  private
+
+  def extract_exif_metadata
+    ExtractExifMetadataJob.perform_later(id)
+  end
+
+  def should_extract_exif?
+    image? && file.attached? && file_attachment_changed?
+  end
+
+  def file_attachment_changed?
+    return true if previously_new_record?
+
+    file.attachment&.previously_new_record? || false
   end
 end

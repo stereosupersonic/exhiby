@@ -5,6 +5,7 @@
 #  id               :bigint           not null, primary key
 #  copyright        :string
 #  description      :text
+#  exif_metadata    :jsonb
 #  license          :string
 #  media_type       :string           not null
 #  published_at     :datetime

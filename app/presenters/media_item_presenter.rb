@@ -69,4 +69,23 @@ class MediaItemPresenter < ApplicationPresenter
       only_path: true
     )
   end
+
+  def has_exif_data?
+    o.has_exif_data?
+  end
+
+  def exif_grouped_tags
+    return {} unless has_exif_data?
+
+    ExifMetadataExtractor::DISPLAY_TAGS.transform_values do |tags|
+      tags.each_with_object({}) do |tag, hash|
+        value = o.exif_metadata[tag]
+        hash[tag] = value if value.present?
+      end.presence
+    end.compact
+  end
+
+  def exif_all_tags
+    o.exif_metadata || {}
+  end
 end
