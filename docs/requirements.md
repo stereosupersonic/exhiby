@@ -41,6 +41,8 @@ management of images, videos and pdfs, creating pages or Blog Posts
 * extracting the current style and images
 * rich text editor lexxy vs trix https://blog.saeloun.com/2025/10/14/lexxy-editor/
 
+* storing meta information in the images
+
 ### Tech stack
 
 * ruby on rails 8.1

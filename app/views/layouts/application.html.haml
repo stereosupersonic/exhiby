@@ -3,8 +3,18 @@
   %head
     %meta{ charset: "utf-8" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
-    %title OnlineMuseum Wartenberg
-    %meta{ name: "description", content: "OnlineMuseum Wartenberg - ein Ort für Kunst und Kulturgeschichte" }
+
+    /-- Primary Meta Tags
+    %title= page_title
+    %meta{ name: "description", content: meta_description }
+    %meta{ name: "robots", content: "index, follow" }
+    %link{ rel: "canonical", href: canonical_url }
+
+    /-- Favicon
+    %link{ rel: "icon", href: "/icon.svg", type: "image/svg+xml" }
+    %link{ rel: "icon", href: "/icon.png", type: "image/png" }
+    %link{ rel: "apple-touch-icon", href: image_path("logo/Logo-Online-Museum-V10-180.png") }
+
     %meta{ name: "turbo-cache-control", content: "no-cache" }
     = csrf_meta_tags
     = csp_meta_tag

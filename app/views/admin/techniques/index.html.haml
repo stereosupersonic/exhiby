@@ -1,0 +1,33 @@
+.admin-techniques{ data: { testid: "admin-techniques" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "techniques-heading" } }= t("admin.techniques.index.title")
+    = link_to t("admin.techniques.index.new_technique"), new_admin_technique_path, class: "btn btn-primary", data: { testid: "new-technique-button" }
+
+  %p.text-muted.mb-4= t("admin.techniques.index.description")
+
+  .card
+    .card-body
+      - if @techniques.any?
+        .table-responsive
+          %table.table.table-hover{ data: { testid: "techniques-table" } }
+            %thead
+              %tr
+                %th{ style: "width: 60px;" }= t("admin.techniques.index.table.position")
+                %th= t("admin.techniques.index.table.name")
+                %th= t("admin.techniques.index.table.media_items_count")
+                %th= t("admin.techniques.index.table.actions")
+            %tbody
+              - @techniques.each do |technique|
+                %tr{ data: { testid: "technique-row-#{technique.slug}" } }
+                  %td= technique.position
+                  %td= technique.name
+                  %td= technique.media_items.count
+                  %td
+                    .d-flex.gap-2
+                      = link_to t("common.edit"), edit_admin_technique_path(technique), class: "btn btn-sm btn-outline-primary", data: { testid: "edit-technique-#{technique.slug}" }
+                      = button_to t("common.delete"), admin_technique_path(technique), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.techniques.index.actions.delete_confirm"), testid: "delete-technique-#{technique.slug}" }
+        = will_paginate @techniques if @techniques.respond_to?(:total_pages)
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-techniques-message" } }
+          %p= t("admin.techniques.index.no_techniques")
+          = link_to t("admin.techniques.index.new_technique"), new_admin_technique_path, class: "btn btn-primary"

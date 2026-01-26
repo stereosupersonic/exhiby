@@ -14,6 +14,7 @@
                 %th= t("admin.users.index.table.role")
                 %th= t("admin.users.index.table.status")
                 %th= t("admin.users.index.table.articles_count")
+                %th= t("admin.users.index.table.last_login_at")
                 %th= t("admin.users.index.table.created_at")
                 %th= t("admin.users.index.table.actions")
             %tbody
@@ -31,15 +32,16 @@
                       %br
                       %small.text-muted= presenter.formatted_status_changed_at
                   %td= presenter.articles_count
+                  %td= presenter.formatted_last_login_at
                   %td= presenter.formatted_created_at
                   %td
-                    .btn-group.btn-group-sm
-                      = link_to t("admin.users.index.actions.edit"), edit_admin_user_path(user), class: "btn btn-outline-primary", data: { testid: "edit-user-#{user.id}" }
+                    .d-flex.gap-2
+                      = link_to t("admin.users.index.actions.edit"), edit_admin_user_path(user), class: "btn btn-sm btn-outline-primary", data: { testid: "edit-user-#{user.id}" }
                       - unless user == current_user
                         - if user.active?
-                          = button_to t("admin.users.index.actions.deactivate"), deactivate_admin_user_path(user), method: :patch, class: "btn btn-outline-warning", data: { turbo_confirm: t("admin.users.index.actions.deactivate_confirm"), testid: "deactivate-user-#{user.id}" }
+                          = button_to t("admin.users.index.actions.deactivate"), deactivate_admin_user_path(user), method: :patch, class: "btn btn-sm btn-outline-warning", data: { turbo_confirm: t("admin.users.index.actions.deactivate_confirm"), testid: "deactivate-user-#{user.id}" }
                         - else
-                          = button_to t("admin.users.index.actions.activate"), activate_admin_user_path(user), method: :patch, class: "btn btn-outline-success", data: { testid: "activate-user-#{user.id}" }
+                          = button_to t("admin.users.index.actions.activate"), activate_admin_user_path(user), method: :patch, class: "btn btn-sm btn-outline-success", data: { testid: "activate-user-#{user.id}" }
       - else
         .text-center.text-muted.py-4{ data: { testid: "no-users-message" } }
           %p= t("admin.users.index.no_users")

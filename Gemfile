@@ -46,6 +46,10 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
+# EXIF metadata extraction [https://github.com/janfri/mini_exiftool]
+gem "mini_exiftool", "~> 2.11"
+
+gem "exception_notification", "~> 5.0"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -69,7 +73,7 @@ group :development, :test do
   gem "rubocop-rspec", "~> 3.9"
   gem "rubocop-capybara", "~> 2.22"
 
-  gem "simplecov", "~> 0.22.0"
+  gem "simplecov", "~> 0.22.0", require: false
   gem "annotaterb", "~> 4.20"
   gem "pry-nav", "~> 1.0"
 end

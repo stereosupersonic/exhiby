@@ -1,0 +1,23 @@
+= form_with model: [:admin, @collection_category], class: "needs-validation", data: { testid: "collection-category-form" } do |form|
+  - if @collection_category.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @collection_category.errors.full_messages.each do |message|
+          %li= message
+
+  .row
+    .col-md-8
+      .mb-3
+        = form.label :name, t("admin.collection_categories.form.name_label"), class: "form-label"
+        = form.text_field :name, class: "form-control #{'is-invalid' if @collection_category.errors[:name].any?}", required: true, data: { testid: "collection-category-name" }
+        - if @collection_category.errors[:name].any?
+          .invalid-feedback= @collection_category.errors[:name].first
+
+      .mb-3
+        = form.label :position, t("admin.collection_categories.form.position_label"), class: "form-label"
+        = form.number_field :position, class: "form-control", data: { testid: "collection-category-position" }
+        .form-text= t("admin.collection_categories.form.position_hint")
+
+  .d-flex.gap-2.mt-4
+    = form.submit @collection_category.persisted? ? t("admin.collection_categories.form.submit_update") : t("admin.collection_categories.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-collection-category" }
+    = link_to t("admin.collection_categories.form.cancel"), admin_collection_categories_path, class: "btn btn-outline-secondary"

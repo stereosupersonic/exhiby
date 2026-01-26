@@ -51,4 +51,10 @@ class UserPresenter < ApplicationPresenter
   def articles_count
     o.articles.size
   end
+
+  def formatted_last_login_at
+    return I18n.t("admin.users.index.table.never_logged_in") unless o.last_login_at
+
+    I18n.l(o.last_login_at, format: :long)
+  end
 end

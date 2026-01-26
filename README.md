@@ -1,15 +1,18 @@
 # Exhiby
 
-A digital museum content management system for the Wartenberger online museum
+A digital museum content management system for [museum-wartenberg.de](https://museum-wartenberg.de), replacing the legacy Joomla installation at onlinemuseum-wartenberg.de.
 
 ## Features
 
 - **Content Management**: Articles, pages, and blog posts with rich text editing
 - **Asset Management**: Images, videos, and PDFs with organized collections
+- **Artist Profiles**: Biographies, CVs, and artwork galleries for local artists
+- **Collections**: Curated collections of historical postcards, photographs, and documents
 - **User Management**: Role-based access control (Admin, Editor, User)
 - **Multi-language Support**: German as default language with i18n support
 - **Modern Frontend**: Server-rendered views with Hotwire (Turbo + Stimulus)
 - **Admin Backend**: Full-featured administration interface
+- **SEO Optimized**: Dynamic meta tags, Open Graph, Twitter Cards, canonical URLs
 
 ## Tech Stack
 
@@ -92,6 +95,33 @@ bin/brakeman
 bin/bundler-audit
 ```
 
+## SEO
+
+The application includes comprehensive SEO support:
+
+### Meta Tags
+- **Dynamic titles**: Each page has a unique, descriptive title (30-60 chars)
+- **Meta descriptions**: Page-specific descriptions (120-160 chars)
+- **Canonical URLs**: Prevents duplicate content issues
+- **Robots meta**: Controls search engine indexing
+
+### Social Sharing
+- **Open Graph tags**: Optimized sharing on Facebook, LinkedIn
+- **Twitter Cards**: Rich previews on Twitter/X
+- **Dynamic images**: Articles and profiles use their cover images for social sharing
+
+### Implementation
+
+Set page-specific SEO in views using `content_for`:
+
+```haml
+- content_for :title, "Page Title"
+- content_for :meta_description, "Page description here"
+- content_for :og_image, url_for(@article.cover_image)
+```
+
+SEO translations are managed in `config/locales/de.yml` under the `seo` key.
+
 ## Project Structure
 
 ```
@@ -100,6 +130,7 @@ app/
 ├── models/                # ActiveRecord models with validations
 ├── services/              # Business logic and complex operations
 ├── presenters/            # View-specific logic and formatting
+├── helpers/               # View helpers including SEO helpers
 ├── views/                 # HAML templates
 ├── javascript/
 │   └── controllers/       # Stimulus controllers
@@ -149,6 +180,30 @@ Use `.env` files for local development (gitignored):
 | `DATABASE_URL` | PostgreSQL connection string |
 | `REDIS_URL` | Redis connection string |
 | `WEB_CONCURRENCY` | Puma worker count |
+
+
+## Website Audit
+
+Run a comprehensive website audit using [squirrelscan](https://squirrelscan.com):
+
+```bash
+# Install squirrel CLI (if not already installed)
+curl -fsSL https://squirrelscan.com/install | bash
+
+# Initialize project (creates squirrel.toml)
+squirrel init --project-name museum-wartenberg
+
+# Run audit on production site
+squirrel audit https://museum-wartenberg.de --format llm
+```
+
+The audit checks 140+ rules including:
+- SEO (meta tags, titles, descriptions, canonical URLs)
+- Performance (page speed, image optimization, CSS/JS size)
+- Accessibility (ARIA labels, heading hierarchy, form labels)
+- Security (HTTPS, HSTS, leaked secrets detection)
+- Content (heading structure, thin content, keyword stuffing)
+
 
 ## Contributing
 

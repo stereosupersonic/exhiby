@@ -1,0 +1,8 @@
+.admin-artists-edit{ data: { testid: "admin-artists-edit" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "edit-artist-heading" } }= t("admin.artists.edit.title")
+    = link_to t("admin.artists.form.cancel"), admin_artist_path(@artist), class: "btn btn-outline-secondary"
+
+  .card
+    .card-body
+      = render "form"

@@ -1,0 +1,60 @@
+- presenter = CollectionPresenter.new(@collection)
+.admin-collection-show{ data: { testid: "admin-collection-show" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "collection-name" } }= @collection.name
+    .d-flex.gap-2
+      = link_to t("common.edit"), edit_admin_collection_path(@collection), class: "btn btn-primary"
+      = link_to t("admin.collections.show.back"), admin_collections_path, class: "btn btn-outline-secondary"
+
+  .row
+    .col-lg-8
+      - if @collection.cover_media_item&.file&.attached?
+        .card.mb-4
+          .card-body.text-center
+            = image_tag @collection.cover_media_item.file.variant(resize_to_fit: [400, 400]), class: "img-fluid rounded", alt: @collection.name
+
+      - if @collection.description.present?
+        .card.mb-4
+          .card-header
+            %h5.mb-0= t("admin.collections.show.description")
+          .card-body{ data: { testid: "collection-description" } }
+            = @collection.description
+
+    .col-lg-4
+      .card.mb-4
+        .card-header
+          %h5.mb-0= t("admin.collections.show.status")
+        .card-body
+          .d-flex.align-items-center.gap-2.mb-3
+            %span.badge.fs-6{ class: presenter.status_badge_class }= presenter.status_name
+
+          - if @collection.draft? && can?(:publish, @collection)
+            = button_to t("admin.collections.show.actions.publish"), publish_admin_collection_path(@collection), method: :patch, class: "btn btn-success w-100 mb-2", data: { testid: "publish-button" }
+
+          - if @collection.published? && can?(:unpublish, @collection)
+            = button_to t("admin.collections.show.actions.unpublish"), unpublish_admin_collection_path(@collection), method: :patch, class: "btn btn-outline-danger w-100", data: { turbo_confirm: t("admin.collections.show.actions.unpublish_confirm"), testid: "unpublish-button" }
+
+      .card.mb-4
+        .card-header
+          %h5.mb-0= t("admin.collections.show.details")
+        .card-body
+          %dl.row.mb-0
+            %dt.col-sm-4= t("admin.collections.show.category")
+            %dd.col-sm-8= presenter.category_name
+
+            %dt.col-sm-4= t("admin.collections.show.position")
+            %dd.col-sm-8= @collection.position
+
+            %dt.col-sm-4= t("admin.collections.show.created_by")
+            %dd.col-sm-8= presenter.creator_email
+
+            %dt.col-sm-4= t("admin.collections.show.created_at")
+            %dd.col-sm-8= l(@collection.created_at, format: :long)
+
+            - if @collection.published_at.present?
+              %dt.col-sm-4= t("admin.collections.show.published_at")
+              %dd.col-sm-8= presenter.formatted_published_at
+
+            %dt.col-sm-4= t("admin.collections.show.slug")
+            %dd.col-sm-8
+              %code= @collection.slug

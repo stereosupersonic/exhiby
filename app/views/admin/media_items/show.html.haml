@@ -1,0 +1,104 @@
+- presenter = MediaItemPresenter.new(@media_item)
+.admin-media-item-show{ data: { testid: "admin-media-item-show" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "media-item-title" } }= @media_item.title
+    .d-flex.gap-2
+      = link_to t("common.edit"), edit_admin_media_item_path(@media_item), class: "btn btn-primary"
+      = link_to t("admin.media_items.show.back"), admin_media_items_path, class: "btn btn-outline-secondary"
+
+  .row
+    .col-lg-8
+      .card.mb-4
+        - if @media_item.image? && @media_item.file.attached?
+          = image_tag @media_item.file.variant(resize_to_limit: [800, 600]), class: "card-img-top", alt: @media_item.title
+        - elsif @media_item.video? && @media_item.file.attached?
+          .card-body
+            %video.w-100{ controls: true }
+              %source{ src: url_for(@media_item.file), type: @media_item.file.content_type }
+              = t("admin.media_items.show.video_not_supported")
+        - elsif @media_item.pdf? && @media_item.file.attached?
+          .card-body
+            .ratio.ratio-16x9
+              %iframe{ src: url_for(@media_item.file), title: @media_item.title }
+
+        .card-body
+          - if @media_item.description.present?
+            %h5= t("admin.media_items.show.description")
+            %p= simple_format(@media_item.description)
+
+          - if @media_item.media_tags.any?
+            %h6= t("admin.media_items.show.tags")
+            .mb-3
+              - @media_item.media_tags.each do |tag|
+                %span.badge.bg-info.me-1= tag.name
+
+    .col-lg-4
+      .card.mb-4
+        .card-header
+          %h5.mb-0= t("admin.media_items.show.status")
+        .card-body
+          .d-flex.align-items-center.gap-2.mb-3
+            %span.badge.fs-6{ class: presenter.status_badge_class }= presenter.status_name
+
+          - if @media_item.draft? && can?(:submit_for_review, @media_item)
+            = button_to t("admin.media_items.show.actions.submit_for_review"), submit_for_review_admin_media_item_path(@media_item), method: :patch, class: "btn btn-warning w-100 mb-2", data: { testid: "submit-for-review-button" }
+
+          - if @media_item.pending_review?
+            - if can?(:publish, @media_item)
+              = button_to t("admin.media_items.show.actions.publish"), publish_admin_media_item_path(@media_item), method: :patch, class: "btn btn-success w-100 mb-2", data: { testid: "publish-button" }
+            - if can?(:reject, @media_item)
+              = button_to t("admin.media_items.show.actions.reject"), reject_admin_media_item_path(@media_item), method: :patch, class: "btn btn-danger w-100 mb-2", data: { turbo_confirm: t("admin.media_items.show.actions.reject_confirm"), testid: "reject-button" }
+
+          - if @media_item.published? && can?(:unpublish, @media_item)
+            = button_to t("admin.media_items.show.actions.unpublish"), unpublish_admin_media_item_path(@media_item), method: :patch, class: "btn btn-outline-danger w-100", data: { turbo_confirm: t("admin.media_items.show.actions.unpublish_confirm"), testid: "unpublish-button" }
+
+      .card.mb-4
+        .card-header
+          %h5.mb-0= t("admin.media_items.show.details")
+        .card-body
+          %dl.row.mb-0
+            %dt.col-sm-5= t("admin.media_items.show.type")
+            %dd.col-sm-7
+              %span.badge{ class: presenter.media_type_badge_class }= presenter.media_type_name
+
+            %dt.col-sm-5= t("admin.media_items.show.uploaded_by")
+            %dd.col-sm-7= presenter.uploader_name
+
+            %dt.col-sm-5= t("admin.media_items.show.created_at")
+            %dd.col-sm-7= l(@media_item.created_at, format: :long)
+
+            - if @media_item.year.present?
+              %dt.col-sm-5= t("admin.media_items.show.year")
+              %dd.col-sm-7= @media_item.year
+
+            - if @media_item.source.present?
+              %dt.col-sm-5= t("admin.media_items.show.source")
+              %dd.col-sm-7= @media_item.source
+
+            - if @media_item.technique.present?
+              %dt.col-sm-5= t("admin.media_items.show.technique")
+              %dd.col-sm-7= @media_item.technique.name
+
+            - if @media_item.copyright.present?
+              %dt.col-sm-5= t("admin.media_items.show.copyright")
+              %dd.col-sm-7= @media_item.copyright
+
+            - if @media_item.license.present?
+              %dt.col-sm-5= t("admin.media_items.show.license")
+              %dd.col-sm-7= @media_item.license
+
+            - if @media_item.file.attached?
+              %dt.col-sm-5= t("admin.media_items.show.file_info")
+              %dd.col-sm-7= presenter.file_info
+
+      - if @media_item.reviewed_by.present?
+        .card
+          .card-header
+            %h5.mb-0= t("admin.media_items.show.review_info")
+          .card-body
+            %dl.row.mb-0
+              %dt.col-sm-5= t("admin.media_items.show.reviewed_by")
+              %dd.col-sm-7= @media_item.reviewed_by.email_address
+
+              %dt.col-sm-5= t("admin.media_items.show.reviewed_at")
+              %dd.col-sm-7= l(@media_item.reviewed_at, format: :long)

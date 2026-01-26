@@ -663,6 +663,7 @@ end
 - Handle errors gracefully
 - Provide meaningful error messages
 - Consider using Result objects
+- use exception_notification gem for notifing about exception in production
 
 #### Testing Services
 ```ruby
@@ -748,6 +749,9 @@ You are a Rails testing specialist ensuring comprehensive test coverage and qual
 - Test services thoroughly
 - System specs for critical user flows
 - Mock external services (AWS Rekognition, etc.)
+- each model spec should have a spec for a vaild factorybot instance
+- each gui feature should be covered by a system spec
+- test coverage should be high > 90 %
 
 ### Core Responsibilities
 
@@ -765,6 +769,13 @@ Your project uses: RSpec
 
 ```ruby
 RSpec.describe User, type: :model do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:user)).to be_valid
+      expect { create :user }.to_not raise_error
+    end
+  end
+
   describe 'validations' do
     it { should validate_presence_of(:email) }
     it { should validate_uniqueness_of(:email).case_insensitive }

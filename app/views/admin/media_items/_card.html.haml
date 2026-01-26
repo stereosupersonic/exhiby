@@ -1,0 +1,36 @@
+- presenter = MediaItemPresenter.new(media_item)
+.card.h-100{ data: { testid: "media-item-card-#{media_item.id}" } }
+  - if media_item.image? && media_item.file.attached?
+    = link_to admin_media_item_path(media_item) do
+      = image_tag media_item.file.variant(resize_to_fill: [300, 200]), class: "card-img-top", alt: media_item.title
+  - elsif media_item.video?
+    .card-img-top.bg-secondary.d-flex.align-items-center.justify-content-center{ style: "height: 200px;" }
+      = link_to admin_media_item_path(media_item) do
+        %i.bi.bi-play-circle-fill.text-white{ style: "font-size: 3rem;" }
+  - elsif media_item.pdf?
+    .card-img-top.bg-danger.d-flex.align-items-center.justify-content-center{ style: "height: 200px;" }
+      = link_to admin_media_item_path(media_item) do
+        %i.bi.bi-file-earmark-pdf-fill.text-white{ style: "font-size: 3rem;" }
+  - else
+    .card-img-top.bg-light.d-flex.align-items-center.justify-content-center{ style: "height: 200px;" }
+      %i.bi.bi-file-earmark.text-muted{ style: "font-size: 3rem;" }
+
+  .card-body
+    %h6.card-title
+      = link_to media_item.title, admin_media_item_path(media_item), class: "text-decoration-none"
+    .d-flex.gap-1.mb-2
+      %span.badge{ class: presenter.status_badge_class }= presenter.status_name
+      %span.badge{ class: presenter.media_type_badge_class }= presenter.media_type_name
+    %p.card-text.small.text-muted.mb-0
+      = presenter.file_size
+      %br
+      = l(media_item.created_at, format: :short)
+
+  .card-footer.bg-transparent
+    .btn-group.btn-group-sm.w-100{ role: "group", "aria-label": t("admin.media_items.index.table.actions") }
+      = link_to admin_media_item_path(media_item), class: "btn btn-outline-primary", "aria-label": t("common.view") do
+        %i.bi.bi-eye{ "aria-hidden": "true" }
+      = link_to edit_admin_media_item_path(media_item), class: "btn btn-outline-secondary", "aria-label": t("common.edit") do
+        %i.bi.bi-pencil{ "aria-hidden": "true" }
+      = button_to admin_media_item_path(media_item), method: :delete, class: "btn btn-outline-danger", "aria-label": t("common.delete"), data: { turbo_confirm: t("admin.media_items.index.actions.delete_confirm") } do
+        %i.bi.bi-trash{ "aria-hidden": "true" }

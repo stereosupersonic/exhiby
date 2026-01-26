@@ -1,0 +1,55 @@
+- content_for :title, @collection.name
+- content_for :meta_description, t("seo.pages.collections.show.description", name: @collection.name, count: @collection.media_items_count)
+- if @collection.cover_media_item&.file&.attached?
+  - content_for :og_image, url_for(@collection.cover_media_item.file.variant(resize_to_limit: [1200, 630]))
+
+= render "shared/site_header", active: :land_und_leute
+- presenter = CollectionPresenter.new(@collection)
+
+%section.collection-section.py-5{ data: { testid: "collection-section" } }
+  .container
+    .mb-4
+      = link_to t("collections.show.back"), land_und_leute_path, class: "btn btn-outline-secondary btn-sm"
+
+    .row.mb-5
+      - has_cover = @collection.cover_media_item&.file&.attached?
+      - if has_cover
+        .col-md-4
+          = render "shared/zoomable_image", image: @collection.cover_media_item.file.variant(resize_to_fit: [400, 300]), full_image_url: url_for(@collection.cover_media_item.file), title: @collection.name, image_class: "img-fluid rounded"
+        .col-md-8
+          %h1.mb-3{ data: { testid: "collection-name" } }= @collection.name
+          %p.text-muted
+            %span.badge.bg-secondary= presenter.category_name
+          - if @collection.description.present?
+            .collection-description.mt-4{ data: { testid: "collection-description" } }
+              .content
+                = @collection.description
+      - else
+        .col-12
+          %h1.mb-3{ data: { testid: "collection-name" } }= @collection.name
+          %p.text-muted
+            %span.badge.bg-secondary= presenter.category_name
+          - if @collection.description.present?
+            .collection-description.mt-4{ data: { testid: "collection-description" } }
+              .content
+                = @collection.description
+
+    - if @media_items.any?
+      .collection-media-items{ data: { testid: "collection-media-items" } }
+        %p.text-muted.fst-italic.mb-3= t("collections.show.click_to_enlarge")
+        .row.g-3
+          - @media_items.each do |media_item|
+            - media_presenter = MediaItemPresenter.new(media_item)
+            .col-6.col-md-4.col-lg-3
+              - if media_item.image? && media_item.file.attached?
+                .card
+                  = render "shared/zoomable_image", image: media_item.file.variant(resize_to_fill: [200, 200]), full_image_url: url_for(media_item.file), title: media_item.title, description: media_item.description, artist: media_item.artist&.name, year: media_item.year&.to_s, technique: media_presenter.technique_name, image_class: "card-img-top"
+                  .card-body.p-2
+                    %small.text-muted= media_item.title
+              - else
+                .card
+                  .card-body.text-center.bg-light{ style: "height: 150px;" }
+                    %p.mb-0= media_item.title
+
+    .mt-5.pt-4.border-top
+      = link_to t("collections.show.back"), land_und_leute_path, class: "btn btn-outline-primary"

@@ -1,4 +1,48 @@
 de:
+  # SEO Meta Tags
+  seo:
+    default_description: "OnlineMuseum Wartenberg - Entdecken Sie Kunst und Kulturgeschichte aus Wartenberg und Umgebung. Kunstschaffende, historische Sammlungen und aktuelle Ausstellungen."
+    pages:
+      home:
+        title: "Startseite"
+        description: "OnlineMuseum Wartenberg - Entdecken Sie Kunst und Kulturgeschichte aus Wartenberg und Umgebung. Kunstschaffende, historische Sammlungen und aktuelle Ausstellungen."
+      team:
+        title: "Über uns"
+        description: "Das Team hinter dem OnlineMuseum Wartenberg. Erfahren Sie mehr über die Menschen, die dieses digitale Museum möglich machen."
+      artists:
+        index:
+          title: "Kunstschaffende"
+          description: "Entdecken Sie die Künstlerinnen und Künstler mit Verbindung zu Wartenberg. Biografien, Werke und künstlerisches Schaffen im OnlineMuseum."
+        show:
+          description: "Biografie und Werke von %{name} im OnlineMuseum Wartenberg."
+      articles:
+        index:
+          title: "Aktuelles"
+          description: "Neuigkeiten und Beiträge aus dem OnlineMuseum Wartenberg. Aktuelle Artikel über Kunst, Kultur und Geschichte."
+        show:
+          description: "Lesen Sie den Artikel '%{title}' im OnlineMuseum Wartenberg."
+      collections:
+        index:
+          title: "Land & Leute"
+          description: "Historische Sammlungen aus Wartenberg und Umgebung. Entdecken Sie Postkarten, Fotografien und Dokumente zur Ortsgeschichte."
+        show:
+          description: "Die Sammlung '%{name}' im OnlineMuseum Wartenberg. %{count} historische Objekte."
+      search:
+        title: "Suche"
+        description: "Durchsuchen Sie das OnlineMuseum Wartenberg nach Kunstwerken, Künstlern, Sammlungen und Artikeln."
+      impressum:
+        title: "Impressum"
+        description: "Impressum und rechtliche Informationen zum OnlineMuseum Wartenberg."
+      datenschutzerklaerung:
+        title: "Datenschutzerklärung"
+        description: "Datenschutzerklärung des OnlineMuseum Wartenberg. Informationen zum Umgang mit Ihren personenbezogenen Daten."
+      ausstellungen:
+        title: "Ausstellungen"
+        description: "Virtuelle Ausstellungen im OnlineMuseum Wartenberg. Entdecken Sie kuratierte Sammlungen zur Kunst und Geschichte Wartenbergs."
+      bild_der_woche:
+        title: "Bild der Woche"
+        description: "Das Bild der Woche im OnlineMuseum Wartenberg. Jede Woche ein neues Highlight aus unserer Sammlung."
+
   # Date/Time formats
   date:
     formats:
@@ -65,6 +109,24 @@ de:
       user:
         one: Benutzer
         other: Benutzer
+      media_item:
+        one: Medium
+        other: Medien
+      media_tag:
+        one: Tag
+        other: Tags
+      artist:
+        one: Künstler
+        other: Künstler
+      collection_category:
+        one: Sammlungskategorie
+        other: Sammlungskategorien
+      collection:
+        one: Sammlung
+        other: Sammlungen
+      collection_item:
+        one: Sammlungselement
+        other: Sammlungselemente
     attributes:
       article:
         title: Titel
@@ -77,6 +139,52 @@ de:
         email_address: E-Mail-Adresse
         role: Rolle
         created_at: Erstellt am
+      media_item:
+        title: Titel
+        description: Beschreibung
+        media_type: Medientyp
+        year: Jahr
+        source: Quelle
+        technique: Technik
+        copyright: Copyright
+        license: Lizenz
+        status: Status
+        published_at: Veröffentlicht am
+        file: Datei
+        uploaded_by: Hochgeladen von
+      media_tag:
+        name: Name
+        slug: Slug
+      artist:
+        name: Name
+        slug: URL-Pfad
+        birth_date: Geburtsdatum
+        death_date: Todesdatum
+        birth_place: Geburtsort
+        death_place: Sterbeort
+        biography: Biografie
+        cv: Lebenslauf
+        status: Status
+        published_at: Veröffentlicht am
+        profile_image: Profilbild
+      collection_category:
+        name: Name
+        slug: URL-Pfad
+        position: Position
+      collection:
+        name: Name
+        slug: URL-Pfad
+        description: Beschreibung
+        position: Position
+        status: Status
+        published_at: Veröffentlicht am
+        collection_category: Kategorie
+        cover_media_item: Titelbild
+        created_by: Erstellt von
+      collection_item:
+        collection: Sammlung
+        media_item: Medium
+        position: Position
     errors:
       models:
         article:
@@ -89,11 +197,97 @@ de:
           attributes:
             current_password:
               invalid: ist nicht korrekt
+        media_item:
+          attributes:
+            title:
+              blank: muss ausgefüllt werden
+            media_type:
+              blank: muss ausgewählt werden
+              inclusion: ist kein gültiger Typ
+            file:
+              blank: muss hochgeladen werden
+        media_tag:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+        artist:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+            slug:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+        collection_category:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+            slug:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+        collection:
+          attributes:
+            name:
+              blank: muss ausgefüllt werden
+            slug:
+              blank: muss ausgefüllt werden
+              taken: ist bereits vergeben
+            status:
+              blank: muss ausgefüllt werden
+              inclusion: ist kein gültiger Status
 
   # Article statuses
   article_statuses:
     draft: Entwurf
     published: Veröffentlicht
+
+  # Artist statuses
+  artist_statuses:
+    draft: Entwurf
+    published: Veröffentlicht
+
+  # Collection statuses
+  collection_statuses:
+    draft: Entwurf
+    published: Veröffentlicht
+
+  # Media item statuses
+  media_item_statuses:
+    draft: Entwurf
+    pending_review: In Prüfung
+    published: Veröffentlicht
+
+  # Media item types
+  media_item_types:
+    image: Bild
+    video: Video
+    pdf: PDF
+
+  # Media item techniques
+  media_item_techniques:
+    oil_on_canvas: Öl auf Leinwand
+    oil_on_wood: Öl auf Holz
+    acrylic: Acryl
+    watercolor: Aquarell
+    tempera: Tempera
+    pastel: Pastell
+    pencil_drawing: Bleistiftzeichnung
+    charcoal: Kohlezeichnung
+    ink: Tusche
+    mixed_media: Mischtechnik
+    woodcut: Holzschnitt
+    etching: Radierung
+    lithograph: Lithografie
+    screen_print: Siebdruck
+    digital_print: Digitaldruck
+    bronze: Bronze
+    marble: Marmor
+    wood_sculpture: Holzskulptur
+    ceramic: Keramik
+    photography: Fotografie
+    silver_gelatin: Silbergelatineabzug
+    other: Sonstige
 
   # User roles
   user_roles:
@@ -116,14 +310,70 @@ de:
     navigation:
       dashboard: Dashboard
       articles: Artikel
+      media_items: Medien
+      artists: Kunstschaffende
+      collections: Sammlungen
+      collection_categories: Kategorien
+      tags: Tags
+      techniques: Techniken
       users: Benutzer
       back_to_site: Zur Website
       sign_out: Abmelden
     dashboard:
       title: Admin Dashboard
       welcome: Willkommen im Administrationsbereich
+      quick_upload: Medium hochladen
+      new_article: Neuer Artikel
+      new_artist: Neuer Künstler
+      new_collection: Neue Sammlung
+      sections:
+        media_items: Medien
+        articles: Artikel
+        artists: Kunstschaffende
+        collections: Sammlungen
+        management: Verwaltung
+      # Artists
+      artists_count: Kunstschaffende gesamt
+      published_artists_count: Veröffentlicht
+      # Media Items
+      media_items_count: Medien gesamt
+      draft_media_items_count: Entwürfe
+      pending_media_items_count: In Prüfung
+      published_media_items_count: Veröffentlicht
+      view_all: Alle anzeigen
+      view_drafts: Entwürfe anzeigen
+      view_pending: Zu prüfen
+      view_published: Veröffentlichte
+      view_all_media: Alle Medien anzeigen
+      # Articles
       articles_count: Artikel gesamt
       published_articles_count: Veröffentlichte Artikel
+      # Users
+      users_count: Benutzer
+      active_users:
+        one: "%{count} aktiv"
+        other: "%{count} aktiv"
+      manage_users: Benutzer verwalten
+      # Tags
+      tags_count: Tags
+      manage_tags: Tags verwalten
+      # Collections
+      collections_count: Sammlungen gesamt
+      published_collections_count: Veröffentlicht
+      collection_categories_count: Kategorien
+      manage_categories: Kategorien verwalten
+      # Tables
+      pending_review_title: Warten auf Prüfung
+      recent_media_items_title: Zuletzt hinzugefügt
+      review: Prüfen
+      table:
+        title: Titel
+        type: Typ
+        status: Status
+        uploaded_by: Hochgeladen von
+        submitted_at: Eingereicht am
+        created_at: Erstellt am
+        actions: Aktionen
     articles:
       index:
         title: Artikel
@@ -152,6 +402,7 @@ de:
         slug_label: URL-Pfad
         slug_hint: Wird automatisch aus dem Titel generiert, falls leer
         cover_image_label: Titelbild
+        search_media_items: Medien durchsuchen...
         content_label: Inhalt
         status_label: Status
         published_at_label: Veröffentlichungsdatum
@@ -172,6 +423,8 @@ de:
           role: Rolle
           status: Status
           articles_count: Artikel
+          last_login_at: Letzter Login
+          never_logged_in: Nie
           created_at: Erstellt
           actions: Aktionen
         actions:
@@ -210,6 +463,339 @@ de:
         submit: Passwort ändern
       messages:
         password_updated: Ihr Passwort wurde erfolgreich geändert.
+    media_items:
+      index:
+        title: Medien
+        new_media_item: Neues Medium
+        no_media_items: Keine Medien vorhanden.
+        view_toggle: Ansicht wechseln
+        grid_view: Rasteransicht
+        list_view: Listenansicht
+        table:
+          title: Titel
+          type: Typ
+          status: Status
+          size: Größe
+          uploaded_by: Hochgeladen von
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie dieses Medium löschen möchten?
+      new:
+        title: Neues Medium
+      edit:
+        title: Medium bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        status: Status
+        details: Details
+        description: Beschreibung
+        tags: Tags
+        type: Typ
+        uploaded_by: Hochgeladen von
+        created_at: Erstellt am
+        year: Jahr
+        source: Quelle
+        technique: Technik
+        copyright: Copyright
+        license: Lizenz
+        file_info: Datei
+        review_info: Prüfungsinformationen
+        reviewed_by: Geprüft von
+        reviewed_at: Geprüft am
+        video_not_supported: Ihr Browser unterstützt keine Videodarstellung.
+        actions:
+          submit_for_review: Zur Prüfung einreichen
+          publish: Veröffentlichen
+          reject: Ablehnen
+          reject_confirm: Sind Sie sicher, dass Sie dieses Medium ablehnen möchten?
+          unpublish: Veröffentlichung zurückziehen
+          unpublish_confirm: Sind Sie sicher, dass Sie die Veröffentlichung zurückziehen möchten?
+      form:
+        title_label: Titel
+        description_label: Beschreibung
+        file_label: Datei
+        type_label: Medientyp
+        select_type: Bitte wählen
+        select_technique: Bitte wählen
+        year_label: Jahr
+        source_label: Quelle
+        technique_label: Technik
+        copyright_label: Copyright
+        license_label: Lizenz
+        tags_label: Tags
+        tags_hint: Tag1, Tag2, Tag3
+        tags_help: Mehrere Tags durch Komma getrennt eingeben
+        artist_label: Künstler
+        select_artist: Kein Künstler zugeordnet
+        submit_create: Medium erstellen
+        submit_update: Medium speichern
+        cancel: Abbrechen
+      filters:
+        search: Suche
+        search_placeholder: Titel durchsuchen...
+        status: Status
+        all_statuses: Alle Status
+        type: Typ
+        all_types: Alle Typen
+        year: Jahr
+        all_years: Alle Jahre
+        apply: Filtern
+        reset: Zurücksetzen
+      messages:
+        created: Medium wurde erfolgreich erstellt.
+        updated: Medium wurde erfolgreich aktualisiert.
+        deleted: Medium wurde erfolgreich gelöscht.
+        submitted_for_review: Medium wurde zur Prüfung eingereicht.
+        submit_failed: Medium konnte nicht zur Prüfung eingereicht werden.
+        published: Medium wurde veröffentlicht.
+        publish_failed: Medium konnte nicht veröffentlicht werden.
+        rejected: Medium wurde abgelehnt.
+        reject_failed: Medium konnte nicht abgelehnt werden.
+        unpublished: Veröffentlichung wurde zurückgezogen.
+        unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
+    media_tags:
+      index:
+        title: Tags
+        new_tag: Neuer Tag
+        no_tags: Keine Tags vorhanden.
+        table:
+          name: Name
+          slug: Slug
+          media_items_count: Medien
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diesen Tag löschen möchten?
+      new:
+        title: Neuer Tag
+      edit:
+        title: Tag bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        details: Details
+        media_items: Medien mit diesem Tag
+        no_media_items: Keine Medien mit diesem Tag vorhanden.
+        slug: Slug
+        created_at: Erstellt am
+      form:
+        name_label: Name
+        name_hint: Der Slug wird automatisch aus dem Namen generiert.
+        submit_create: Tag erstellen
+        submit_update: Tag speichern
+        cancel: Abbrechen
+      messages:
+        created: Tag wurde erfolgreich erstellt.
+        updated: Tag wurde erfolgreich aktualisiert.
+        deleted: Tag wurde erfolgreich gelöscht.
+    techniques:
+      index:
+        title: Techniken
+        description: Techniken beschreiben die künstlerische Ausführungsart eines Werks, z.B. Öl auf Leinwand, Aquarell oder Bronze. Sie werden bei Medien-Einträgen zur Kategorisierung verwendet.
+        new_technique: Neue Technik
+        no_techniques: Keine Techniken vorhanden.
+        table:
+          position: Pos.
+          name: Name
+          media_items_count: Medien
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diese Technik löschen möchten?
+      new:
+        title: Neue Technik
+      edit:
+        title: Technik bearbeiten
+      form:
+        name_label: Name
+        position_label: Position
+        position_hint: Niedrigere Werte werden zuerst angezeigt.
+        submit_create: Technik erstellen
+        submit_update: Technik speichern
+        cancel: Abbrechen
+      messages:
+        created: Technik wurde erfolgreich erstellt.
+        updated: Technik wurde erfolgreich aktualisiert.
+        deleted: Technik wurde erfolgreich gelöscht.
+    artists:
+      index:
+        title: Kunstschaffende
+        new_artist: Neuer Künstler
+        no_artists: Keine Künstler vorhanden.
+        table:
+          name: Name
+          life_dates: Lebensdaten
+          status: Status
+          media_items_count: Werke
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diesen Künstler löschen möchten?
+      new:
+        title: Neuer Künstler
+      edit:
+        title: Künstler bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        status: Status
+        details: Details
+        biography: Biografie
+        cv: Lebenslauf
+        media_items: Werke
+        view_all_media_items: Alle Werke anzeigen
+        life_info: Lebensdaten
+        birth_date: Geburtsdatum
+        birth_place: Geburtsort
+        death_date: Todesdatum
+        death_place: Sterbeort
+        created_by: Erstellt von
+        created_at: Erstellt am
+        published_at: Veröffentlicht am
+        slug: URL-Pfad
+        actions:
+          publish: Veröffentlichen
+          unpublish: Veröffentlichung zurückziehen
+          unpublish_confirm: Sind Sie sicher, dass Sie die Veröffentlichung zurückziehen möchten?
+      form:
+        name_label: Name
+        slug_label: URL-Pfad
+        slug_hint: Wird automatisch aus dem Namen generiert, falls leer
+        profile_image_label: Profilbild
+        search_media_items: Medien durchsuchen...
+        biography_label: Biografie
+        cv_label: Lebenslauf
+        life_data: Lebensdaten
+        birth_date_label: Geburtsdatum
+        birth_place_label: Geburtsort
+        death_date_label: Todesdatum
+        death_place_label: Sterbeort
+        publication: Veröffentlichung
+        status_label: Status
+        submit_create: Künstler erstellen
+        submit_update: Künstler speichern
+        cancel: Abbrechen
+      filters:
+        search: Suche
+        search_placeholder: Name durchsuchen...
+        status: Status
+        all_statuses: Alle Status
+        apply: Filtern
+        reset: Zurücksetzen
+      messages:
+        created: Künstler wurde erfolgreich erstellt.
+        updated: Künstler wurde erfolgreich aktualisiert.
+        deleted: Künstler wurde erfolgreich gelöscht.
+        published: Künstler wurde veröffentlicht.
+        publish_failed: Künstler konnte nicht veröffentlicht werden.
+        unpublished: Veröffentlichung wurde zurückgezogen.
+        unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
+        cannot_delete_with_media_items: Künstler kann nicht gelöscht werden, da noch Werke zugeordnet sind.
+    collection_categories:
+      index:
+        title: Sammlungskategorien
+        description: Sammlungskategorien dienen zur Gruppierung von Sammlungen, z.B. "Historische Ansichtskarten" oder "Historische Fotos".
+        new_category: Neue Kategorie
+        no_categories: Keine Kategorien vorhanden.
+        table:
+          position: Pos.
+          name: Name
+          collections_count: Sammlungen
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diese Kategorie löschen möchten?
+      new:
+        title: Neue Sammlungskategorie
+      edit:
+        title: Sammlungskategorie bearbeiten
+      form:
+        name_label: Name
+        position_label: Position
+        position_hint: Niedrigere Werte werden zuerst angezeigt.
+        submit_create: Kategorie erstellen
+        submit_update: Kategorie speichern
+        cancel: Abbrechen
+      messages:
+        created: Kategorie wurde erfolgreich erstellt.
+        updated: Kategorie wurde erfolgreich aktualisiert.
+        deleted: Kategorie wurde erfolgreich gelöscht.
+        cannot_delete_with_collections: Kategorie kann nicht gelöscht werden, da noch Sammlungen zugeordnet sind.
+    collections:
+      index:
+        title: Sammlungen
+        new_collection: Neue Sammlung
+        no_collections: Keine Sammlungen vorhanden.
+        table:
+          name: Name
+          category: Kategorie
+          status: Status
+          media_items_count: Medien
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diese Sammlung löschen möchten?
+      new:
+        title: Neue Sammlung
+      edit:
+        title: Sammlung bearbeiten
+      show:
+        back: Zurück zur Übersicht
+        status: Status
+        details: Details
+        description: Beschreibung
+        media_items: Medien in der Sammlung
+        no_media_items: Noch keine Medien in dieser Sammlung.
+        add_media_item: Medium hinzufügen
+        search_media_items: Medien durchsuchen...
+        view_all_media_items: Alle Medien anzeigen
+        category: Kategorie
+        position: Position
+        created_by: Erstellt von
+        created_at: Erstellt am
+        published_at: Veröffentlicht am
+        slug: URL-Pfad
+        actions:
+          publish: Veröffentlichen
+          unpublish: Veröffentlichung zurückziehen
+          unpublish_confirm: Sind Sie sicher, dass Sie die Veröffentlichung zurückziehen möchten?
+      form:
+        name_label: Name
+        slug_label: URL-Pfad
+        slug_hint: Wird automatisch aus dem Namen generiert, falls leer
+        cover_image_label: Titelbild
+        search_media_items: Medien durchsuchen...
+        description_label: Beschreibung
+        settings: Einstellungen
+        category_label: Kategorie
+        select_category: Bitte wählen
+        position_label: Position
+        position_hint: Niedrigere Werte werden zuerst angezeigt.
+        publication: Veröffentlichung
+        status_label: Status
+        media_items_label: Medien in der Sammlung
+        add_media_item: Medium hinzufügen
+        search_media_items_placeholder: Medien durchsuchen...
+        media_items_hint: Medien können nach dem Speichern der Sammlung hinzugefügt werden.
+        submit_create: Sammlung erstellen
+        submit_update: Sammlung speichern
+        cancel: Abbrechen
+      filters:
+        search: Suche
+        search_placeholder: Name durchsuchen...
+        status: Status
+        all_statuses: Alle Status
+        category: Kategorie
+        all_categories: Alle Kategorien
+        apply: Filtern
+        reset: Zurücksetzen
+      messages:
+        created: Sammlung wurde erfolgreich erstellt.
+        updated: Sammlung wurde erfolgreich aktualisiert.
+        deleted: Sammlung wurde erfolgreich gelöscht.
+        published: Sammlung wurde veröffentlicht.
+        publish_failed: Sammlung konnte nicht veröffentlicht werden.
+        unpublished: Veröffentlichung wurde zurückgezogen.
+        unpublish_failed: Veröffentlichung konnte nicht zurückgezogen werden.
+        item_added: Medium wurde zur Sammlung hinzugefügt.
+        item_removed: Medium wurde aus der Sammlung entfernt.
+        item_already_added: Dieses Medium ist bereits in der Sammlung.
 
   # Public articles
   articles:
@@ -221,6 +807,30 @@ de:
       back: Zurück zur Übersicht
       published_at: "Veröffentlicht am %{date}"
       by_author: "von %{author}"
+
+  # Public collections
+  collections:
+    index:
+      title: Land & Leute
+      no_collections: Keine Sammlungen vorhanden.
+      media_items_count:
+        one: "%{count} Medium"
+        other: "%{count} Medien"
+    show:
+      back: Zurück zu Land & Leute
+      media_items: Medien in dieser Sammlung
+      click_to_enlarge: "(Zum Vergrößern Bilder bitte anklicken!)"
+
+  # Public artists
+  artists:
+    index:
+      title: Kunstschaffende
+      no_artists: Keine Künstler vorhanden.
+    show:
+      back: Zurück zu Kunstschaffende
+      biography: Biografie
+      cv: Lebenslauf
+      works: Werke
 
   # Welcome/Start page
   welcome:
@@ -235,5 +845,22 @@ de:
     cancel: Abbrechen
     delete: Löschen
     edit: Bearbeiten
+    view: Anzeigen
     back: Zurück
     not_published: Nicht veröffentlicht
+    click_to_enlarge: "%{title} vergrößern"
+
+  # Search
+  search:
+    title: "Suche"
+    placeholder: "Suchbegriff eingeben..."
+    button: "Suchen"
+    no_query: "Bitte geben Sie einen Suchbegriff ein."
+    no_results: "Keine Ergebnisse gefunden für \"%{query}\"."
+    results_for: "Suchergebnisse für \"%{query}\""
+    sections:
+      media_items: "Medien"
+      artists: "Kunstschaffende"
+      articles: "Artikel"
+      collections: "Sammlungen"
+    view_all: "Alle anzeigen"

@@ -1,0 +1,73 @@
+= form_with model: [:admin, @artist], class: "needs-validation", data: { testid: "artist-form" } do |form|
+  - if @artist.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @artist.errors.full_messages.each do |message|
+          %li= message
+
+  .row
+    .col-md-8
+      .mb-3
+        = form.label :name, t("admin.artists.form.name_label"), class: "form-label"
+        = form.text_field :name, class: "form-control #{'is-invalid' if @artist.errors[:name].any?}", required: true, data: { testid: "artist-name" }
+        - if @artist.errors[:name].any?
+          .invalid-feedback= @artist.errors[:name].first
+
+      .mb-3
+        = form.label :slug, t("admin.artists.form.slug_label"), class: "form-label"
+        = form.text_field :slug, class: "form-control #{'is-invalid' if @artist.errors[:slug].any?}", data: { testid: "artist-slug" }
+        .form-text= t("admin.artists.form.slug_hint")
+        - if @artist.errors[:slug].any?
+          .invalid-feedback= @artist.errors[:slug].first
+
+      - profile_thumbnail = @artist.profile_media_item&.file&.attached? ? url_for(@artist.profile_media_item.file.variant(resize_to_limit: [100, 100])) : ""
+      .mb-3{ data: { controller: "media-item-selector", "media-item-selector-search-url-value": search_admin_media_items_path, "media-item-selector-selected-id-value": @artist.profile_media_item_id.to_i, "media-item-selector-selected-title-value": @artist.profile_media_item&.title.to_s, "media-item-selector-selected-thumbnail-value": profile_thumbnail } }
+        = form.label :profile_media_item_id, t("admin.artists.form.profile_image_label"), class: "form-label"
+        = form.hidden_field :profile_media_item_id, data: { "media-item-selector-target": "input" }
+        .position-relative{ data: { "media-item-selector-target": "selected" }, class: (@artist.profile_media_item_id.present? ? "d-none" : "") }
+          %label.visually-hidden{ for: "artist-profile-search" }= t("admin.artists.form.search_media_items")
+          %input#artist-profile-search.form-control{ type: "text", placeholder: t("admin.artists.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
+          .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "media-item-selector-target": "results" } }
+        .mt-2{ data: { "media-item-selector-target": "preview" }, class: (@artist.profile_media_item_id.blank? ? "d-none" : "") }
+
+      .mb-3
+        = form.label :biography, t("admin.artists.form.biography_label"), class: "form-label"
+        = form.rich_text_area :biography, data: { testid: "artist-biography" }
+
+      .mb-3
+        = form.label :cv, t("admin.artists.form.cv_label"), class: "form-label"
+        = form.rich_text_area :cv, data: { testid: "artist-cv" }
+
+    .col-md-4
+      .card
+        .card-header
+          %h6.mb-0= t("admin.artists.form.life_data")
+        .card-body
+          .mb-3
+            = form.label :birth_date, t("admin.artists.form.birth_date_label"), class: "form-label"
+            = form.date_field :birth_date, class: "form-control", data: { testid: "artist-birth-date" }
+
+          .mb-3
+            = form.label :birth_place, t("admin.artists.form.birth_place_label"), class: "form-label"
+            = form.text_field :birth_place, class: "form-control", data: { testid: "artist-birth-place" }
+
+          .mb-3
+            = form.label :death_date, t("admin.artists.form.death_date_label"), class: "form-label"
+            = form.date_field :death_date, class: "form-control", data: { testid: "artist-death-date" }
+
+          .mb-3
+            = form.label :death_place, t("admin.artists.form.death_place_label"), class: "form-label"
+            = form.text_field :death_place, class: "form-control", data: { testid: "artist-death-place" }
+
+      - if @artist.persisted?
+        .card.mt-3
+          .card-header
+            %h6.mb-0= t("admin.artists.form.publication")
+          .card-body
+            .mb-3
+              = form.label :status, t("admin.artists.form.status_label"), class: "form-label"
+              = form.select :status, Artist::STATUSES.map { |s| [I18n.t("artist_statuses.#{s}"), s] }, {}, class: "form-select", data: { testid: "artist-status" }
+
+  .d-flex.gap-2.mt-4
+    = form.submit @artist.persisted? ? t("admin.artists.form.submit_update") : t("admin.artists.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-artist" }
+    = link_to t("admin.artists.form.cancel"), @artist.persisted? ? admin_artist_path(@artist) : admin_artists_path, class: "btn btn-outline-secondary"

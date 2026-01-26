@@ -223,20 +223,6 @@ RSpec.describe "Welcome Pages" do
   end
 
   describe "coming soon pages" do
-    it "displays coming soon page for Kunstschaffende" do
-      visit kunstschaffende_path
-
-      expect(page).to have_selector("[data-testid='coming-soon-page']")
-      expect(page).to have_selector("[data-testid='coming-soon-title']", text: "Coming Soon")
-      expect(page).to have_content("Diese Seite befindet sich noch im Aufbau")
-    end
-
-    it "displays coming soon page for Land & Leute" do
-      visit land_und_leute_path
-
-      expect(page).to have_selector("[data-testid='coming-soon-page']")
-    end
-
     it "displays coming soon page for Ausstellungen" do
       visit ausstellungen_path
 
@@ -252,12 +238,24 @@ RSpec.describe "Welcome Pages" do
     it "navigation links lead to coming soon pages" do
       visit root_path
 
-      click_link "Kunstschaffende"
-      expect(page).to have_selector("[data-testid='coming-soon-page']")
-
-      click_link "Zur Startseite"
       click_link "Ausstellungen"
       expect(page).to have_selector("[data-testid='coming-soon-page']")
+    end
+  end
+
+  describe "artists page (Kunstschaffende)" do
+    it "displays the artists page" do
+      visit artists_path
+
+      expect(page).to have_selector("[data-testid='artists-hero']")
+      expect(page).to have_selector("[data-testid='artists-heading']", text: "Kunstschaffende")
+    end
+
+    it "navigation link leads to artists page" do
+      visit root_path
+
+      click_link "Kunstschaffende"
+      expect(page).to have_selector("[data-testid='artists-section']")
     end
   end
 end

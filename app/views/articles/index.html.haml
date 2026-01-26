@@ -1,3 +1,6 @@
+- content_for :title, t("seo.pages.articles.index.title")
+- content_for :meta_description, t("seo.pages.articles.index.description")
+
 = render "shared/site_header", active: :archiv
 
 %section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/archiv_om_1920.jpg')}')", data: { testid: "articles-hero" } }
@@ -17,10 +20,10 @@
         - presenter = ArticlePresenter.new(article)
         .article-item.py-4{ data: { testid: "article-card-#{article.slug}" } }
           .row
-            - if article.cover_image.attached?
+            - if article.cover_media_item&.file&.attached?
               .col-md-2
                 = link_to article_path(article.slug) do
-                  = image_tag article.cover_image.variant(resize_to_limit: [400, 300]), class: "img-fluid", alt: article.title
+                  = image_tag article.cover_media_item.file.variant(resize_to_limit: [400, 300]), class: "img-fluid", alt: article.title
               .col-md-10
                 %h4
                   = link_to article.title, article_path(article.slug), class: "text-decoration-none"

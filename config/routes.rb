@@ -7,6 +7,34 @@ Rails.application.routes.draw do
     root to: "dashboard#index"
     resource :profile, only: %i[edit update]
     resources :articles
+    resources :media_items do
+      collection do
+        get :search
+      end
+      member do
+        patch :submit_for_review
+        patch :publish
+        patch :reject
+        patch :unpublish
+      end
+    end
+    resources :media_tags, path: "tags"
+    resources :techniques, except: [ :show ]
+    resources :collection_categories, path: "sammlungs-kategorien", except: [ :show ]
+    resources :collections, path: "sammlungen" do
+      member do
+        patch :publish
+        patch :unpublish
+        post :add_item
+        delete :remove_item
+      end
+    end
+    resources :artists do
+      member do
+        patch :publish
+        patch :unpublish
+      end
+    end
     resources :users, only: %i[index new create edit update] do
       member do
         patch :deactivate
@@ -37,9 +65,17 @@ Rails.application.routes.draw do
   get "team", to: "welcome#team"
   get "coming-soon", to: "welcome#coming_soon", as: :coming_soon
 
+  # Search
+  get "suche", to: "search#index", as: :search
+
+  # Public artists (German URL)
+  resources :artists, only: %i[index show], path: "kunstschaffende", param: :slug
+
+  # Collections (Land & Leute)
+  get "land-und-leute", to: "collections#index", as: :land_und_leute
+  get "land-und-leute/:slug", to: "collections#show", as: :collection
+
   # Placeholder pages (coming soon)
-  get "kunstschaffende", to: "welcome#coming_soon", as: :kunstschaffende
-  get "land-und-leute", to: "welcome#coming_soon", as: :land_und_leute
   get "ausstellungen", to: "welcome#coming_soon", as: :ausstellungen
   get "bild-der-woche", to: "welcome#coming_soon", as: :bild_der_woche
 end

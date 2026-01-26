@@ -1,0 +1,104 @@
+- presenter = ArtistPresenter.new(@artist)
+.admin-artist-show{ data: { testid: "admin-artist-show" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "artist-name" } }= @artist.name
+    .d-flex.gap-2
+      = link_to t("common.edit"), edit_admin_artist_path(@artist), class: "btn btn-primary"
+      = link_to t("admin.artists.show.back"), admin_artists_path, class: "btn btn-outline-secondary"
+
+  .row
+    .col-lg-8
+      - if @artist.profile_media_item&.file&.attached?
+        .card.mb-4
+          .card-body.text-center
+            = image_tag @artist.profile_media_item.file.variant(resize_to_fit: [400, 400]), class: "img-fluid rounded", alt: @artist.name
+      - elsif @artist.profile_image.attached?
+        .card.mb-4
+          .card-body.text-center
+            = image_tag @artist.profile_image.variant(resize_to_fit: [400, 400]), class: "img-fluid rounded", alt: @artist.name
+
+      - if @artist.biography.present?
+        .card.mb-4
+          .card-header
+            %h5.mb-0= t("admin.artists.show.biography")
+          .card-body{ data: { testid: "artist-biography" } }
+            = @artist.biography
+
+      - if @artist.cv.present?
+        .card.mb-4
+          .card-header
+            %h5.mb-0= t("admin.artists.show.cv")
+          .card-body{ data: { testid: "artist-cv" } }
+            = @artist.cv
+
+      - if @artist.media_items.any?
+        .card.mb-4
+          .card-header
+            %h5.mb-0
+              = t("admin.artists.show.media_items")
+              %span.badge.bg-secondary.ms-2= presenter.media_items_count
+          .card-body
+            .row.g-3
+              - @artist.media_items.limit(8).each do |media_item|
+                .col-md-3
+                  - if media_item.image? && media_item.file.attached?
+                    = link_to admin_media_item_path(media_item) do
+                      = image_tag media_item.file.variant(resize_to_limit: [150, 150]), class: "img-thumbnail", alt: media_item.title
+                  - else
+                    = link_to media_item.title, admin_media_item_path(media_item), class: "btn btn-outline-secondary btn-sm"
+            - if @artist.media_items.count > 8
+              .mt-3
+                = link_to t("admin.artists.show.view_all_media_items"), admin_media_items_path(artist_id: @artist.id), class: "btn btn-outline-primary"
+
+    .col-lg-4
+      .card.mb-4
+        .card-header
+          %h5.mb-0= t("admin.artists.show.status")
+        .card-body
+          .d-flex.align-items-center.gap-2.mb-3
+            %span.badge.fs-6{ class: presenter.status_badge_class }= presenter.status_name
+
+          - if @artist.draft? && can?(:publish, @artist)
+            = button_to t("admin.artists.show.actions.publish"), publish_admin_artist_path(@artist), method: :patch, class: "btn btn-success w-100 mb-2", data: { testid: "publish-button" }
+
+          - if @artist.published? && can?(:unpublish, @artist)
+            = button_to t("admin.artists.show.actions.unpublish"), unpublish_admin_artist_path(@artist), method: :patch, class: "btn btn-outline-danger w-100", data: { turbo_confirm: t("admin.artists.show.actions.unpublish_confirm"), testid: "unpublish-button" }
+
+      .card.mb-4
+        .card-header
+          %h5.mb-0= t("admin.artists.show.details")
+        .card-body
+          %dl.row.mb-0
+            - if presenter.full_life_info.present?
+              %dt.col-sm-4= t("admin.artists.show.life_info")
+              %dd.col-sm-8= presenter.full_life_info
+
+            - if @artist.birth_date.present?
+              %dt.col-sm-4= t("admin.artists.show.birth_date")
+              %dd.col-sm-8= presenter.formatted_birth_date
+
+            - if @artist.birth_place.present?
+              %dt.col-sm-4= t("admin.artists.show.birth_place")
+              %dd.col-sm-8= @artist.birth_place
+
+            - if @artist.death_date.present?
+              %dt.col-sm-4= t("admin.artists.show.death_date")
+              %dd.col-sm-8= presenter.formatted_death_date
+
+            - if @artist.death_place.present?
+              %dt.col-sm-4= t("admin.artists.show.death_place")
+              %dd.col-sm-8= @artist.death_place
+
+            %dt.col-sm-4= t("admin.artists.show.created_by")
+            %dd.col-sm-8= presenter.creator_email
+
+            %dt.col-sm-4= t("admin.artists.show.created_at")
+            %dd.col-sm-8= l(@artist.created_at, format: :long)
+
+            - if @artist.published_at.present?
+              %dt.col-sm-4= t("admin.artists.show.published_at")
+              %dd.col-sm-8= presenter.formatted_published_at
+
+            %dt.col-sm-4= t("admin.artists.show.slug")
+            %dd.col-sm-8
+              %code= @artist.slug

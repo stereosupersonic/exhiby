@@ -46,7 +46,7 @@ module Admin
     end
 
     def article_params
-      params.expect(article: [ :title, :content, :status, :published_at, :cover_image ])
+      params.expect(article: [ :title, :content, :status, :published_at, :cover_media_item_id ])
     end
   end
 end

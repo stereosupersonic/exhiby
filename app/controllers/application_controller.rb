@@ -6,6 +6,9 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
+  before_action :set_nav_artists
+  before_action :set_nav_collection_categories
+
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
       format.json { head :forbidden }
@@ -20,5 +23,13 @@ class ApplicationController < ActionController::Base
   # CanCanCan expects current_user method
   def current_user
     Current.user
+  end
+
+  def set_nav_artists
+    @nav_artists = Artist.published.alphabetical
+  end
+
+  def set_nav_collection_categories
+    @nav_collection_categories = CollectionCategory.ordered
   end
 end

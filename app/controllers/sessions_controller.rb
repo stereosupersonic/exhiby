@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
 
     if user&.active?
       start_new_session_for user
+      user.update_column(:last_login_at, Time.current)
       redirect_to after_authentication_url
     elsif user && !user.active?
       redirect_to new_session_path, alert: t("sessions.account_inactive")

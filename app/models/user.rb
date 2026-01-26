@@ -7,6 +7,7 @@
 #  active          :boolean          default(TRUE), not null
 #  deactivated_at  :datetime
 #  email_address   :string           not null
+#  last_login_at   :datetime
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
 #  created_at      :datetime         not null
@@ -26,6 +27,14 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :articles, foreign_key: :author_id, dependent: :destroy, inverse_of: :author
+  has_many :uploaded_media_items, class_name: "MediaItem", foreign_key: :uploaded_by_id,
+                                  dependent: :destroy, inverse_of: :uploaded_by
+  has_many :reviewed_media_items, class_name: "MediaItem", foreign_key: :reviewed_by_id,
+                                  dependent: :nullify, inverse_of: :reviewed_by
+  has_many :created_artists, class_name: "Artist", foreign_key: :created_by_id,
+                             dependent: :destroy, inverse_of: :created_by
+  has_many :created_collections, class_name: "Collection", foreign_key: :created_by_id,
+                                 dependent: :destroy, inverse_of: :created_by
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

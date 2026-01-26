@@ -7,6 +7,7 @@
 #  active          :boolean          default(TRUE), not null
 #  deactivated_at  :datetime
 #  email_address   :string           not null
+#  last_login_at   :datetime
 #  password_digest :string           not null
 #  role            :string           default("user"), not null
 #  created_at      :datetime         not null
@@ -21,6 +22,12 @@
 require "rails_helper"
 
 RSpec.describe User do
+  describe "factory" do
+    it "has a valid factory" do
+      expect(build(:user)).to be_valid
+    end
+  end
+
   describe "associations" do
     it { is_expected.to have_many(:sessions).dependent(:destroy) }
   end

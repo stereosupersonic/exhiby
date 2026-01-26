@@ -1,0 +1,33 @@
+.admin-media-tags{ data: { testid: "admin-media-tags" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "media-tags-heading" } }= t("admin.media_tags.index.title")
+    = link_to t("admin.media_tags.index.new_tag"), new_admin_media_tag_path, class: "btn btn-primary", data: { testid: "new-media-tag-button" }
+
+  .card
+    .card-body
+      - if @media_tags.any?
+        .table-responsive
+          %table.table.table-hover{ data: { testid: "media-tags-table" } }
+            %thead
+              %tr
+                %th= t("admin.media_tags.index.table.name")
+                %th= t("admin.media_tags.index.table.slug")
+                %th= t("admin.media_tags.index.table.media_items_count")
+                %th= t("admin.media_tags.index.table.actions")
+            %tbody
+              - @media_tags.each do |tag|
+                %tr{ data: { testid: "media-tag-row-#{tag.id}" } }
+                  %td= link_to tag.name, admin_media_tag_path(tag)
+                  %td= tag.slug
+                  %td
+                    %span.badge.bg-secondary= tag.media_items_count
+                  %td
+                    .d-flex.gap-2
+                      = link_to t("common.edit"), edit_admin_media_tag_path(tag), class: "btn btn-sm btn-outline-primary"
+                      = button_to t("common.delete"), admin_media_tag_path(tag), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.media_tags.index.actions.delete_confirm") }
+
+        = will_paginate @media_tags, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-media-tags-message" } }
+          %p= t("admin.media_tags.index.no_tags")
+          = link_to t("admin.media_tags.index.new_tag"), new_admin_media_tag_path, class: "btn btn-primary"
