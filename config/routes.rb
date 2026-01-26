@@ -19,8 +19,8 @@ Rails.application.routes.draw do
       end
     end
     resources :media_tags, path: "tags"
-    resources :techniques, except: [:show]
-    resources :collection_categories, path: "sammlungs-kategorien", except: [:show]
+    resources :techniques, except: [ :show ]
+    resources :collection_categories, path: "sammlungs-kategorien", except: [ :show ]
     resources :collections, path: "sammlungen" do
       member do
         patch :publish
