@@ -1,3 +1,8 @@
+- content_for :title, @collection.name
+- content_for :meta_description, t("seo.pages.collections.show.description", name: @collection.name, count: @collection.media_items_count)
+- if @collection.cover_media_item&.file&.attached?
+  - content_for :og_image, url_for(@collection.cover_media_item.file.variant(resize_to_limit: [1200, 630]))
+
 = render "shared/site_header", active: :land_und_leute
 - presenter = CollectionPresenter.new(@collection)
 

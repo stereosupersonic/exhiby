@@ -1,4 +1,48 @@
 de:
+  # SEO Meta Tags
+  seo:
+    default_description: "OnlineMuseum Wartenberg - Entdecken Sie Kunst und Kulturgeschichte aus Wartenberg und Umgebung. Kunstschaffende, historische Sammlungen und aktuelle Ausstellungen."
+    pages:
+      home:
+        title: "Startseite"
+        description: "OnlineMuseum Wartenberg - Entdecken Sie Kunst und Kulturgeschichte aus Wartenberg und Umgebung. Kunstschaffende, historische Sammlungen und aktuelle Ausstellungen."
+      team:
+        title: "Über uns"
+        description: "Das Team hinter dem OnlineMuseum Wartenberg. Erfahren Sie mehr über die Menschen, die dieses digitale Museum möglich machen."
+      artists:
+        index:
+          title: "Kunstschaffende"
+          description: "Entdecken Sie die Künstlerinnen und Künstler mit Verbindung zu Wartenberg. Biografien, Werke und künstlerisches Schaffen im OnlineMuseum."
+        show:
+          description: "Biografie und Werke von %{name} im OnlineMuseum Wartenberg."
+      articles:
+        index:
+          title: "Aktuelles"
+          description: "Neuigkeiten und Beiträge aus dem OnlineMuseum Wartenberg. Aktuelle Artikel über Kunst, Kultur und Geschichte."
+        show:
+          description: "Lesen Sie den Artikel '%{title}' im OnlineMuseum Wartenberg."
+      collections:
+        index:
+          title: "Land & Leute"
+          description: "Historische Sammlungen aus Wartenberg und Umgebung. Entdecken Sie Postkarten, Fotografien und Dokumente zur Ortsgeschichte."
+        show:
+          description: "Die Sammlung '%{name}' im OnlineMuseum Wartenberg. %{count} historische Objekte."
+      search:
+        title: "Suche"
+        description: "Durchsuchen Sie das OnlineMuseum Wartenberg nach Kunstwerken, Künstlern, Sammlungen und Artikeln."
+      impressum:
+        title: "Impressum"
+        description: "Impressum und rechtliche Informationen zum OnlineMuseum Wartenberg."
+      datenschutzerklaerung:
+        title: "Datenschutzerklärung"
+        description: "Datenschutzerklärung des OnlineMuseum Wartenberg. Informationen zum Umgang mit Ihren personenbezogenen Daten."
+      ausstellungen:
+        title: "Ausstellungen"
+        description: "Virtuelle Ausstellungen im OnlineMuseum Wartenberg. Entdecken Sie kuratierte Sammlungen zur Kunst und Geschichte Wartenbergs."
+      bild_der_woche:
+        title: "Bild der Woche"
+        description: "Das Bild der Woche im OnlineMuseum Wartenberg. Jede Woche ein neues Highlight aus unserer Sammlung."
+
   # Date/Time formats
   date:
     formats:

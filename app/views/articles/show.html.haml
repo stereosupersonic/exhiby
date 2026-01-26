@@ -1,3 +1,9 @@
+- content_for :title, @article.title
+- content_for :meta_description, truncate_for_meta(@article.content.to_plain_text)
+- content_for :og_type, "article"
+- if @article.cover_media_item&.file&.attached?
+  - content_for :og_image, url_for(@article.cover_media_item.file.variant(resize_to_limit: [1200, 630]))
+
 = render "shared/site_header", active: :archiv
 
 %section.article-section{ data: { testid: "article-section" } }

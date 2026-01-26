@@ -1,3 +1,6 @@
+- content_for :title, t("seo.pages.artists.index.title")
+- content_for :meta_description, t("seo.pages.artists.index.description")
+
 = render "shared/site_header", active: :kunstschaffende
 
 %section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "artists-hero" } }

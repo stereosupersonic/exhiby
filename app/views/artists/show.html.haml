@@ -1,3 +1,11 @@
+- content_for :title, @artist.name
+- content_for :meta_description, t("seo.pages.artists.show.description", name: @artist.name)
+- content_for :og_type, "profile"
+- if @artist.profile_media_item&.file&.attached?
+  - content_for :og_image, url_for(@artist.profile_media_item.file.variant(resize_to_limit: [1200, 630]))
+- elsif @artist.profile_image.attached?
+  - content_for :og_image, url_for(@artist.profile_image.variant(resize_to_limit: [1200, 630]))
+
 = render "shared/site_header", active: :kunstschaffende
 - presenter = ArtistPresenter.new(@artist)
 

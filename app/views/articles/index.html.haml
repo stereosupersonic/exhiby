@@ -1,3 +1,6 @@
+- content_for :title, t("seo.pages.articles.index.title")
+- content_for :meta_description, t("seo.pages.articles.index.description")
+
 = render "shared/site_header", active: :archiv
 
 %section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/archiv_om_1920.jpg')}')", data: { testid: "articles-hero" } }
