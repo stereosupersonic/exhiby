@@ -16,7 +16,7 @@
 
 # SimpleCov must be started before any application code is loaded
 
-if !ENV["CI"].present?
+if !ENV["CI"]
   puts "Running SimpleCov"
   require "simplecov"
   SimpleCov.start "rails" do
