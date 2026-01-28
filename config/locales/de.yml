@@ -366,6 +366,10 @@ de:
       pending_review_title: Warten auf Prüfung
       recent_media_items_title: Zuletzt hinzugefügt
       review: Prüfen
+      # Developer Tools
+      developer_tools: Entwickler-Tools
+      sidekiq: Sidekiq Jobs
+      test_exception: Test-Fehler auslösen
       table:
         title: Titel
         type: Typ
@@ -504,6 +508,18 @@ de:
         reviewed_by: Geprüft von
         reviewed_at: Geprüft am
         video_not_supported: Ihr Browser unterstützt keine Videodarstellung.
+        exif_data: EXIF-Metadaten
+        show_all_exif_tags:
+          one: "Alle %{count} Tag anzeigen"
+          other: "Alle %{count} Tags anzeigen"
+        exif_groups:
+          camera: Kamera
+          image: Bildeigenschaften
+          capture: Aufnahmeeinstellungen
+          date: Datum
+          location: GPS-Position
+          author: Autor/Copyright
+          description: Beschreibung
         actions:
           submit_for_review: Zur Prüfung einreichen
           publish: Veröffentlichen
@@ -531,6 +547,8 @@ de:
         submit_create: Medium erstellen
         submit_update: Medium speichern
         cancel: Abbrechen
+        exif_preview: EXIF-Daten aus Bild
+        stored_exif_data: Gespeicherte EXIF-Daten
       filters:
         search: Suche
         search_placeholder: Titel durchsuchen...

@@ -1,4 +1,5 @@
-= form_with model: [:admin, @media_item], class: "needs-validation", data: { testid: "media-item-form" } do |form|
+- presenter = MediaItemPresenter.new(@media_item) if @media_item.persisted?
+= form_with model: [:admin, @media_item], class: "needs-validation", data: { testid: "media-item-form", controller: "exif-extractor", exif_extractor_url_value: extract_exif_admin_media_items_path } do |form|
   - if @media_item.errors.any?
     .alert.alert-danger
       %ul.mb-0
@@ -9,25 +10,73 @@
     .col-md-8
       .mb-3
         = form.label :title, t("admin.media_items.form.title_label"), class: "form-label"
-        = form.text_field :title, class: "form-control #{'is-invalid' if @media_item.errors[:title].any?}", required: true, data: { testid: "media-item-title" }
+        = form.text_field :title, class: "form-control #{'is-invalid' if @media_item.errors[:title].any?}", required: true, data: { testid: "media-item-title", exif_extractor_target: "title" }
         - if @media_item.errors[:title].any?
           .invalid-feedback= @media_item.errors[:title].first
 
       .mb-3
         = form.label :description, t("admin.media_items.form.description_label"), class: "form-label"
-        = form.text_area :description, class: "form-control", rows: 4, data: { testid: "media-item-description" }
+        = form.text_area :description, class: "form-control", rows: 4, data: { testid: "media-item-description", exif_extractor_target: "description" }
 
       .mb-3
         = form.label :file, t("admin.media_items.form.file_label"), class: "form-label"
-        = form.file_field :file, class: "form-control #{'is-invalid' if @media_item.errors[:file].any?}", accept: "image/*,video/*,application/pdf", data: { testid: "media-item-file" }
-        - if @media_item.errors[:file].any?
-          .invalid-feedback= @media_item.errors[:file].first
+
+        -# File preview (for new uploads)
+        .mb-2.d-none{ data: { exif_extractor_target: "filePreview" } }
+          %img.img-thumbnail{ style: "max-height: 200px; max-width: 100%;", data: { exif_extractor_target: "previewImage" } }
+
+        -# Existing file preview (for edit form)
         - if @media_item.persisted? && @media_item.file.attached?
-          .mt-2
+          .mb-2
             - if @media_item.image?
               = image_tag @media_item.file.variant(resize_to_limit: [200, 200]), class: "img-thumbnail"
             - else
               %span.badge.bg-secondary= @media_item.file.filename
+
+        .input-group
+          = form.file_field :file, class: "form-control #{'is-invalid' if @media_item.errors[:file].any?}", accept: "image/*,video/*,application/pdf", data: { testid: "media-item-file", exif_extractor_target: "file", action: "change->exif-extractor#extractExif" }
+          %span.input-group-text.d-none{ data: { exif_extractor_target: "spinner" } }
+            %span.spinner-border.spinner-border-sm{ role: "status" }
+        - if @media_item.errors[:file].any?
+          .invalid-feedback.d-block= @media_item.errors[:file].first
+
+      -# EXIF Data Card (shown after file selection OR for stored EXIF data)
+      - if @media_item.persisted? && @media_item.image? && presenter&.has_exif_data?
+        -# Stored EXIF Data (edit page)
+        .card.mb-3{ data: { exif_extractor_target: "exifPreview" } }
+          .card-header.bg-light.py-2
+            %h6.mb-0
+              %i.bi.bi-camera.me-2
+              = t("admin.media_items.form.stored_exif_data")
+              %span.badge.bg-secondary.ms-2= presenter.exif_all_tags.count
+          .card-body.py-2{ data: { exif_extractor_target: "exifContent" } }
+            - presenter.exif_grouped_tags.each do |group, tags|
+              - next if tags.blank?
+              %h6.text-muted.border-bottom.pb-1.mb-2.small
+                = t("admin.media_items.show.exif_groups.#{group}", default: group.to_s.titleize)
+              %dl.row.small.mb-2
+                - tags.each do |tag, value|
+                  %dt.col-sm-5.text-truncate{ title: tag }= tag
+                  %dd.col-sm-7.text-truncate{ title: value }= value
+
+            %details.mt-2
+              %summary.text-muted.small
+                %i.bi.bi-list.me-1
+                = t("admin.media_items.show.show_all_exif_tags", count: presenter.exif_all_tags.count)
+              .mt-2.border-top.pt-2
+                %dl.row.small.mb-0
+                  - presenter.exif_all_tags.each do |tag, value|
+                    %dt.col-sm-5.text-truncate{ title: tag }= tag
+                    %dd.col-sm-7.text-truncate{ title: value }= value
+      - else
+        -# EXIF Preview for new uploads (populated via JavaScript)
+        .card.mb-3.d-none{ data: { exif_extractor_target: "exifPreview" } }
+          .card-header.bg-light.py-2
+            %h6.mb-0
+              %i.bi.bi-camera.me-2
+              = t("admin.media_items.form.exif_preview")
+              %span.badge.bg-secondary.ms-2 0
+          .card-body.py-2{ data: { exif_extractor_target: "exifContent" } }
 
       .mb-3
         = form.label :tag_list, t("admin.media_items.form.tags_label"), class: "form-label"
@@ -37,17 +86,17 @@
     .col-md-4
       .mb-3
         = form.label :media_type, t("admin.media_items.form.type_label"), class: "form-label"
-        = form.select :media_type, MediaItem::MEDIA_TYPES.map { |t| [I18n.t("media_item_types.#{t}"), t] }, { include_blank: t("admin.media_items.form.select_type") }, class: "form-select #{'is-invalid' if @media_item.errors[:media_type].any?}", required: true, data: { testid: "media-item-type" }
+        = form.select :media_type, MediaItem::MEDIA_TYPES.map { |t| [I18n.t("media_item_types.#{t}"), t] }, { include_blank: t("admin.media_items.form.select_type") }, class: "form-select #{'is-invalid' if @media_item.errors[:media_type].any?}", required: true, data: { testid: "media-item-type", exif_extractor_target: "mediaType" }
         - if @media_item.errors[:media_type].any?
           .invalid-feedback= @media_item.errors[:media_type].first
 
       .mb-3
         = form.label :year, t("admin.media_items.form.year_label"), class: "form-label"
-        = form.number_field :year, class: "form-control", min: 1, max: Time.current.year, data: { testid: "media-item-year" }
+        = form.number_field :year, class: "form-control", min: 1, max: Time.current.year, data: { testid: "media-item-year", exif_extractor_target: "year" }
 
       .mb-3
         = form.label :source, t("admin.media_items.form.source_label"), class: "form-label"
-        = form.text_field :source, class: "form-control", data: { testid: "media-item-source" }
+        = form.text_field :source, class: "form-control", data: { testid: "media-item-source", exif_extractor_target: "source" }
 
       .mb-3
         = form.label :technique_id, t("admin.media_items.form.technique_label"), class: "form-label"
@@ -59,7 +108,7 @@
 
       .mb-3
         = form.label :copyright, t("admin.media_items.form.copyright_label"), class: "form-label"
-        = form.text_field :copyright, class: "form-control", data: { testid: "media-item-copyright" }
+        = form.text_field :copyright, class: "form-control", data: { testid: "media-item-copyright", exif_extractor_target: "copyright" }
 
       .mb-3
         = form.label :license, t("admin.media_items.form.license_label"), class: "form-label"
