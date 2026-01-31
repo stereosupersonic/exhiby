@@ -74,7 +74,7 @@ group :development, :test do
   gem "rubocop-capybara", "~> 2.22"
 
   gem "simplecov", "~> 0.22.0", require: false
-  gem "annotaterb", "~> 4.20"
+  gem "annotaterb", "~> 4.21"
   gem "pry-nav", "~> 1.0"
 end
 
