@@ -85,7 +85,7 @@ group :test do
   gem "rspec-rails", "~> 8.0"
   gem "capybara"
   gem "selenium-webdriver"
-  gem "shoulda-matchers", "~> 6.0"
+  gem "shoulda-matchers", "~> 7.0"
   gem "super_diff", "~> 0.18.0"
 end
 
