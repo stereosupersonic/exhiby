@@ -31,6 +31,9 @@
             - if can? :manage, CollectionCategory
               %li.nav-item
                 = link_to t("admin.navigation.collection_categories"), admin_collection_categories_path, class: "nav-link"
+            - if can? :manage, PictureOfTheDay
+              %li.nav-item
+                = link_to t("admin.navigation.pictures_of_the_day"), admin_pictures_of_the_day_index_path, class: "nav-link"
             - if can? :manage, MediaTag
               %li.nav-item
                 = link_to t("admin.navigation.tags"), admin_media_tags_path, class: "nav-link"

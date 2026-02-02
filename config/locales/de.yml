@@ -39,9 +39,12 @@ de:
       ausstellungen:
         title: "Ausstellungen"
         description: "Virtuelle Ausstellungen im OnlineMuseum Wartenberg. Entdecken Sie kuratierte Sammlungen zur Kunst und Geschichte Wartenbergs."
-      bild_der_woche:
-        title: "Bild der Woche"
-        description: "Das Bild der Woche im OnlineMuseum Wartenberg. Jede Woche ein neues Highlight aus unserer Sammlung."
+      bild_des_tages:
+        title: "Bild des Tages"
+        description: "Das Bild des Tages im OnlineMuseum Wartenberg. Jeden Tag ein neues Highlight aus unserer Sammlung."
+        index:
+          title: "Bild des Tages - Archiv"
+          description: "Archiv der Bilder des Tages im OnlineMuseum Wartenberg. Entdecken Sie vergangene Highlights aus unserer Sammlung."
 
   # Date/Time formats
   date:
@@ -102,6 +105,9 @@ de:
 
   # ActiveRecord
   activerecord:
+    errors:
+      messages:
+        required: muss ausgefüllt werden
     models:
       article:
         one: Artikel
@@ -127,6 +133,9 @@ de:
       collection_item:
         one: Sammlungselement
         other: Sammlungselemente
+      picture_of_the_day:
+        one: Bild des Tages
+        other: Bilder des Tages
     attributes:
       article:
         title: Titel
@@ -185,6 +194,12 @@ de:
         collection: Sammlung
         media_item: Medium
         position: Position
+      picture_of_the_day:
+        media_item: Medium
+        created_by: Erstellt von
+        display_date: Anzeigedatum
+        caption: Titel
+        description: Beschreibung
     errors:
       models:
         article:
@@ -236,6 +251,16 @@ de:
             status:
               blank: muss ausgefüllt werden
               inclusion: ist kein gültiger Status
+        picture_of_the_day:
+          attributes:
+            display_date:
+              blank: muss ausgefüllt werden
+              taken: ist bereits für dieses Datum vergeben
+            media_item:
+              blank: muss ausgefüllt werden
+              required: muss ausgefüllt werden
+              must_be_image: muss ein Bild sein
+              must_be_published: muss veröffentlicht sein
 
   # Article statuses
   article_statuses:
@@ -251,6 +276,12 @@ de:
   collection_statuses:
     draft: Entwurf
     published: Veröffentlicht
+
+  # Picture of the Day statuses
+  picture_of_the_day_statuses:
+    past: Vergangen
+    today: Heute
+    upcoming: Geplant
 
   # Media item statuses
   media_item_statuses:
@@ -314,6 +345,7 @@ de:
       artists: Kunstschaffende
       collections: Sammlungen
       collection_categories: Kategorien
+      pictures_of_the_day: Bild des Tages
       tags: Tags
       techniques: Techniken
       users: Benutzer
@@ -814,6 +846,56 @@ de:
         item_added: Medium wurde zur Sammlung hinzugefügt.
         item_removed: Medium wurde aus der Sammlung entfernt.
         item_already_added: Dieses Medium ist bereits in der Sammlung.
+    pictures_of_the_day:
+      index:
+        title: Bild des Tages
+        new_picture: Neues Bild des Tages
+        no_pictures: Keine Bilder des Tages vorhanden.
+        filter:
+          all: Alle
+          upcoming: Geplant
+          today: Heute
+          past: Vergangen
+        table:
+          media_item: Medium
+          display_date: Datum
+          caption: Titel
+          status: Status
+          created_by: Erstellt von
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie dieses Bild des Tages löschen möchten?
+      new:
+        title: Neues Bild des Tages
+      edit:
+        title: Bild des Tages bearbeiten
+      show:
+        title: Bild des Tages
+        back: Zurück zur Übersicht
+        status: Status
+        details: Details
+        display_date: Anzeigedatum
+        caption: Titel
+        description: Beschreibung
+        media_item: Medium
+        created_by: Erstellt von
+        created_at: Erstellt am
+      form:
+        media_item_label: Medium
+        search_media_items: Medien durchsuchen...
+        display_date_label: Anzeigedatum
+        caption_label: Titel (optional)
+        caption_hint: Überschreibt den Titel des Mediums
+        description_label: Beschreibung (optional)
+        description_hint: Überschreibt die Beschreibung des Mediums
+        submit_create: Bild des Tages erstellen
+        submit_update: Bild des Tages speichern
+        cancel: Abbrechen
+      messages:
+        created: Bild des Tages wurde erfolgreich erstellt.
+        updated: Bild des Tages wurde erfolgreich aktualisiert.
+        deleted: Bild des Tages wurde erfolgreich gelöscht.
 
   # Public articles
   articles:
@@ -849,6 +931,18 @@ de:
       biography: Biografie
       cv: Lebenslauf
       works: Werke
+
+  # Public pictures of the day
+  pictures_of_the_day:
+    index:
+      title: Bild des Tages - Archiv
+      no_pictures: Noch keine Bilder des Tages vorhanden.
+    show:
+      back: Zurück zum Archiv
+      artist: Künstler
+      year: Jahr
+      copyright: Copyright
+    not_found: Für dieses Datum gibt es kein Bild des Tages.
 
   # Welcome/Start page
   welcome:

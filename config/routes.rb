@@ -50,6 +50,7 @@ Rails.application.routes.draw do
         patch :activate
       end
     end
+    resources :pictures_of_the_day, path: "bild-des-tages"
   end
 
   # Public articles
@@ -86,5 +87,9 @@ Rails.application.routes.draw do
 
   # Placeholder pages (coming soon)
   get "ausstellungen", to: "welcome#coming_soon", as: :ausstellungen
-  get "bild-der-woche", to: "welcome#coming_soon", as: :bild_der_woche
+
+  # Picture of the Day (Bild des Tages)
+  get "bild-des-tages", to: "pictures_of_the_day#index", as: :pictures_of_the_day
+  get "bild-des-tages/:date", to: "pictures_of_the_day#show", as: :picture_of_the_day,
+                              constraints: { date: /\d{4}-\d{2}-\d{2}/ }
 end

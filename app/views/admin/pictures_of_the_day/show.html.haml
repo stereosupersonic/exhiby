@@ -1,0 +1,65 @@
+- presenter = PictureOfTheDayPresenter.new(@picture_of_the_day)
+.admin-pictures-of-the-day-show{ data: { testid: "admin-pictures-of-the-day-show" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "picture-title" } }= presenter.display_title
+    .btn-group
+      = link_to t("common.edit"), edit_admin_pictures_of_the_day_path(@picture_of_the_day), class: "btn btn-primary", data: { testid: "edit-picture-button" }
+      = link_to t("admin.pictures_of_the_day.show.back"), admin_pictures_of_the_day_index_path, class: "btn btn-outline-secondary"
+
+  .row
+    .col-lg-8
+      - if @picture_of_the_day.media_item.file.attached?
+        .card.mb-4
+          .card-body
+            = image_tag @picture_of_the_day.media_item.file.variant(resize_to_limit: [800, 600]), class: "img-fluid rounded", alt: presenter.display_title
+
+      - if presenter.display_description.present?
+        .card.mb-4
+          .card-header
+            %strong= t("admin.pictures_of_the_day.show.description")
+          .card-body
+            %p{ data: { testid: "picture-description" } }= presenter.display_description
+
+    .col-lg-4
+      .card.mb-4
+        .card-header
+          .d-flex.justify-content-between.align-items-center
+            %strong= t("admin.pictures_of_the_day.show.status")
+            %span.badge{ class: presenter.status_badge_class }
+              = presenter.status_label
+        .card-body
+          %dl.mb-0
+            %dt= t("admin.pictures_of_the_day.show.display_date")
+            %dd{ data: { testid: "display-date" } }= presenter.formatted_display_date
+
+            - if @picture_of_the_day.caption.present?
+              %dt= t("admin.pictures_of_the_day.show.caption")
+              %dd= @picture_of_the_day.caption
+
+      .card.mb-4
+        .card-header
+          %strong= t("admin.pictures_of_the_day.show.media_item")
+        .card-body
+          %dl.mb-0
+            %dt= t("activerecord.attributes.media_item.title")
+            %dd
+              = link_to @picture_of_the_day.media_item.title, admin_media_item_path(@picture_of_the_day.media_item)
+
+            - if @picture_of_the_day.media_item.artist
+              %dt= t("activerecord.attributes.artist.name")
+              %dd= @picture_of_the_day.media_item.artist.name
+
+            - if @picture_of_the_day.media_item.year
+              %dt= t("activerecord.attributes.media_item.year")
+              %dd= @picture_of_the_day.media_item.year
+
+      .card
+        .card-header
+          %strong= t("admin.pictures_of_the_day.show.details")
+        .card-body
+          %dl.mb-0
+            %dt= t("admin.pictures_of_the_day.show.created_by")
+            %dd= presenter.created_by_name
+
+            %dt= t("admin.pictures_of_the_day.show.created_at")
+            %dd= l(@picture_of_the_day.created_at, format: :long)

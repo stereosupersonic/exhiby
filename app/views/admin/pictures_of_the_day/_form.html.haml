@@ -1,0 +1,39 @@
+- form_url = @picture_of_the_day.persisted? ? admin_pictures_of_the_day_path(@picture_of_the_day) : admin_pictures_of_the_day_index_path
+= form_with model: @picture_of_the_day, url: form_url, class: "needs-validation", data: { testid: "picture-of-the-day-form" } do |form|
+  - if @picture_of_the_day.errors.any?
+    .alert.alert-danger
+      %ul.mb-0
+        - @picture_of_the_day.errors.full_messages.each do |message|
+          %li= message
+
+  - media_thumbnail = @picture_of_the_day.media_item&.file&.attached? ? url_for(@picture_of_the_day.media_item.file.variant(resize_to_limit: [100, 100])) : ""
+  .mb-3{ data: { controller: "media-item-selector", "media-item-selector-search-url-value": search_admin_media_items_path(status: "published", type: "image"), "media-item-selector-selected-id-value": @picture_of_the_day.media_item_id.to_i, "media-item-selector-selected-title-value": @picture_of_the_day.media_item&.title.to_s, "media-item-selector-selected-thumbnail-value": media_thumbnail } }
+    = form.label :media_item_id, t("admin.pictures_of_the_day.form.media_item_label"), class: "form-label"
+    = form.hidden_field :media_item_id, data: { "media-item-selector-target": "input" }
+    .position-relative{ data: { "media-item-selector-target": "selected" }, class: (@picture_of_the_day.media_item_id.present? ? "d-none" : "") }
+      %label.visually-hidden{ for: "picture-media-search" }= t("admin.pictures_of_the_day.form.search_media_items")
+      %input#picture-media-search.form-control{ type: "text", placeholder: t("admin.pictures_of_the_day.form.search_media_items"), data: { action: "input->media-item-selector#search", "media-item-selector-target": "search" }, autocomplete: "off" }
+      .position-absolute.bg-white.border.rounded.shadow-sm.w-100.d-none{ style: "z-index: 1000; max-height: 300px; overflow-y: auto;", data: { "media-item-selector-target": "results" } }
+    .mt-2{ data: { "media-item-selector-target": "preview" }, class: (@picture_of_the_day.media_item_id.blank? ? "d-none" : "") }
+    - if @picture_of_the_day.errors[:media_item].any?
+      .invalid-feedback.d-block= @picture_of_the_day.errors[:media_item].first
+
+  .mb-3
+    = form.label :display_date, t("admin.pictures_of_the_day.form.display_date_label"), class: "form-label"
+    = form.date_field :display_date, class: "form-control #{'is-invalid' if @picture_of_the_day.errors[:display_date].any?}", required: true, data: { testid: "display-date" }
+    - if @picture_of_the_day.errors[:display_date].any?
+      .invalid-feedback= @picture_of_the_day.errors[:display_date].first
+
+  .mb-3
+    = form.label :caption, t("admin.pictures_of_the_day.form.caption_label"), class: "form-label"
+    = form.text_field :caption, class: "form-control", data: { testid: "caption" }
+    .form-text= t("admin.pictures_of_the_day.form.caption_hint")
+
+  .mb-3
+    = form.label :description, t("admin.pictures_of_the_day.form.description_label"), class: "form-label"
+    = form.text_area :description, class: "form-control", rows: 4, data: { testid: "description" }
+    .form-text= t("admin.pictures_of_the_day.form.description_hint")
+
+  .d-flex.gap-2
+    = form.submit @picture_of_the_day.persisted? ? t("admin.pictures_of_the_day.form.submit_update") : t("admin.pictures_of_the_day.form.submit_create"), class: "btn btn-primary", data: { testid: "submit-picture" }
+    = link_to t("admin.pictures_of_the_day.form.cancel"), admin_pictures_of_the_day_index_path, class: "btn btn-outline-secondary"

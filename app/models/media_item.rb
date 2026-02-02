@@ -52,6 +52,7 @@ class MediaItem < ApplicationRecord
 
   has_many :media_taggings, dependent: :destroy
   has_many :media_tags, through: :media_taggings
+  has_many :pictures_of_the_day, dependent: :restrict_with_error
 
   has_one_attached :file
 

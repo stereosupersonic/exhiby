@@ -36,7 +36,8 @@ export default class extends Controller {
 
   async performSearch(query) {
     try {
-      const response = await fetch(`${this.searchUrlValue}?q=${encodeURIComponent(query)}`)
+      const separator = this.searchUrlValue.includes("?") ? "&" : "?"
+      const response = await fetch(`${this.searchUrlValue}${separator}q=${encodeURIComponent(query)}`)
       if (!response.ok) throw new Error("Search failed")
 
       const items = await response.json()

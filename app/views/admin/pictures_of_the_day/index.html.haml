@@ -1,0 +1,51 @@
+.admin-pictures-of-the-day{ data: { testid: "admin-pictures-of-the-day" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "pictures-of-the-day-heading" } }= t("admin.pictures_of_the_day.index.title")
+    = link_to t("admin.pictures_of_the_day.index.new_picture"), new_admin_pictures_of_the_day_path, class: "btn btn-primary", data: { testid: "new-picture-button" }
+
+  .card.mb-4
+    .card-body
+      .d-flex.gap-2.flex-wrap
+        = link_to t("admin.pictures_of_the_day.index.filter.all"), admin_pictures_of_the_day_index_path, class: "btn btn-sm #{params[:filter].blank? ? 'btn-primary' : 'btn-outline-primary'}", data: { testid: "filter-all" }
+        = link_to t("admin.pictures_of_the_day.index.filter.today"), admin_pictures_of_the_day_index_path(filter: "today"), class: "btn btn-sm #{params[:filter] == 'today' ? 'btn-primary' : 'btn-outline-primary'}", data: { testid: "filter-today" }
+        = link_to t("admin.pictures_of_the_day.index.filter.upcoming"), admin_pictures_of_the_day_index_path(filter: "upcoming"), class: "btn btn-sm #{params[:filter] == 'upcoming' ? 'btn-primary' : 'btn-outline-primary'}", data: { testid: "filter-upcoming" }
+        = link_to t("admin.pictures_of_the_day.index.filter.past"), admin_pictures_of_the_day_index_path(filter: "past"), class: "btn btn-sm #{params[:filter] == 'past' ? 'btn-primary' : 'btn-outline-primary'}", data: { testid: "filter-past" }
+
+  .card
+    .card-body
+      - if @pictures_of_the_day.any?
+        .table-responsive
+          %table.table.table-hover{ data: { testid: "pictures-of-the-day-table" } }
+            %thead
+              %tr
+                %th= t("admin.pictures_of_the_day.index.table.display_date")
+                %th= t("admin.pictures_of_the_day.index.table.media_item")
+                %th= t("admin.pictures_of_the_day.index.table.caption")
+                %th= t("admin.pictures_of_the_day.index.table.status")
+                %th= t("admin.pictures_of_the_day.index.table.created_by")
+                %th= t("admin.pictures_of_the_day.index.table.actions")
+            %tbody
+              - @pictures_of_the_day.each do |picture|
+                - presenter = PictureOfTheDayPresenter.new(picture)
+                %tr{ data: { testid: "picture-row-#{picture.id}" } }
+                  %td
+                    = link_to presenter.formatted_display_date, admin_pictures_of_the_day_path(picture)
+                  %td
+                    .d-flex.align-items-center.gap-2
+                      - if picture.media_item.file.attached?
+                        = image_tag picture.media_item.file.variant(resize_to_limit: [50, 50]), class: "rounded", alt: picture.media_item.title
+                      = link_to picture.media_item.title, admin_media_item_path(picture.media_item), class: "text-decoration-none"
+                  %td= presenter.display_title
+                  %td
+                    %span.badge{ class: presenter.status_badge_class }
+                      = presenter.status_label
+                  %td= presenter.created_by_name
+                  %td
+                    .d-flex.gap-2
+                      = link_to t("common.edit"), edit_admin_pictures_of_the_day_path(picture), class: "btn btn-sm btn-outline-primary", data: { testid: "edit-picture-#{picture.id}" }
+                      = button_to t("common.delete"), admin_pictures_of_the_day_path(picture), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.pictures_of_the_day.index.actions.delete_confirm"), testid: "delete-picture-#{picture.id}" }
+        = will_paginate @pictures_of_the_day, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-pictures-message" } }
+          %p= t("admin.pictures_of_the_day.index.no_pictures")
+          = link_to t("admin.pictures_of_the_day.index.new_picture"), new_admin_pictures_of_the_day_path, class: "btn btn-primary"

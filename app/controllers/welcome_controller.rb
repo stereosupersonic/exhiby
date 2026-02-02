@@ -3,6 +3,7 @@ class WelcomeController < ApplicationController
 
   def index
     @recent_articles = Article.recent(3)
+    @picture_of_the_day = PictureOfTheDay.current_or_most_recent
   end
 
   def impressum

@@ -8,8 +8,11 @@ module Admin
     end
 
     def search
-      items = accessible_media_items.where(media_type: "image")
-        .search(params[:q])
+      items = accessible_media_items
+      items = items.where(media_type: params[:type]) if params[:type].present?
+      items = items.where(media_type: "image") if params[:type].blank?
+      items = items.where(status: params[:status]) if params[:status].present?
+      items = items.search(params[:q])
         .limit(20)
         .includes(file_attachment: :blob)
 
