@@ -16,6 +16,10 @@
         = link_to new_admin_collection_path, class: "btn btn-outline-primary" do
           %i.bi.bi-folder-plus.me-2
           = t("admin.dashboard.new_collection")
+      - if current_user.admin?
+        = link_to sidekiq_web_path, class: "btn btn-outline-primary" do
+          %i.bi.bi-folder-plus.me-2
+          = t("admin.dashboard.sidekiq")
 
   / Statistics Cards
   .row.mb-4
@@ -258,11 +262,10 @@
         .card.border-danger
           .card-header.bg-danger.text-white
             %h6.mb-0
-              %i.bi.bi-bug.me-2
-              Developer Tools
+              %i.bi.bi-gear.me-2
+              = t("admin.dashboard.developer_tools")
           .card-body
-            %p.text-muted.small.mb-2
-              Test error tracking and exception handling.
-            = link_to admin_root_path(test_exception: true), class: "btn btn-outline-danger btn-sm", data: { turbo: false } do
-              %i.bi.bi-exclamation-triangle.me-1
-              Trigger Test Exception
+            .d-flex.flex-wrap.gap-2
+              = link_to admin_root_path(test_exception: true), class: "btn btn-outline-danger btn-sm", data: { turbo: false } do
+                %i.bi.bi-exclamation-triangle.me-1
+                = t("admin.dashboard.test_exception")

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_21_140412) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_122618) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -136,6 +136,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_140412) do
     t.string "copyright"
     t.datetime "created_at", null: false
     t.text "description"
+    t.jsonb "exif_metadata", default: {}
     t.string "license"
     t.string "media_type", null: false
     t.datetime "published_at"
