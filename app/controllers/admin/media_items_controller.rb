@@ -4,15 +4,16 @@ module Admin
     before_action :authorize_media_item, only: %i[show edit update destroy]
 
     def index
-      @media_items = filtered_media_items.includes(:uploaded_by, :media_tags).recent.page(params[:page])
+      @media_items = MediaItems::SearchQuery.new(accessible_media_items, filter_params)
+        .call
+        .includes(:uploaded_by, :media_tags)
+        .recent
+        .page(params[:page])
     end
 
     def search
-      items = accessible_media_items
-      items = items.where(media_type: params[:type]) if params[:type].present?
-      items = items.where(media_type: "image") if params[:type].blank?
-      items = items.where(status: params[:status]) if params[:status].present?
-      items = items.search(params[:q])
+      items = MediaItems::SearchQuery.new(accessible_media_items, search_params)
+        .call
         .limit(20)
         .includes(file_attachment: :blob)
 
@@ -161,13 +162,14 @@ module Admin
       end
     end
 
-    def filtered_media_items
-      scope = accessible_media_items
-      scope = scope.by_status(params[:status]) if params[:status].present?
-      scope = scope.by_type(params[:media_type]) if params[:media_type].present?
-      scope = scope.by_year(params[:year]) if params[:year].present?
-      scope = scope.search(params[:q]) if params[:q].present?
-      scope
+    def filter_params
+      params.permit(:status, :media_type, :year, :q)
+    end
+
+    def search_params
+      search = params.permit(:status, :type, :q)
+      search[:type] = "image" if search[:type].blank?
+      search
     end
 
     def accessible_media_items
