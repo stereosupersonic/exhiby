@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Welcome Pages" do
+RSpec.describe "Welcome Pages", type: :system do
   describe "start page" do
     it "displays the homepage with all sections" do
       visit root_path

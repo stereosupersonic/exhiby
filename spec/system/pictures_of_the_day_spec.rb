@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Pictures of the Day" do
+RSpec.describe "Pictures of the Day", type: :system do
   describe "archive page" do
     it "displays the archive page" do
       visit pictures_of_the_day_path

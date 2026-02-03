@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Admin Profile" do
+RSpec.describe "Admin Profile", type: :system do
   let(:user) { create(:user, email_address: "user@example.com", password: "password") }
 
   before do

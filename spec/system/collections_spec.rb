@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Public Collections" do
+RSpec.describe "Public Collections", type: :system do
   let!(:category) { create(:collection_category, name: "Historische Ansichtskarten") }
 
   describe "collections index (Land & Leute)" do

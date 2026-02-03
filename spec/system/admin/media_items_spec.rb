@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Admin Media Items" do
+RSpec.describe "Admin Media Items", type: :system do
   let(:admin) { create(:user, :admin) }
   let(:editor) { create(:user, :editor) }
 

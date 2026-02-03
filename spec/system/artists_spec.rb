@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Public Artists" do
+RSpec.describe "Public Artists", type: :system do
   describe "artists listing" do
     it "displays the artists index page" do
       visit artists_path
