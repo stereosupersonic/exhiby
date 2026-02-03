@@ -36,7 +36,7 @@ class PictureOfTheDayPresenter < ApplicationPresenter
   end
 
   def status_badge_class
-    STATUS_BADGE_CLASSES.fetch(status_key, "bg-secondary")
+    STATUS_BADGE_CLASSES.fetch(status_key, "bg-secondary").html_safe
   end
 
   def hero_image_url(size: [ 1200, 600 ])
