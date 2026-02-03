@@ -5,7 +5,12 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      chrome:
+        condition: service_healthy
+    ports:
+      - "3001:3000"
     environment:
+      CAPYBARA_SERVER_PORT: 3001
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_USERNAME: postgres
@@ -14,7 +19,7 @@ services:
       CI: true
       RAILS_LOG_TO_STDOUT: true
     # Chrome/Cuprite configuration
-      CHROME_URL: http://chrome:3333
+      CHROME_URL: http://chrome:4444/wd/hub
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme}
 
@@ -33,20 +38,21 @@ services:
       retries: 5
 
   chrome:
-    image: browserless/chrome:1.31-chrome-stable
+    image: selenium/standalone-chrome-debug:3.141.59
     ports:
-      - 3333:3333
-    # Mount application source code to support file uploading
-    # (otherwise Chrome won't be able to find files).
-    # NOTE: Make sure you use absolute paths in `#attach_file`.
+      - 4444:4444
+      - 7900:7900
+    shm_size: 2gb
     volumes:
-      - .:/app:cached # change it for your rails' container directory
+      - .:/app:cached
     environment:
-      # By default, it uses 3000, which is typically used by Rails.
-      PORT: 3333
-      # Set connection timeout to avoid timeout exception during debugging
-      # https://docs.browserless.io/docs/docker.html#connection-timeout
-      CONNECTION_TIMEOUT: 600000
+      SE_NODE_MAX_SESSIONS: 4
+      SE_NODE_OVERRIDE_MAX_SESSIONS: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   postgres:

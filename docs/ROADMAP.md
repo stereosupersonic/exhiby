@@ -29,6 +29,7 @@ Digital asset handling and organization.
 | Collections | 🟢 | P1 | Collections with categories, ordered items, cover images |
 | Collection Categories | 🟢 | P1 | Hierarchical organization for collections |
 | EXIF Metadata Extraction | 🔴 | P1 | Extract and store metadata (date, camera, GPS, etc.) from uploaded images |
+| ZIP Bulk Import | 🔴 | P1 | Import multiple images via ZIP with CSV metadata (title, description, year, etc.). Attribute priority: CSV → EXIF → filename. Background job with progress bar. Import log tracks attribute sources. |
 | Duplicate Detection | 🔴 | P2 | Detect duplicate images using ruby-vips |
 | AI Tagging | 🔴 | P2 | AWS Rekognition for auto-tagging |
 

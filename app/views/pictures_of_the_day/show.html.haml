@@ -1,0 +1,50 @@
+- presenter = PictureOfTheDayPresenter.new(@picture_of_the_day)
+- content_for :title, presenter.display_title
+- content_for :meta_description, presenter.display_description.presence || t("seo.pages.bild_des_tages.description")
+
+= render "shared/site_header", active: :bild_des_tages
+
+%section.static-page.py-5{ data: { testid: "picture-of-the-day-show" } }
+  .container
+    .mb-4
+      = link_to t("pictures_of_the_day.show.back"), pictures_of_the_day_path, class: "btn btn-outline-secondary btn-sm"
+
+    .row
+      .col-lg-8
+        - if @picture_of_the_day.media_item.file.attached?
+          .card.mb-4
+            = render "shared/zoomable_image",
+              image: @picture_of_the_day.media_item.file.variant(resize_to_limit: [800, 600]),
+              full_image_url: url_for(@picture_of_the_day.media_item.file),
+              title: presenter.display_title,
+              description: presenter.display_description,
+              artist: presenter.artist_name,
+              year: presenter.year&.to_s,
+              image_class: "card-img-top img-fluid"
+
+      .col-lg-4
+        .card.mb-4
+          .card-body
+            %h1.h3.card-title{ data: { testid: "picture-title" } }= presenter.display_title
+            %p.text-muted{ data: { testid: "display-date" } }
+              %i.bi.bi-calendar3.me-2
+              = presenter.formatted_display_date
+
+            - if presenter.display_description.present?
+              %hr
+              %p{ data: { testid: "picture-description" } }= presenter.display_description
+
+            - if presenter.artist_name || presenter.year || presenter.copyright
+              %hr
+              %dl.mb-0
+                - if presenter.artist_name
+                  %dt= t("pictures_of_the_day.show.artist")
+                  %dd= presenter.artist_name
+
+                - if presenter.year
+                  %dt= t("pictures_of_the_day.show.year")
+                  %dd= presenter.year
+
+                - if presenter.copyright
+                  %dt= t("pictures_of_the_day.show.copyright")
+                  %dd= presenter.copyright

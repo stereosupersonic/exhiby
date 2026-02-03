@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Admin Users" do
+RSpec.describe "Admin Users", type: :system do
   let(:admin) { create(:user, :admin) }
 
   before do

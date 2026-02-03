@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Authentication" do
+RSpec.describe "Authentication", type: :system do
   describe "sign in" do
     let!(:user) { create(:user, :admin, email_address: "admin@example.com", password: "password") }
 

@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Search" do
+RSpec.describe "Search", type: :system do
   describe "search page" do
     it "displays the search page with form" do
       visit search_path

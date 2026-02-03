@@ -1,0 +1,33 @@
+- content_for :title, t("pictures_of_the_day.index.title")
+- content_for :meta_description, t("seo.pages.bild_des_tages.index.description")
+
+= render "shared/site_header", active: :bild_des_tages
+
+%section.static-page.py-5{ data: { testid: "pictures-of-the-day-archive" } }
+  .container
+    %h1.page-title.text-center.mb-5= t("pictures_of_the_day.index.title")
+
+    - if @pictures_of_the_day.any?
+      .row.g-4
+        - @pictures_of_the_day.each do |picture|
+          - presenter = PictureOfTheDayPresenter.new(picture)
+          .col-md-6.col-lg-4
+            .card.h-100{ data: { testid: "picture-card-#{picture.display_date}" } }
+              - if picture.media_item.file.attached?
+                = link_to picture_of_the_day_path(date: picture.display_date) do
+                  = image_tag presenter.thumbnail_url, class: "card-img-top", alt: presenter.display_title
+              .card-body
+                %h5.card-title
+                  = link_to presenter.display_title, picture_of_the_day_path(date: picture.display_date), class: "text-decoration-none"
+                %p.card-text.text-muted
+                  %small= presenter.formatted_display_date
+                - if presenter.display_description.present?
+                  %p.card-text= truncate(presenter.display_description, length: 100)
+              .card-footer.bg-transparent.border-top-0
+                = link_to t("articles.index.read_more"), picture_of_the_day_path(date: picture.display_date), class: "btn btn-sm btn-outline-primary"
+
+      .d-flex.justify-content-center.mt-4
+        = will_paginate @pictures_of_the_day, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+    - else
+      .text-center.text-muted.py-5{ data: { testid: "no-pictures-message" } }
+        %p= t("pictures_of_the_day.index.no_pictures")

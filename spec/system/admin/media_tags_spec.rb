@@ -1,4 +1,4 @@
-require "rails_helper"
+require "capybara_helper"
 
 RSpec.describe "Admin Media Tags", type: :system do
   let(:admin) { create(:user, :admin) }

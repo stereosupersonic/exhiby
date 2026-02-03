@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Welcome Pages" do
+RSpec.describe "Welcome Pages", type: :system do
   describe "start page" do
     it "displays the homepage with all sections" do
       visit root_path
@@ -38,7 +38,7 @@ RSpec.describe "Welcome Pages" do
         expect(page).to have_selector("[data-testid='nav-land-leute']", text: "Land & Leute")
         expect(page).to have_selector("[data-testid='nav-ausstellungen']", text: "Ausstellungen")
         expect(page).to have_selector("[data-testid='nav-team']", text: "Team")
-        expect(page).to have_selector("[data-testid='nav-bild-der-woche']", text: "Bild der Woche")
+        expect(page).to have_selector("[data-testid='nav-bild-des-tages']", text: "Bild des Tages")
         expect(page).to have_selector("[data-testid='nav-archiv']", text: "Archiv")
       end
     end
@@ -225,12 +225,6 @@ RSpec.describe "Welcome Pages" do
   describe "coming soon pages" do
     it "displays coming soon page for Ausstellungen" do
       visit ausstellungen_path
-
-      expect(page).to have_selector("[data-testid='coming-soon-page']")
-    end
-
-    it "displays coming soon page for Bild der Woche" do
-      visit bild_der_woche_path
 
       expect(page).to have_selector("[data-testid='coming-soon-page']")
     end

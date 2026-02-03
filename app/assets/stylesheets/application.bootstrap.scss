@@ -329,6 +329,31 @@ $text-orange: #ff6600;
       }
     }
   }
+
+  &.hero-section-picture-of-the-day {
+    .hero-overlay {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-picture-info {
+      margin-top: 1.5rem;
+
+      .hero-picture-link {
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+          opacity: 0.9;
+        }
+
+        .badge {
+          font-size: 0.9rem;
+          padding: 0.5rem 1rem;
+        }
+      }
+    }
+  }
 }
 
 // Welcome Section

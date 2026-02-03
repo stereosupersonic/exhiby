@@ -3,14 +3,27 @@
 
 = render "shared/site_header", active: :willkommen
 
--# Hero Section with Background Image
-%section.hero-section{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "hero-section" } }
-  .hero-overlay
-    .container
-      %h1.hero-title
-        OnlineMuseum Wartenberg –
-        %br
-        ein Ort für Kunst und Kulturgeschichte
+-# Hero Section with Picture of the Day or Default Background
+- if @picture_of_the_day && @picture_of_the_day.media_item.file.attached?
+  - picture_presenter = PictureOfTheDayPresenter.new(@picture_of_the_day)
+  %section.hero-section.hero-section-picture-of-the-day{ style: "background-image: url('#{url_for(picture_presenter.hero_image_url)}')", data: { testid: "hero-section-picture-of-the-day" } }
+    .hero-overlay
+      .container
+        %h1.hero-title= picture_presenter.display_title
+        .hero-picture-info
+          = link_to pictures_of_the_day_path, class: "hero-picture-link" do
+            %span.badge.bg-light.text-dark
+              %i.bi.bi-calendar3.me-1
+              Bild des Tages
+              = picture_presenter.formatted_display_date_short
+- else
+  %section.hero-section{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "hero-section" } }
+    .hero-overlay
+      .container
+        %h1.hero-title
+          OnlineMuseum Wartenberg –
+          %br
+          ein Ort für Kunst und Kulturgeschichte
 
 -# Welcome Content
 %section.welcome-section{ data: { testid: "welcome-section" } }

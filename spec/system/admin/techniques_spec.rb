@@ -1,4 +1,4 @@
-require "rails_helper"
+require "capybara_helper"
 
 RSpec.describe "Admin Techniques", type: :system do
   let(:admin) { create(:user, :admin) }

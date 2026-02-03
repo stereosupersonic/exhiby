@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Admin Collections" do
+RSpec.describe "Admin Collections", type: :system do
   let(:admin) { create(:user, :admin) }
   let!(:category) { create(:collection_category, name: "Historische Bilder") }
 

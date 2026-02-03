@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Password Reset" do
+RSpec.describe "Password Reset", type: :system do
   let(:user) { create(:user, email_address: "test@example.com") }
 
   describe "requesting password reset" do

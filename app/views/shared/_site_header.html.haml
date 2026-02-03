@@ -59,5 +59,5 @@
     .nav-row.nav-row-secondary
       = link_to "Ausstellungen", ausstellungen_path, class: "nav-pill#{' active' if local_assigns[:active] == :ausstellungen}", data: { testid: "nav-ausstellungen" }
       = link_to "Team", team_path, class: "nav-pill#{' active' if local_assigns[:active] == :team}", data: { testid: "nav-team" }
-      = link_to "Bild der Woche", bild_der_woche_path, class: "nav-pill#{' active' if local_assigns[:active] == :bild_der_woche}", data: { testid: "nav-bild-der-woche" }
+      = link_to "Bild des Tages", pictures_of_the_day_path, class: "nav-pill#{' active' if local_assigns[:active] == :bild_des_tages}", data: { testid: "nav-bild-des-tages" }
       = link_to "Archiv", articles_path, class: "nav-pill#{' active' if local_assigns[:active] == :archiv}", data: { testid: "nav-archiv" }

@@ -1,6 +1,6 @@
-require "rails_helper"
+require "capybara_helper"
 
-RSpec.describe "Public Articles" do
+RSpec.describe "Public Articles", type: :system do
   describe "articles listing" do
     it "displays the articles index page" do
       visit articles_path
