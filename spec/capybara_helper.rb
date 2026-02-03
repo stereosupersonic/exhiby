@@ -7,17 +7,17 @@ RSpec.configure do |config|
   Capybara.default_max_wait_time = 10 # The maximum number of seconds to wait for asynchronous processes to finish.
   Capybara.default_normalize_ws = true # match DOM Elements with text spanning over multiple line
 
-  if ENV["SELENIUM_URL"]
-    Capybara.server_host = ENV.fetch("CAPYBARA_SERVER_HOST", "127.0.0.1")
-    Capybara.server_port = ENV.fetch("CAPYBARA_SERVER_PORT", "300")
-    Capybara.app_host = ENV.fetch("CAPYBARA_APP_HOST", "http://#{Capybara.server_host}:#{Capybara.server_port}")
+  if ENV["CHROME_URL"]
+    Capybara.server_host = "0.0.0.0"
+    Capybara.server_port = 3001
+    Capybara.app_host = "http://app:#{Capybara.server_port}"
 
     require "selenium/webdriver"
 
     Capybara.register_driver :selenium_remote do |app|
       options = Selenium::WebDriver::Chrome::Options.new
       options.add_argument("--disable-dev-shm-usage")
-      options.add_argument("--headless")
+      options.add_argument("--headless=new")
       options.add_argument("--start-maximized")
       options.add_argument("--window-size=1600,1400")
       options.add_argument("--disable-extensions")
@@ -27,7 +27,7 @@ RSpec.configure do |config|
 
       Capybara::Selenium::Driver.new(app,
                                      browser: :remote,
-                                     url: ENV["SELENIUM_URL"],
+                                     url: ENV["CHROME_URL"],
                                      options: options)
     end
 
