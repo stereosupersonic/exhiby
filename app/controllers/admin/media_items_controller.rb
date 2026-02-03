@@ -4,7 +4,7 @@ module Admin
     before_action :authorize_media_item, only: %i[show edit update destroy]
 
     def index
-      @media_items = MediaItemsFinder.new(relation: accessible_media_items, **filter_params.to_h.symbolize_keys)
+      @media_items = MediaItemsFinder.new(relation: accessible_media_items, **filter_params)
         .call
         .includes(:uploaded_by, :media_tags)
         .recent
@@ -12,7 +12,7 @@ module Admin
     end
 
     def search
-      items = MediaItemsFinder.new(relation: accessible_media_items, **search_params.to_h.symbolize_keys)
+      items = MediaItemsFinder.new(relation: accessible_media_items, **search_params)
         .call
         .limit(20)
         .includes(file_attachment: :blob)
@@ -163,7 +163,7 @@ module Admin
     end
 
     def filter_params
-      params.permit(:status, :media_type, :year, :q)
+      params.permit(:status, :media_type, :year, :q).to_h.symbolize_keys
     end
 
     def search_params

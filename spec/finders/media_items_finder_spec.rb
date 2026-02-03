@@ -69,7 +69,7 @@ RSpec.describe MediaItemsFinder do
       it "applies all filters together" do
         result = described_class.new(status: "published", media_type: "image", year: 2023).call
 
-        expect(result).to eq([published_image])
+        expect(result).to eq([ published_image ])
       end
 
       it "returns empty when no items match all filters" do
@@ -84,7 +84,7 @@ RSpec.describe MediaItemsFinder do
         base_relation = MediaItem.where(media_type: "image")
         result = described_class.new(relation: base_relation, status: "published").call
 
-        expect(result).to eq([published_image])
+        expect(result).to eq([ published_image ])
       end
     end
 
