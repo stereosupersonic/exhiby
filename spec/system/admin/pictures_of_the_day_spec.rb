@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin Pictures of the Day" do
+RSpec.describe "Admin Pictures of the Day", type: :system do
   let(:admin) { create(:user, :admin) }
 
   before do
