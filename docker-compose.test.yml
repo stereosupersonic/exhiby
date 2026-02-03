@@ -12,7 +12,6 @@ services:
       DATABASE_PASSWORD: postgres
       RAILS_ENV: test
       CI: true
-      SELENIUM_URL: http://chrome:3333/wd/hub
       RAILS_LOG_TO_STDOUT: true
     # Chrome/Cuprite configuration
       CHROME_URL: http://chrome:3333
