@@ -1,26 +1,209 @@
 {
   "ignored_warnings": [
     {
-      "fingerprint": "bd4cc6bdb83bb1478ae667941fdee9753c64cd17d898ddf0e501bf033ae9d76e",
-      "note": "False positive: status_badge_class returns only hardcoded Bootstrap class strings based on validated article status (draft/published)"
-    },
-    {
-      "fingerprint": "2c498c7548e094983cf747a0aedacb8c612d5eec3d7e050a24f014ee0cd627e3",
-      "note": "False positive: ArtistPresenter#status_badge_class returns only hardcoded Bootstrap class strings from STATUS_BADGE_CLASSES hash"
-    },
-    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "0179a5c1c14091cf224bfc946e799a3274e12024ab184150bae2d0dcd9dd24e3",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/collections/show.html.haml",
+      "line": 29,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"badge fs-6\", CollectionPresenter.new(Collection.find_by!(:slug => params[:id])).status_badge_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::CollectionsController",
+          "method": "show",
+          "line": 11,
+          "file": "app/controllers/admin/collections_controller.rb",
+          "rendered": {
+            "name": "admin/collections/show",
+            "file": "app/views/admin/collections/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/collections/show"
+      },
+      "user_input": "Collection.find_by!(:slug => params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
       "note": "False positive: CollectionPresenter#status_badge_class returns only hardcoded Bootstrap class strings from STATUS_BADGE_CLASSES hash"
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "2c498c7548e094983cf747a0aedacb8c612d5eec3d7e050a24f014ee0cd627e3",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/artists/show.html.haml",
+      "line": 59,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"badge fs-6\", ArtistPresenter.new(Artist.find_by!(:slug => params[:id])).status_badge_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::ArtistsController",
+          "method": "show",
+          "line": 11,
+          "file": "app/controllers/admin/artists_controller.rb",
+          "rendered": {
+            "name": "admin/artists/show",
+            "file": "app/views/admin/artists/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/artists/show"
+      },
+      "user_input": "Artist.find_by!(:slug => params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": "False positive: ArtistPresenter#status_badge_class returns only hardcoded Bootstrap class strings from STATUS_BADGE_CLASSES hash"
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "336bf6f89ebe2a7a7c7e0165a055c74e048934081a1d90e6f60a430c29f913a7",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/pictures_of_the_day/show.html.haml",
+      "line": 28,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"badge\", PictureOfTheDayPresenter.new(PictureOfTheDay.find(params[:id])).status_badge_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::PicturesOfTheDayController",
+          "method": "show",
+          "line": 11,
+          "file": "app/controllers/admin/pictures_of_the_day_controller.rb",
+          "rendered": {
+            "name": "admin/pictures_of_the_day/show",
+            "file": "app/views/admin/pictures_of_the_day/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/pictures_of_the_day/show"
+      },
+      "user_input": "PictureOfTheDay.find(params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "6936e0d612ebe4cb9c0d8633b43220a8fc7e9d05934a25197808ba037756b13d",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/media_items/show.html.haml",
+      "line": 41,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"badge fs-6\", MediaItemPresenter.new(MediaItem.find(params[:id])).status_badge_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::MediaItemsController",
+          "method": "show",
+          "line": 47,
+          "file": "app/controllers/admin/media_items_controller.rb",
+          "rendered": {
+            "name": "admin/media_items/show",
+            "file": "app/views/admin/media_items/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/media_items/show"
+      },
+      "user_input": "MediaItem.find(params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
       "note": "False positive: MediaItemPresenter#status_badge_class returns only hardcoded Bootstrap class strings from STATUS_BADGE_CLASSES hash"
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "bd4cc6bdb83bb1478ae667941fdee9753c64cd17d898ddf0e501bf033ae9d76e",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/articles/show.html.haml",
+      "line": 17,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"badge\", ArticlePresenter.new(Article.find_by!(:slug => params[:id])).status_badge_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::ArticlesController",
+          "method": "show",
+          "line": 10,
+          "file": "app/controllers/admin/articles_controller.rb",
+          "rendered": {
+            "name": "admin/articles/show",
+            "file": "app/views/admin/articles/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/articles/show"
+      },
+      "user_input": "Article.find_by!(:slug => params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": "False positive: status_badge_class returns only hardcoded Bootstrap class strings based on validated article status (draft/published)"
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "c327f298be156f2f4369d59f84434621e2f6cec96915f7e3b825d002d5c08ab3",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/media_items/show.html.haml",
+      "line": 62,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"badge\", MediaItemPresenter.new(MediaItem.find(params[:id])).media_type_badge_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::MediaItemsController",
+          "method": "show",
+          "line": 47,
+          "file": "app/controllers/admin/media_items_controller.rb",
+          "rendered": {
+            "name": "admin/media_items/show",
+            "file": "app/views/admin/media_items/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/media_items/show"
+      },
+      "user_input": "MediaItem.find(params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
       "note": "False positive: MediaItemPresenter#media_type_badge_class returns only hardcoded Bootstrap class strings from MEDIA_TYPE_BADGE_CLASSES hash"
     }
   ],
-  "updated": "2026-01-21 16:25:00 +0100",
-  "brakeman_version": "7.1.2"
+  "brakeman_version": "8.0.1"
 }
