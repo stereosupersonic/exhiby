@@ -105,7 +105,7 @@ RSpec.describe BulkImport do
         old_import = create(:bulk_import, created_at: 2.days.ago)
         new_import = create(:bulk_import, created_at: 1.day.ago)
 
-        expect(described_class.recent).to eq([new_import, old_import])
+        expect(described_class.recent).to eq([ new_import, old_import ])
       end
     end
   end

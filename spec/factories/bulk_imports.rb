@@ -70,7 +70,7 @@ FactoryBot.define do
           { filename: "image2.jpg", success: true, media_item_id: 2, attribute_sources: { title: "exif" } },
           { filename: "image3.jpg", success: true, media_item_id: 3, attribute_sources: { title: "filename" } },
           { filename: "image4.jpg", success: true, media_item_id: 4, attribute_sources: { title: "csv" } },
-          { filename: "image5.jpg", success: false, errors: ["Invalid file type"] }
+          { filename: "image5.jpg", success: false, errors: [ "Invalid file type" ] }
         ]
       end
     end
@@ -79,7 +79,7 @@ FactoryBot.define do
       status { "failed" }
       started_at { 2.minutes.ago }
       completed_at { 1.minute.ago }
-      error_messages { ["ZIP file extraction failed"] }
+      error_messages { [ "ZIP file extraction failed" ] }
     end
   end
 end
