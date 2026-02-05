@@ -56,7 +56,7 @@ RUN gem install bundler -v 4.0.4 && \
 
 # Install node modules
 COPY package.json yarn.lock ./
-RUN yarn cache clean && yarn install --immutable --verbose
+RUN yarn cache clean && yarn install --immutable --verbose --network-timeout 1000000
 
 # Copy application code
 COPY . .
