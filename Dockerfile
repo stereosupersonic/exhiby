@@ -56,7 +56,7 @@ RUN gem install bundler -v 4.0.4 && \
 
 # Install node modules
 COPY package.json yarn.lock ./
-RUN yarn install --immutable
+RUN yarn cache clean && yarn install --immutable --verbose
 
 # Copy application code
 COPY . .
