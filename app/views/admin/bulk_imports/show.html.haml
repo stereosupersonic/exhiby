@@ -1,4 +1,5 @@
-.admin-bulk-imports-show{ data: { testid: "admin-bulk-imports-show", controller: "bulk-import-progress", "bulk-import-progress-url-value": progress_admin_bulk_import_path(@bulk_import), "bulk-import-progress-completed-value": @presenter.completed? || @presenter.failed? } }
+- status_labels = { pending: t("bulk_import_statuses.pending"), processing: t("bulk_import_statuses.processing"), completed: t("bulk_import_statuses.completed"), failed: t("bulk_import_statuses.failed") }
+.admin-bulk-imports-show{ data: { testid: "admin-bulk-imports-show", controller: "bulk-import-progress", "bulk-import-progress-url-value": progress_admin_bulk_import_path(@bulk_import), "bulk-import-progress-completed-value": @presenter.completed? || @presenter.failed?, "bulk-import-progress-status-labels-value": status_labels.to_json } }
   .d-flex.justify-content-between.align-items-center.mb-4
     %h1{ data: { testid: "bulk-import-heading" } }= t("admin.bulk_imports.show.title")
     .d-flex.gap-2

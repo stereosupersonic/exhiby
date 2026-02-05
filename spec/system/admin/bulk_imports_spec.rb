@@ -18,7 +18,7 @@ RSpec.describe "Admin Bulk Imports", type: :system do
       visit admin_bulk_imports_path
 
       expect(page).to have_selector("[data-testid='admin-bulk-imports']")
-      expect(page).to have_selector("[data-testid='bulk-imports-heading']", text: "Massenimport")
+      expect(page).to have_selector("[data-testid='bulk-imports-heading']", text: I18n.t("admin.bulk_imports.index.title"))
     end
 
     it "shows existing imports" do
@@ -50,7 +50,7 @@ RSpec.describe "Admin Bulk Imports", type: :system do
     it "shows the new import form" do
       visit new_admin_bulk_import_path
 
-      expect(page).to have_selector("[data-testid='new-bulk-import-heading']", text: "Neuer Massenimport")
+      expect(page).to have_selector("[data-testid='new-bulk-import-heading']", text: I18n.t("admin.bulk_imports.new.title"))
       expect(page).to have_selector("[data-testid='bulk-import-form']")
     end
 
@@ -134,7 +134,7 @@ RSpec.describe "Admin Bulk Imports", type: :system do
     it "shows bulk imports link in admin navigation" do
       visit admin_root_path
 
-      expect(page).to have_link("Massenimport", href: admin_bulk_imports_path)
+      expect(page).to have_link(I18n.t("admin.navigation.bulk_imports"), href: admin_bulk_imports_path)
     end
   end
 

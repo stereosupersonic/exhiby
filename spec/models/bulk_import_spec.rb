@@ -7,10 +7,10 @@
 #  error_messages     :jsonb            not null
 #  failed_imports     :integer          default(0), not null
 #  import_log         :jsonb            not null
-#  import_type        :string           default("zip"), not null
+#  import_type        :text             default("zip"), not null
 #  processed_files    :integer          default(0), not null
 #  started_at         :datetime
-#  status             :string           default("pending"), not null
+#  status             :text             default("pending"), not null
 #  successful_imports :integer          default(0), not null
 #  total_files        :integer          default(0), not null
 #  created_at         :datetime         not null

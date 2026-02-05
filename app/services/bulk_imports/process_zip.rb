@@ -39,7 +39,7 @@ module BulkImports
 
       temp_file = Tempfile.new([ "bulk_import", ".zip" ], binmode: true)
       temp_file.write(bulk_import.file.download)
-      temp_file.rewind
+      temp_file.close
       temp_file.path
     end
 

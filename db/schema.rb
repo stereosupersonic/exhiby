@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_131526) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_05_084932) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -95,10 +95,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_131526) do
     t.jsonb "error_messages", default: [], null: false
     t.integer "failed_imports", default: 0, null: false
     t.jsonb "import_log", default: [], null: false
-    t.string "import_type", default: "zip", null: false
+    t.text "import_type", default: "zip", null: false
     t.integer "processed_files", default: 0, null: false
     t.datetime "started_at"
-    t.string "status", default: "pending", null: false
+    t.text "status", default: "pending", null: false
     t.integer "successful_imports", default: 0, null: false
     t.integer "total_files", default: 0, null: false
     t.datetime "updated_at", null: false

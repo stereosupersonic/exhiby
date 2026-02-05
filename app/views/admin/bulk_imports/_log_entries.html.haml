@@ -24,8 +24,8 @@
             %td
               - if entry.success? && entry.attribute_sources.any?
                 - entry.attribute_sources.each do |attr, source|
-                  %span.badge.me-1{ class: BulkImportPresenter.new(nil).source_badge_class(source), title: I18n.t("activerecord.attributes.media_item.#{attr}") }
-                    = "#{I18n.t("activerecord.attributes.media_item.#{attr}", default: attr.to_s.titleize)}: #{I18n.t("bulk_import_sources.#{source}")}"
+                  %span.badge.me-1{ class: BulkImportPresenter.source_badge_class(source), title: I18n.t("activerecord.attributes.media_item.#{attr}") }
+                    = "#{I18n.t("activerecord.attributes.media_item.#{attr}", default: attr.to_s.titleize)}: #{BulkImportPresenter.source_name(source)}"
               - elsif entry.errors.any?
                 .small.text-danger
                   = entry.errors.join(", ")

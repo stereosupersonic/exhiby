@@ -54,6 +54,30 @@ RSpec.describe BulkImportPresenter do
     end
   end
 
+  describe ".source_badge_class" do
+    it "returns correct class for csv" do
+      expect(described_class.source_badge_class("csv")).to eq("bg-primary")
+    end
+
+    it "returns correct class for exif" do
+      expect(described_class.source_badge_class("exif")).to eq("bg-info")
+    end
+
+    it "returns correct class for filename" do
+      expect(described_class.source_badge_class("filename")).to eq("bg-secondary")
+    end
+
+    it "returns default class for unknown source" do
+      expect(described_class.source_badge_class("unknown")).to eq("bg-secondary")
+    end
+  end
+
+  describe ".source_name" do
+    it "returns translated source name" do
+      expect(described_class.source_name("csv")).to eq(I18n.t("bulk_import_sources.csv"))
+    end
+  end
+
   describe "#creator_name" do
     it "returns email of creator" do
       expect(presenter.creator_name).to eq(user.email_address)
@@ -220,8 +244,8 @@ RSpec.describe BulkImportPresenter do
       end
 
       it "returns errors array" do
-        failed_entry = described_class.new(errors: ["Error 1", "Error 2"])
-        expect(failed_entry.errors).to eq(["Error 1", "Error 2"])
+        failed_entry = described_class.new(errors: [ "Error 1", "Error 2" ])
+        expect(failed_entry.errors).to eq([ "Error 1", "Error 2" ])
       end
     end
 

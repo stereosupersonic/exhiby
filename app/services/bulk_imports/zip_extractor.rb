@@ -4,7 +4,6 @@ module BulkImports
   class ZipExtractor < BaseService
     MAX_EXTRACTED_SIZE = 2.gigabytes
     MAX_COMPRESSION_RATIO = 100
-    ALLOWED_CONTENT_TYPES = %w[image/jpeg image/png image/gif image/webp image/tiff image/bmp].freeze
     IGNORED_PATTERNS = [
       /^__MACOSX\//,
       /\.DS_Store$/,

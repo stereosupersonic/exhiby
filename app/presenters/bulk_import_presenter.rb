@@ -21,10 +21,18 @@ class BulkImportPresenter < ApplicationPresenter
   end
 
   def source_badge_class(source)
-    SOURCE_BADGE_CLASSES.fetch(source.to_s, "bg-secondary")
+    self.class.source_badge_class(source)
   end
 
   def source_name(source)
+    self.class.source_name(source)
+  end
+
+  def self.source_badge_class(source)
+    SOURCE_BADGE_CLASSES.fetch(source.to_s, "bg-secondary")
+  end
+
+  def self.source_name(source)
     I18n.t("bulk_import_sources.#{source}")
   end
 

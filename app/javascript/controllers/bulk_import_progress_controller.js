@@ -14,7 +14,9 @@ export default class extends Controller {
   static values = {
     url: String,
     completed: { type: Boolean, default: false },
-    interval: { type: Number, default: 2000 }
+    interval: { type: Number, default: 2000 },
+    statusLabels: { type: Object, default: {} },
+    statusClasses: { type: Object, default: {} }
   }
 
   connect() {
@@ -99,22 +101,19 @@ export default class extends Controller {
   }
 
   updateStatusBadge(status) {
-    const statusClasses = {
+    const defaultClasses = {
       pending: "bg-secondary",
       processing: "bg-info",
       completed: "bg-success",
       failed: "bg-danger"
     }
 
-    const statusLabels = {
-      pending: "Ausstehend",
-      processing: "Wird verarbeitet",
-      completed: "Abgeschlossen",
-      failed: "Fehlgeschlagen"
-    }
+    const statusClasses = { ...defaultClasses, ...this.statusClassesValue }
+    const badgeClass = statusClasses[status] || "bg-secondary"
+    const labelText = this.statusLabelsValue[status] || status
 
-    this.statusTarget.className = `badge ${statusClasses[status] || "bg-secondary"}`
-    this.statusTarget.textContent = statusLabels[status] || status
+    this.statusTarget.className = `badge ${badgeClass}`
+    this.statusTarget.textContent = labelText
   }
 
   reloadPage() {

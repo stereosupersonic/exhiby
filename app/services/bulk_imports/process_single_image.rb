@@ -14,8 +14,9 @@ module BulkImports
       validate_file!
 
       file = File.open(file_path)
-      media_item = build_media_item(file)
-      attribute_sources = track_attribute_sources(media_item)
+      exif_data = extract_exif_metadata
+      media_item = build_media_item(file, exif_data)
+      attribute_sources = track_attribute_sources(media_item, exif_data)
 
       if media_item.save
         {
@@ -53,7 +54,7 @@ module BulkImports
       end
     end
 
-    def build_media_item(file)
+    def build_media_item(file, exif_data)
       media_item = MediaItem.new(
         uploaded_by: user,
         bulk_import: bulk_import,
@@ -67,7 +68,6 @@ module BulkImports
         content_type: Marcel::MimeType.for(Pathname.new(file_path))
       )
 
-      exif_data = extract_exif_metadata
       apply_attributes(media_item, exif_data)
 
       media_item
@@ -144,9 +144,9 @@ module BulkImports
       end
     end
 
-    def track_attribute_sources(media_item)
+    def track_attribute_sources(media_item, exif_data)
       sources = {}
-      suggested = extract_exif_metadata[:suggested_values] || {}
+      suggested = exif_data[:suggested_values] || {}
 
       sources[:title] = attribute_source(:title, suggested)
       sources[:description] = attribute_source(:description, suggested) if media_item.description.present?
