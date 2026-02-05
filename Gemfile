@@ -53,6 +53,12 @@ gem "exception_notification", "~> 5.0"
 
 # Background job processing [https://github.com/sidekiq/sidekiq]
 gem "sidekiq", "~> 7.3"
+
+# ZIP file processing for bulk imports [https://github.com/rubyzip/rubyzip]
+gem "rubyzip", "~> 2.3"
+
+# CSV processing (standard library until Ruby 3.4)
+gem "csv"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"

@@ -1,0 +1,50 @@
+.admin-bulk-imports{ data: { testid: "admin-bulk-imports" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "bulk-imports-heading" } }= t("admin.bulk_imports.index.title")
+    = link_to t("admin.bulk_imports.index.new_import"), new_admin_bulk_import_path, class: "btn btn-primary", data: { testid: "new-bulk-import-button" }
+
+  .card
+    .card-body
+      - if @bulk_imports.any?
+        .table-responsive
+          %table.table.table-hover{ data: { testid: "bulk-imports-table" } }
+            %thead
+              %tr
+                %th= t("admin.bulk_imports.index.table.file")
+                %th= t("admin.bulk_imports.index.table.status")
+                %th= t("admin.bulk_imports.index.table.progress")
+                %th= t("admin.bulk_imports.index.table.created_by")
+                %th= t("admin.bulk_imports.index.table.created_at")
+                %th= t("admin.bulk_imports.index.table.actions")
+            %tbody
+              - @bulk_imports.each do |bulk_import|
+                - presenter = BulkImportPresenter.new(bulk_import)
+                %tr{ data: { testid: "bulk-import-row-#{bulk_import.id}" } }
+                  %td
+                    - if bulk_import.file.attached?
+                      %i.bi.bi-file-earmark-zip.me-2
+                      = link_to bulk_import.file.filename, admin_bulk_import_path(bulk_import)
+                    - else
+                      = link_to "##{bulk_import.id}", admin_bulk_import_path(bulk_import)
+                  %td
+                    %span.badge{ class: presenter.status_badge_class }
+                      = presenter.status_name
+                  %td
+                    .progress{ style: "height: 20px;" }
+                      .progress-bar{ class: presenter.progress_bar_class, style: "width: #{presenter.progress_percentage}%", role: "progressbar", "aria-valuenow": presenter.progress_percentage, "aria-valuemin": "0", "aria-valuemax": "100" }
+                        = "#{presenter.progress_percentage}%"
+                    .small.text-muted.mt-1
+                      = t("admin.bulk_imports.index.progress_detail", successful: bulk_import.successful_imports, failed: bulk_import.failed_imports, total: bulk_import.total_files)
+                  %td= presenter.creator_name
+                  %td= l(bulk_import.created_at, format: :short)
+                  %td
+                    .d-flex.gap-2
+                      = link_to t("common.view"), admin_bulk_import_path(bulk_import), class: "btn btn-sm btn-outline-primary"
+                      - unless bulk_import.processing?
+                        = button_to t("common.delete"), admin_bulk_import_path(bulk_import), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: t("admin.bulk_imports.index.actions.delete_confirm") }
+
+        = will_paginate @bulk_imports, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+      - else
+        .text-center.text-muted.py-4{ data: { testid: "no-bulk-imports-message" } }
+          %p= t("admin.bulk_imports.index.no_imports")
+          = link_to t("admin.bulk_imports.index.new_import"), new_admin_bulk_import_path, class: "btn btn-primary"

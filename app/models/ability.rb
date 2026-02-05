@@ -23,6 +23,10 @@ class Ability
     can %i[read update destroy], MediaItem, uploaded_by_id: user.id
     can :submit_for_review, MediaItem, uploaded_by_id: user.id, status: "draft"
 
+    # All authenticated users can create bulk imports and manage their own
+    can :create, BulkImport
+    can %i[read destroy], BulkImport, created_by_id: user.id
+
     if user.admin?
       can :manage, :all
     elsif user.editor?
@@ -37,6 +41,7 @@ class Ability
       can :manage, Collection
       can :manage, CollectionItem
       can :manage, PictureOfTheDay
+      can :manage, BulkImport
       can %i[publish reject unpublish], MediaItem
       can %i[publish unpublish], Artist
       can %i[publish unpublish], Collection

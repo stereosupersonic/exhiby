@@ -1,0 +1,83 @@
+.admin-bulk-imports-new{ data: { testid: "admin-bulk-imports-new" } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "new-bulk-import-heading" } }= t("admin.bulk_imports.new.title")
+
+  .row
+    .col-lg-8
+      .card
+        .card-body
+          = form_with model: [:admin, @bulk_import], html: { class: "needs-validation" }, data: { testid: "bulk-import-form" } do |f|
+            - if @bulk_import.errors.any?
+              .alert.alert-danger
+                %ul.mb-0
+                  - @bulk_import.errors.full_messages.each do |message|
+                    %li= message
+
+            .mb-3
+              = f.label :file, t("admin.bulk_imports.form.file_label"), class: "form-label"
+              = f.file_field :file, class: "form-control", accept: ".zip", required: true, data: { testid: "bulk-import-file-input" }
+              .form-text= t("admin.bulk_imports.form.file_hint")
+
+            = f.hidden_field :import_type, value: "zip"
+
+            .d-flex.gap-2
+              = f.submit t("admin.bulk_imports.form.submit"), class: "btn btn-primary", data: { testid: "bulk-import-submit-button" }
+              = link_to t("admin.bulk_imports.form.cancel"), admin_bulk_imports_path, class: "btn btn-outline-secondary"
+
+    .col-lg-4
+      .card
+        .card-header
+          %h5.mb-0
+            %i.bi.bi-info-circle.me-2
+            = t("admin.bulk_imports.new.csv_help.title")
+        .card-body
+          %p= t("admin.bulk_imports.new.csv_help.description")
+
+          %h6= t("admin.bulk_imports.new.csv_help.format_title")
+          %pre.bg-light.p-3.small{ style: "white-space: pre-wrap; word-wrap: break-word;" }
+            :preserve
+              filename,title,description,year,source,copyright,tags,artist_name,technique_name
+              bild1.jpg,Marktplatz 1920,Historische Ansicht,1920,Stadtarchiv,Museum,Geschichte; Markt,Max Mustermann,Fotografie
+
+          %h6.mt-3= t("admin.bulk_imports.new.csv_help.columns_title")
+          %ul.small
+            %li
+              %strong filename
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.filename")
+            %li
+              %strong title
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.title")
+            %li
+              %strong description
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.description")
+            %li
+              %strong year
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.year")
+            %li
+              %strong source
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.source")
+            %li
+              %strong copyright
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.copyright")
+            %li
+              %strong tags
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.tags")
+            %li
+              %strong artist_name
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.artist_name")
+            %li
+              %strong technique_name
+              \-
+              = t("admin.bulk_imports.new.csv_help.columns.technique_name")
+
+          .alert.alert-info.small.mt-3
+            %i.bi.bi-lightbulb.me-2
+            = t("admin.bulk_imports.new.csv_help.priority_note")

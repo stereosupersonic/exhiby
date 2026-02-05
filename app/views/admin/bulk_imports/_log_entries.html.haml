@@ -1,0 +1,37 @@
+- if entries.any?
+  .table-responsive
+    %table.table.table-sm.table-hover
+      %thead
+        %tr
+          %th= t("admin.bulk_imports.show.log.filename")
+          %th= t("admin.bulk_imports.show.log.status")
+          %th= t("admin.bulk_imports.show.log.sources")
+          %th= t("admin.bulk_imports.show.log.actions")
+      %tbody
+        - entries.each do |entry|
+          %tr{ class: entry.success? ? "" : "table-danger" }
+            %td
+              %code.small= entry.filename
+            %td
+              - if entry.success?
+                %span.badge.bg-success
+                  %i.bi.bi-check-circle.me-1
+                  = t("admin.bulk_imports.show.log.success")
+              - else
+                %span.badge.bg-danger
+                  %i.bi.bi-x-circle.me-1
+                  = t("admin.bulk_imports.show.log.failed")
+            %td
+              - if entry.success? && entry.attribute_sources.any?
+                - entry.attribute_sources.each do |attr, source|
+                  %span.badge.me-1{ class: BulkImportPresenter.new(nil).source_badge_class(source), title: I18n.t("activerecord.attributes.media_item.#{attr}") }
+                    = "#{I18n.t("activerecord.attributes.media_item.#{attr}", default: attr.to_s.titleize)}: #{I18n.t("bulk_import_sources.#{source}")}"
+              - elsif entry.errors.any?
+                .small.text-danger
+                  = entry.errors.join(", ")
+            %td
+              - if entry.success? && entry.media_item_id
+                = link_to t("common.view"), admin_media_item_path(entry.media_item_id), class: "btn btn-sm btn-outline-primary"
+- else
+  .text-center.text-muted.py-4
+    = t("admin.bulk_imports.show.no_entries")

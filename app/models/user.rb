@@ -35,6 +35,7 @@ class User < ApplicationRecord
                              dependent: :destroy, inverse_of: :created_by
   has_many :created_collections, class_name: "Collection", foreign_key: :created_by_id,
                                  dependent: :destroy, inverse_of: :created_by
+  has_many :bulk_imports, foreign_key: :created_by_id, dependent: :destroy, inverse_of: :created_by
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

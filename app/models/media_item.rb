@@ -19,6 +19,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  artist_id        :bigint
+#  bulk_import_id   :bigint
 #  reviewed_by_id   :bigint
 #  technique_id     :bigint
 #  uploaded_by_id   :bigint           not null
@@ -26,6 +27,7 @@
 # Indexes
 #
 #  index_media_items_on_artist_id       (artist_id)
+#  index_media_items_on_bulk_import_id  (bulk_import_id)
 #  index_media_items_on_media_type      (media_type)
 #  index_media_items_on_published_at    (published_at)
 #  index_media_items_on_reviewed_by_id  (reviewed_by_id)
@@ -37,6 +39,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (artist_id => artists.id) ON DELETE => restrict
+#  fk_rails_...  (bulk_import_id => bulk_imports.id)
 #  fk_rails_...  (reviewed_by_id => users.id)
 #  fk_rails_...  (technique_id => techniques.id)
 #  fk_rails_...  (uploaded_by_id => users.id)
@@ -49,6 +52,7 @@ class MediaItem < ApplicationRecord
   belongs_to :reviewed_by, class_name: "User", optional: true
   belongs_to :artist, optional: true
   belongs_to :technique, optional: true
+  belongs_to :bulk_import, optional: true
 
   has_many :media_taggings, dependent: :destroy
   has_many :media_tags, through: :media_taggings

@@ -51,6 +51,11 @@ Rails.application.routes.draw do
       end
     end
     resources :pictures_of_the_day, path: "bild-des-tages"
+    resources :bulk_imports, path: "massenimport", only: %i[index new create show destroy] do
+      member do
+        get :progress
+      end
+    end
   end
 
   # Public articles
