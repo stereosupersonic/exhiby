@@ -235,6 +235,7 @@ de:
               inclusion: ist kein gültiger Typ
             file:
               blank: muss hochgeladen werden
+              duplicate: "ist ein Duplikat von '%{existing_title}'"
         media_tag:
           attributes:
             name:
@@ -518,6 +519,7 @@ de:
     media_items:
       index:
         title: Medien
+        total_size: "Gesamtgröße: %{size}"
         new_media_item: Neues Medium
         no_media_items: Keine Medien vorhanden.
         view_toggle: Ansicht wechseln
@@ -528,6 +530,7 @@ de:
           type: Typ
           status: Status
           size: Größe
+          phash: Hash
           uploaded_by: Hochgeladen von
           created_at: Erstellt
           actions: Aktionen
@@ -552,6 +555,7 @@ de:
         copyright: Copyright
         license: Lizenz
         file_info: Datei
+        phash: Bildhash
         review_info: Prüfungsinformationen
         reviewed_by: Geprüft von
         reviewed_at: Geprüft am
@@ -910,6 +914,7 @@ de:
           all: Alle
           successful: Erfolgreich
           failed: Fehlgeschlagen
+          duplicates: Duplikate
         stats:
           total: Gesamt
           processed: Verarbeitet
@@ -930,6 +935,7 @@ de:
           actions: Aktionen
           success: Erfolgreich
           failed: Fehlgeschlagen
+          duplicate: Duplikat
       form:
         file_label: ZIP-Datei
         file_hint: Laden Sie eine ZIP-Datei mit Bildern hoch. Optional kann eine CSV-Datei mit Metadaten enthalten sein.

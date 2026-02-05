@@ -2,33 +2,36 @@
 #
 # Table name: media_items
 #
-#  id               :bigint           not null, primary key
-#  copyright        :string
-#  description      :text
-#  exif_metadata    :jsonb
-#  license          :string
-#  media_type       :string           not null
-#  published_at     :datetime
-#  reviewed_at      :datetime
-#  source           :string
-#  status           :string           default("draft"), not null
-#  submitted_at     :datetime
-#  technique_legacy :string
-#  title            :string           not null
-#  year             :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  artist_id        :bigint
-#  bulk_import_id   :bigint
-#  reviewed_by_id   :bigint
-#  technique_id     :bigint
-#  uploaded_by_id   :bigint           not null
+#  id                  :bigint           not null, primary key
+#  copyright           :string
+#  description         :text
+#  exif_metadata       :jsonb
+#  license             :string
+#  media_type          :string           not null
+#  phash               :text
+#  phash_calculated_at :datetime
+#  published_at        :datetime
+#  reviewed_at         :datetime
+#  source              :string
+#  status              :string           default("draft"), not null
+#  submitted_at        :datetime
+#  technique_legacy    :string
+#  title               :string           not null
+#  year                :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  artist_id           :bigint
+#  bulk_import_id      :bigint
+#  reviewed_by_id      :bigint
+#  technique_id        :bigint
+#  uploaded_by_id      :bigint           not null
 #
 # Indexes
 #
 #  index_media_items_on_artist_id       (artist_id)
 #  index_media_items_on_bulk_import_id  (bulk_import_id)
 #  index_media_items_on_media_type      (media_type)
+#  index_media_items_on_phash           (phash)
 #  index_media_items_on_published_at    (published_at)
 #  index_media_items_on_reviewed_by_id  (reviewed_by_id)
 #  index_media_items_on_status          (status)
@@ -60,7 +63,11 @@ class MediaItem < ApplicationRecord
 
   has_one_attached :file
 
+  attr_accessor :duplicate_media_item
+
   before_save :sync_exif_metadata, if: :should_sync_exif?
+  before_validation :calculate_phash_from_file, if: :should_calculate_phash?
+  validate :check_for_duplicates, on: :create, if: :has_phash?
 
   # Build a MediaItem with file and extract EXIF metadata before saving
   # @param file [ActionDispatch::Http::UploadedFile, File, Tempfile] the file to attach
@@ -79,6 +86,7 @@ class MediaItem < ApplicationRecord
 
     file.attach(uploaded_file)
     extract_exif_from_uploaded_file(uploaded_file)
+    calculate_phash_from_uploaded_file(uploaded_file)
   end
 
   validates :title, presence: true, length: { maximum: 255 }
@@ -95,6 +103,8 @@ class MediaItem < ApplicationRecord
   scope :by_year, ->(year) { where(year: year) if year.present? }
   scope :by_status, ->(status) { where(status: status) if status.present? }
   scope :recent, -> { order(created_at: :desc) }
+  scope :with_phash, -> { where.not(phash: [ nil, "" ]) }
+  scope :without_phash, -> { where(phash: [ nil, "" ]) }
   scope :search, ->(query) {
     if query.present?
       left_joins(:media_tags)
@@ -179,6 +189,10 @@ class MediaItem < ApplicationRecord
     exif_metadata.present? && exif_metadata.any?
   end
 
+  def has_phash?
+    phash.present?
+  end
+
   private
 
   def extract_exif_from_uploaded_file(uploaded_file)
@@ -257,5 +271,59 @@ class MediaItem < ApplicationRecord
       exif_metadata["ImageDescription"] = description
       exif_metadata["Caption-Abstract"] = description
     end
+  end
+
+  def should_calculate_phash?
+    image? && file.attached? && phash.blank?
+  end
+
+  def calculate_phash_from_uploaded_file(uploaded_file)
+    return unless image?
+    return if phash.present?
+
+    file_path = extract_file_path(uploaded_file)
+    return if file_path.blank?
+
+    set_phash_from_path(file_path)
+  end
+
+  def calculate_phash_from_file
+    return unless file.attached?
+
+    file_path = extract_attached_file_path
+    return if file_path.blank?
+
+    set_phash_from_path(file_path)
+  end
+
+  def set_phash_from_path(file_path)
+    calculated_phash = PerceptualHashCalculator.call(file_path)
+    if calculated_phash.present?
+      self.phash = calculated_phash
+      self.phash_calculated_at = Time.current
+    end
+  rescue StandardError => e
+    Rails.logger.error("Failed to calculate phash: #{e.message}")
+  end
+
+  def extract_attached_file_path
+    if file.blob.service.respond_to?(:path_for)
+      file.blob.service.path_for(file.blob.key)
+    else
+      tempfile = Tempfile.new([ "phash", File.extname(file.filename.to_s) ])
+      tempfile.binmode
+      tempfile.write(file.download)
+      tempfile.close
+      @_temp_file_for_phash = tempfile
+      tempfile.path
+    end
+  end
+
+  def check_for_duplicates
+    existing = MediaItem.where(phash: phash).where.not(id: id).first
+    return unless existing
+
+    self.duplicate_media_item = existing
+    errors.add(:file, :duplicate, existing_title: existing.title, existing_id: existing.id)
   end
 end

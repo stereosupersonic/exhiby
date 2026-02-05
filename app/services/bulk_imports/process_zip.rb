@@ -54,12 +54,21 @@ module BulkImports
     end
 
     def process_images(extracted_files, csv_metadata)
+      batch_phashes = {}
+
       extracted_files.each do |file_info|
-        process_single_image(file_info, csv_metadata)
+        result = process_single_image(file_info, csv_metadata, batch_phashes)
+
+        if result[:success] && result[:phash].present?
+          batch_phashes[result[:phash]] = {
+            id: result[:media_item_id],
+            filename: result[:filename]
+          }
+        end
       end
     end
 
-    def process_single_image(file_info, csv_metadata)
+    def process_single_image(file_info, csv_metadata, batch_phashes)
       filename = file_info[:filename]
       normalized_filename = filename.downcase
 
@@ -70,11 +79,14 @@ module BulkImports
         filename: filename,
         csv_metadata: metadata,
         bulk_import: bulk_import,
-        user: bulk_import.created_by
+        user: bulk_import.created_by,
+        batch_phashes: batch_phashes
       )
 
       log_result(result)
       update_counters(result)
+
+      result
     end
 
     def log_result(result)
@@ -89,6 +101,8 @@ module BulkImports
         entry[:attribute_sources] = result[:attribute_sources]
       else
         entry[:errors] = result[:errors]
+        entry[:duplicate] = result[:duplicate] if result[:duplicate]
+        entry[:existing_media_item_id] = result[:existing_media_item_id] if result[:existing_media_item_id]
       end
 
       bulk_import.add_log_entry(entry)

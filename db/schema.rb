@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_05_084932) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_05_091258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -160,6 +160,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_084932) do
     t.jsonb "exif_metadata", default: {}
     t.string "license"
     t.string "media_type", null: false
+    t.text "phash"
+    t.datetime "phash_calculated_at"
     t.datetime "published_at"
     t.datetime "reviewed_at"
     t.bigint "reviewed_by_id"
@@ -175,6 +177,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_084932) do
     t.index ["artist_id"], name: "index_media_items_on_artist_id"
     t.index ["bulk_import_id"], name: "index_media_items_on_bulk_import_id"
     t.index ["media_type"], name: "index_media_items_on_media_type"
+    t.index ["phash"], name: "index_media_items_on_phash"
     t.index ["published_at"], name: "index_media_items_on_published_at"
     t.index ["reviewed_by_id"], name: "index_media_items_on_reviewed_by_id"
     t.index ["status"], name: "index_media_items_on_status"

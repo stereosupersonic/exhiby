@@ -106,6 +106,10 @@ class BulkImportPresenter < ApplicationPresenter
     log_entries.reject(&:success?)
   end
 
+  def duplicate_log_entries
+    log_entries.select(&:duplicate?)
+  end
+
   class LogEntry
     attr_reader :data
 
@@ -131,6 +135,14 @@ class BulkImportPresenter < ApplicationPresenter
 
     def errors
       data[:errors] || []
+    end
+
+    def duplicate?
+      data[:duplicate] == true
+    end
+
+    def existing_media_item_id
+      data[:existing_media_item_id]
     end
 
     def processed_at

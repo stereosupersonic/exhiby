@@ -1,13 +1,14 @@
 module BulkImports
   class ProcessSingleImage < BaseService
-    attr_reader :file_path, :filename, :csv_metadata, :bulk_import, :user
+    attr_reader :file_path, :filename, :csv_metadata, :bulk_import, :user, :batch_phashes
 
-    def initialize(file_path:, filename:, csv_metadata:, bulk_import:, user:)
+    def initialize(file_path:, filename:, csv_metadata:, bulk_import:, user:, batch_phashes: {})
       @file_path = file_path
       @filename = filename
       @csv_metadata = csv_metadata || {}
       @bulk_import = bulk_import
       @user = user
+      @batch_phashes = batch_phashes || {}
     end
 
     def call
@@ -16,6 +17,24 @@ module BulkImports
       file = File.open(file_path)
       exif_data = extract_exif_metadata
       media_item = build_media_item(file, exif_data)
+
+      phash = calculate_phash
+      if phash
+        media_item.phash = phash
+        media_item.phash_calculated_at = Time.current
+
+        duplicate_result = DuplicateDetector.call(phash, batch_phashes: batch_phashes)
+        if duplicate_result[:duplicate]
+          return {
+            success: false,
+            filename: filename,
+            duplicate: true,
+            existing_media_item_id: duplicate_result[:existing_media_item_id],
+            errors: [ "Duplikat: entspricht '#{duplicate_result[:existing_title]}'" ]
+          }
+        end
+      end
+
       attribute_sources = track_attribute_sources(media_item, exif_data)
 
       if media_item.save
@@ -23,6 +42,7 @@ module BulkImports
           success: true,
           media_item_id: media_item.id,
           filename: filename,
+          phash: phash,
           attribute_sources: attribute_sources
         }
       else
@@ -52,6 +72,13 @@ module BulkImports
       unless content_type.start_with?("image/")
         raise ArgumentError, "Invalid file type: #{content_type}"
       end
+    end
+
+    def calculate_phash
+      PerceptualHashCalculator.call(file_path)
+    rescue StandardError => e
+      Rails.logger.warn("Phash calculation failed for #{filename}: #{e.message}")
+      nil
     end
 
     def build_media_item(file, exif_data)

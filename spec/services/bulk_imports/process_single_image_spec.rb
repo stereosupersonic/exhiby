@@ -140,5 +140,78 @@ RSpec.describe BulkImports::ProcessSingleImage do
         expect(result[:errors]).to include(/Invalid file type/)
       end
     end
+
+    context "with perceptual hash calculation" do
+      it "calculates and stores phash" do
+        result
+        media_item = MediaItem.find(result[:media_item_id])
+
+        expect(media_item.phash).to be_present
+        expect(media_item.phash_calculated_at).to be_present
+      end
+
+      it "returns phash in result" do
+        expect(result[:phash]).to be_present
+        expect(result[:phash]).to match(/\A[0-9a-f]{16}\z/)
+      end
+    end
+
+    context "with duplicate detection" do
+      context "when duplicate exists in database" do
+        let(:phash) { "abc123def456789a" }
+        let!(:existing_media_item) { create(:media_item, phash: phash, title: "Existing") }
+
+        before do
+          allow(PerceptualHashCalculator).to receive(:call).and_return(phash)
+        end
+
+        it "returns duplicate error" do
+          expect(result[:success]).to be false
+          expect(result[:duplicate]).to be true
+          expect(result[:existing_media_item_id]).to eq(existing_media_item.id)
+        end
+
+        it "does not create media item" do
+          expect { result }.not_to change(MediaItem, :count)
+        end
+      end
+
+      context "when duplicate exists in batch" do
+        let(:phash) { "abc123def456789a" }
+        let(:batch_phashes) { { phash => { id: 99, filename: "batch_image.jpg" } } }
+
+        before do
+          allow(PerceptualHashCalculator).to receive(:call).and_return(phash)
+        end
+
+        it "returns duplicate error" do
+          result = described_class.call(
+            file_path: file_path,
+            filename: filename,
+            csv_metadata: csv_metadata,
+            bulk_import: bulk_import,
+            user: user,
+            batch_phashes: batch_phashes
+          )
+
+          expect(result[:success]).to be false
+          expect(result[:duplicate]).to be true
+          expect(result[:existing_media_item_id]).to eq(99)
+        end
+      end
+
+      context "when phash calculation fails" do
+        before do
+          allow(PerceptualHashCalculator).to receive(:call).and_return(nil)
+        end
+
+        it "still creates media item without phash" do
+          expect { result }.to change(MediaItem, :count).by(1)
+          media_item = MediaItem.find(result[:media_item_id])
+
+          expect(media_item.phash).to be_nil
+        end
+      end
+    end
   end
 end

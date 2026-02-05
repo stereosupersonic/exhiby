@@ -2,33 +2,36 @@
 #
 # Table name: media_items
 #
-#  id               :bigint           not null, primary key
-#  copyright        :string
-#  description      :text
-#  exif_metadata    :jsonb
-#  license          :string
-#  media_type       :string           not null
-#  published_at     :datetime
-#  reviewed_at      :datetime
-#  source           :string
-#  status           :string           default("draft"), not null
-#  submitted_at     :datetime
-#  technique_legacy :string
-#  title            :string           not null
-#  year             :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  artist_id        :bigint
-#  bulk_import_id   :bigint
-#  reviewed_by_id   :bigint
-#  technique_id     :bigint
-#  uploaded_by_id   :bigint           not null
+#  id                  :bigint           not null, primary key
+#  copyright           :string
+#  description         :text
+#  exif_metadata       :jsonb
+#  license             :string
+#  media_type          :string           not null
+#  phash               :text
+#  phash_calculated_at :datetime
+#  published_at        :datetime
+#  reviewed_at         :datetime
+#  source              :string
+#  status              :string           default("draft"), not null
+#  submitted_at        :datetime
+#  technique_legacy    :string
+#  title               :string           not null
+#  year                :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  artist_id           :bigint
+#  bulk_import_id      :bigint
+#  reviewed_by_id      :bigint
+#  technique_id        :bigint
+#  uploaded_by_id      :bigint           not null
 #
 # Indexes
 #
 #  index_media_items_on_artist_id       (artist_id)
 #  index_media_items_on_bulk_import_id  (bulk_import_id)
 #  index_media_items_on_media_type      (media_type)
+#  index_media_items_on_phash           (phash)
 #  index_media_items_on_published_at    (published_at)
 #  index_media_items_on_reviewed_by_id  (reviewed_by_id)
 #  index_media_items_on_status          (status)
@@ -118,6 +121,29 @@ RSpec.describe MediaItem do
 
       it "searches by title" do
         expect(described_class.search("Unique")).to contain_exactly(searchable_item)
+      end
+    end
+
+    describe ".with_phash" do
+      it "returns only items with phash" do
+        item_with_phash = create(:media_item, phash: "abc123def456789a")
+        create(:media_item, phash: nil)
+        create(:media_item, phash: "")
+
+        expect(described_class.with_phash).to include(item_with_phash)
+        expect(described_class.with_phash.count).to eq(1)
+      end
+    end
+
+    describe ".without_phash" do
+      it "returns only items without phash" do
+        create(:media_item, phash: "abc123def456789a")
+        item_without_phash = create(:media_item, phash: nil)
+        item_empty_phash = create(:media_item, phash: "")
+
+        without_phash_items = described_class.without_phash
+        expect(without_phash_items).to include(item_without_phash)
+        expect(without_phash_items).to include(item_empty_phash)
       end
     end
   end
@@ -250,6 +276,23 @@ RSpec.describe MediaItem do
         expect(media_item.pdf?).to be true
       end
     end
+
+    describe "#has_phash?" do
+      it "returns true when phash is present" do
+        media_item = build(:media_item, phash: "abc123def456789a")
+        expect(media_item.has_phash?).to be true
+      end
+
+      it "returns false when phash is nil" do
+        media_item = build(:media_item, phash: nil)
+        expect(media_item.has_phash?).to be false
+      end
+
+      it "returns false when phash is empty string" do
+        media_item = build(:media_item, phash: "")
+        expect(media_item.has_phash?).to be false
+      end
+    end
   end
 
   describe "tag methods" do
@@ -291,6 +334,96 @@ RSpec.describe MediaItem do
 
     it "defines MEDIA_TYPES" do
       expect(MediaItem::MEDIA_TYPES).to eq(%w[image video pdf])
+    end
+  end
+
+  describe "duplicate detection on create" do
+    let(:user) { create(:user) }
+    let(:test_image) { Rails.root.join("spec/fixtures/files/testbild_katze_exif_v2.jpg") }
+
+    it "calculates phash when image is attached" do
+      media_item = MediaItem.build_with_file(
+        file: Rack::Test::UploadedFile.new(test_image, "image/jpeg"),
+        uploaded_by: user,
+        media_type: "image"
+      )
+      media_item.save!
+
+      expect(media_item.phash).to be_present
+      expect(media_item.phash_calculated_at).to be_present
+    end
+
+    it "detects duplicate on create" do
+      existing = MediaItem.build_with_file(
+        file: Rack::Test::UploadedFile.new(test_image, "image/jpeg"),
+        uploaded_by: user,
+        media_type: "image"
+      )
+      existing.save!
+
+      duplicate = MediaItem.build_with_file(
+        file: Rack::Test::UploadedFile.new(test_image, "image/jpeg"),
+        uploaded_by: user,
+        media_type: "image"
+      )
+
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:file]).to include(/Duplikat/)
+      expect(duplicate.duplicate_media_item).to eq(existing)
+    end
+
+    it "allows non-duplicate images" do
+      existing = MediaItem.build_with_file(
+        file: Rack::Test::UploadedFile.new(test_image, "image/jpeg"),
+        uploaded_by: user,
+        media_type: "image"
+      )
+      existing.save!
+
+      different_image = Rails.root.join("spec/fixtures/files/test_image.png")
+      new_item = MediaItem.build_with_file(
+        file: Rack::Test::UploadedFile.new(different_image, "image/png"),
+        uploaded_by: user,
+        media_type: "image",
+        title: "Different Image"
+      )
+
+      expect(new_item).to be_valid
+    end
+
+    it "skips phash calculation for bulk imports" do
+      bulk_import = create(:bulk_import)
+      media_item = MediaItem.new(
+        uploaded_by: user,
+        media_type: "image",
+        title: "Test",
+        bulk_import: bulk_import
+      )
+      media_item.file.attach(
+        io: File.open(test_image),
+        filename: "test.jpg",
+        content_type: "image/jpeg"
+      )
+
+      expect(media_item).to be_valid
+      expect(media_item.phash).to be_nil
+    end
+
+    it "skips phash calculation for non-image types" do
+      pdf_file = Rails.root.join("spec/fixtures/files/test_document.pdf")
+      media_item = MediaItem.new(
+        uploaded_by: user,
+        media_type: "pdf",
+        title: "Test PDF"
+      )
+      media_item.file.attach(
+        io: File.open(pdf_file),
+        filename: "test.pdf",
+        content_type: "application/pdf"
+      )
+
+      expect(media_item).to be_valid
+      expect(media_item.phash).to be_nil
     end
   end
 

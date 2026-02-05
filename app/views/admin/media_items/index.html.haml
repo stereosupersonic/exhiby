@@ -1,6 +1,8 @@
 .admin-media-items{ data: { testid: "admin-media-items", controller: "view-toggle" } }
   .d-flex.justify-content-between.align-items-center.mb-4
-    %h1{ data: { testid: "media-items-heading" } }= t("admin.media_items.index.title")
+    .d-flex.flex-column
+      %h1.mb-0{ data: { testid: "media-items-heading" } }= t("admin.media_items.index.title")
+      %small.text-muted= t("admin.media_items.index.total_size", size: number_to_human_size(@total_size))
     .d-flex.gap-2
       .btn-group{ data: { testid: "view-toggle" }, role: "group", "aria-label": t("admin.media_items.index.view_toggle") }
         %button.btn.btn-outline-secondary{ type: "button", "aria-label": t("admin.media_items.index.grid_view"), data: { action: "click->view-toggle#showGrid", "view-toggle-target": "gridBtn" } }
@@ -29,6 +31,7 @@
                   %th= t("admin.media_items.index.table.type")
                   %th= t("admin.media_items.index.table.status")
                   %th= t("admin.media_items.index.table.size")
+                  %th= t("admin.media_items.index.table.phash")
                   %th= t("admin.media_items.index.table.uploaded_by")
                   %th= t("admin.media_items.index.table.created_at")
                   %th= t("admin.media_items.index.table.actions")
@@ -55,6 +58,11 @@
                       %span.badge{ class: presenter.status_badge_class }
                         = presenter.status_name
                     %td= presenter.file_size
+                    %td
+                      - if presenter.phash_short
+                        %code.small{ title: media_item.phash }= presenter.phash_short
+                      - else
+                        %span.text-muted –
                     %td= presenter.uploader_name
                     %td= l(media_item.created_at, format: :short)
                     %td

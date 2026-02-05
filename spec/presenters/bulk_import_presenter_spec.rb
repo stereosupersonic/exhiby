@@ -197,6 +197,21 @@ RSpec.describe BulkImportPresenter do
     end
   end
 
+  describe "#duplicate_log_entries" do
+    let(:bulk_import) do
+      create(:bulk_import, :completed, created_by: user, import_log: [
+        { filename: "image1.jpg", success: true, media_item_id: 1 },
+        { filename: "duplicate.jpg", success: false, duplicate: true, existing_media_item_id: 1 },
+        { filename: "error.jpg", success: false, errors: [ "Some error" ] }
+      ])
+    end
+
+    it "returns only duplicate entries" do
+      expect(presenter.duplicate_log_entries.count).to eq(1)
+      expect(presenter.duplicate_log_entries.first.filename).to eq("duplicate.jpg")
+    end
+  end
+
   describe BulkImportPresenter::LogEntry do
     let(:entry_data) do
       {
@@ -257,6 +272,24 @@ RSpec.describe BulkImportPresenter do
       it "returns nil when not set" do
         entry_without_time = described_class.new({})
         expect(entry_without_time.processed_at).to be_nil
+      end
+    end
+
+    describe "#duplicate?" do
+      it "returns true for duplicate entry" do
+        duplicate_entry = described_class.new(duplicate: true, success: false)
+        expect(duplicate_entry).to be_duplicate
+      end
+
+      it "returns false for non-duplicate entry" do
+        expect(entry).not_to be_duplicate
+      end
+    end
+
+    describe "#existing_media_item_id (for duplicates)" do
+      it "returns existing media item id for duplicates" do
+        duplicate_entry = described_class.new(duplicate: true, existing_media_item_id: 456)
+        expect(duplicate_entry.existing_media_item_id).to eq(456)
       end
     end
   end

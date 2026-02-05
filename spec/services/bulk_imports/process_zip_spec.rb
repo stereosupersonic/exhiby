@@ -9,6 +9,11 @@ RSpec.describe BulkImports::ProcessZip do
       let(:bulk_import) { create(:bulk_import, created_by: user) }
 
       before do
+        call_count = 0
+        allow(PerceptualHashCalculator).to receive(:call) do
+          call_count += 1
+          "unique_hash_#{call_count}"
+        end
         attach_zip_with_images(bulk_import, 3)
       end
 
@@ -50,6 +55,7 @@ RSpec.describe BulkImports::ProcessZip do
       let(:bulk_import) { create(:bulk_import, created_by: user) }
 
       before do
+        allow(PerceptualHashCalculator).to receive(:call).and_return("csv_test_hash_123")
         attach_zip_with_csv(bulk_import)
       end
 
@@ -92,12 +98,67 @@ RSpec.describe BulkImports::ProcessZip do
     context "when already processing" do
       let(:bulk_import) { create(:bulk_import, :processing, created_by: user) }
 
+      before do
+        allow(PerceptualHashCalculator).to receive(:call).and_return("processing_test_hash")
+      end
+
       it "continues processing" do
         attach_zip_with_images(bulk_import, 1)
 
         result = described_class.call(bulk_import)
 
         expect(result[:success]).to be true
+      end
+    end
+
+    context "with within-batch duplicate detection" do
+      let(:bulk_import) { create(:bulk_import, created_by: user) }
+
+      before do
+        attach_zip_with_duplicate_images(bulk_import)
+      end
+
+      it "imports first image and skips duplicate" do
+        expect { described_class.call(bulk_import) }
+          .to change(MediaItem, :count).by(1)
+      end
+
+      it "logs duplicate as failed" do
+        described_class.call(bulk_import)
+
+        duplicate_entry = bulk_import.reload.import_log.find { |e| e["duplicate"] == true }
+        expect(duplicate_entry).to be_present
+        expect(duplicate_entry["success"]).to be false
+      end
+
+      it "updates counters correctly" do
+        described_class.call(bulk_import)
+
+        expect(bulk_import.reload.successful_imports).to eq(1)
+        expect(bulk_import.reload.failed_imports).to eq(1)
+      end
+    end
+
+    context "with database duplicate detection" do
+      let(:bulk_import) { create(:bulk_import, created_by: user) }
+      let!(:existing_media_item) { create(:media_item, phash: "abc123def456789a", title: "Existing Image") }
+
+      before do
+        allow(PerceptualHashCalculator).to receive(:call).and_return("abc123def456789a")
+        attach_zip_with_images(bulk_import, 1)
+      end
+
+      it "skips image that matches existing database record" do
+        expect { described_class.call(bulk_import) }
+          .not_to change(MediaItem, :count)
+      end
+
+      it "logs database duplicate" do
+        described_class.call(bulk_import)
+
+        log_entry = bulk_import.reload.import_log.first
+        expect(log_entry["duplicate"]).to be true
+        expect(log_entry["existing_media_item_id"]).to eq(existing_media_item.id)
       end
     end
   end
@@ -144,6 +205,27 @@ RSpec.describe BulkImports::ProcessZip do
     Zip::File.open(zip_path, create: true) do |zipfile|
       zipfile.add("test_image.png", source_image)
       zipfile.add("metadata.csv", csv_path)
+    end
+
+    bulk_import.file.attach(
+      io: File.open(zip_path),
+      filename: "test.zip",
+      content_type: "application/zip"
+    )
+
+    FileUtils.rm_rf(temp_dir)
+  end
+
+  def attach_zip_with_duplicate_images(bulk_import)
+    temp_dir = Rails.root.join("tmp", "test_zip_#{SecureRandom.hex(4)}")
+    FileUtils.mkdir_p(temp_dir)
+
+    zip_path = File.join(temp_dir, "test.zip")
+    source_image = Rails.root.join("spec/fixtures/files/test_image.png")
+
+    Zip::File.open(zip_path, create: true) do |zipfile|
+      zipfile.add("original.png", source_image)
+      zipfile.add("duplicate.png", source_image)
     end
 
     bulk_import.file.attach(

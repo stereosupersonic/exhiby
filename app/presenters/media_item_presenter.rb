@@ -88,4 +88,10 @@ class MediaItemPresenter < ApplicationPresenter
   def exif_all_tags
     o.exif_metadata || {}
   end
+
+  def phash_short
+    return nil unless o.has_phash?
+
+    o.phash[0, 8]
+  end
 end

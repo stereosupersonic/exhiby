@@ -9,6 +9,7 @@ module Admin
         .includes(:uploaded_by, :media_tags)
         .recent
         .page(params[:page])
+      @total_size = total_storage_size
     end
 
     def search
@@ -178,6 +179,13 @@ module Admin
       else
         current_user.uploaded_media_items
       end
+    end
+
+    def total_storage_size
+      ActiveStorage::Blob
+        .joins(:attachments)
+        .where(active_storage_attachments: { record_type: "MediaItem", name: "file" })
+        .sum(:byte_size)
     end
   end
 end

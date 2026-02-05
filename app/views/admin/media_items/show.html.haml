@@ -91,6 +91,11 @@
               %dt.col-sm-5= t("admin.media_items.show.file_info")
               %dd.col-sm-7= presenter.file_info
 
+            - if @media_item.has_phash?
+              %dt.col-sm-5= t("admin.media_items.show.phash")
+              %dd.col-sm-7
+                %code.small= @media_item.phash
+
       -# EXIF Metadata Card (shown for images with EXIF data)
       - if @media_item.image? && presenter.has_exif_data?
         .card.mb-4

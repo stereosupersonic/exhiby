@@ -2,33 +2,36 @@
 #
 # Table name: media_items
 #
-#  id               :bigint           not null, primary key
-#  copyright        :string
-#  description      :text
-#  exif_metadata    :jsonb
-#  license          :string
-#  media_type       :string           not null
-#  published_at     :datetime
-#  reviewed_at      :datetime
-#  source           :string
-#  status           :string           default("draft"), not null
-#  submitted_at     :datetime
-#  technique_legacy :string
-#  title            :string           not null
-#  year             :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  artist_id        :bigint
-#  bulk_import_id   :bigint
-#  reviewed_by_id   :bigint
-#  technique_id     :bigint
-#  uploaded_by_id   :bigint           not null
+#  id                  :bigint           not null, primary key
+#  copyright           :string
+#  description         :text
+#  exif_metadata       :jsonb
+#  license             :string
+#  media_type          :string           not null
+#  phash               :text
+#  phash_calculated_at :datetime
+#  published_at        :datetime
+#  reviewed_at         :datetime
+#  source              :string
+#  status              :string           default("draft"), not null
+#  submitted_at        :datetime
+#  technique_legacy    :string
+#  title               :string           not null
+#  year                :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  artist_id           :bigint
+#  bulk_import_id      :bigint
+#  reviewed_by_id      :bigint
+#  technique_id        :bigint
+#  uploaded_by_id      :bigint           not null
 #
 # Indexes
 #
 #  index_media_items_on_artist_id       (artist_id)
 #  index_media_items_on_bulk_import_id  (bulk_import_id)
 #  index_media_items_on_media_type      (media_type)
+#  index_media_items_on_phash           (phash)
 #  index_media_items_on_published_at    (published_at)
 #  index_media_items_on_reviewed_by_id  (reviewed_by_id)
 #  index_media_items_on_status          (status)
