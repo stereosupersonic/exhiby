@@ -16,6 +16,10 @@
         = link_to new_admin_collection_path, class: "btn btn-outline-primary" do
           %i.bi.bi-folder-plus.me-2
           = t("admin.dashboard.new_collection")
+      - if can? :create, BulkImport
+        = link_to new_admin_bulk_import_path, class: "btn btn-outline-primary" do
+          %i.bi.bi-file-earmark-zip.me-2
+          = t("admin.dashboard.new_import")
       - if current_user.admin?
         = link_to sidekiq_web_path, class: "btn btn-outline-primary" do
           %i.bi.bi-folder-plus.me-2

@@ -117,7 +117,7 @@
           "type": "controller",
           "class": "Admin::MediaItemsController",
           "method": "show",
-          "line": 47,
+          "line": 48,
           "file": "app/controllers/admin/media_items_controller.rb",
           "rendered": {
             "name": "admin/media_items/show",
@@ -185,7 +185,7 @@
           "type": "controller",
           "class": "Admin::MediaItemsController",
           "method": "show",
-          "line": 47,
+          "line": 48,
           "file": "app/controllers/admin/media_items_controller.rb",
           "rendered": {
             "name": "admin/media_items/show",
@@ -203,7 +203,75 @@
         79
       ],
       "note": "False positive: MediaItemPresenter#media_type_badge_class returns only hardcoded Bootstrap class strings from MEDIA_TYPE_BADGE_CLASSES hash"
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "c3422cfdce5b547868491293c09a85c687958110a2c726f41209338723c5435b",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/bulk_imports/show.html.haml",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"progress-bar\", BulkImportPresenter.new(BulkImport.find(params[:id])).progress_bar_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::BulkImportsController",
+          "method": "show",
+          "line": 29,
+          "file": "app/controllers/admin/bulk_imports_controller.rb",
+          "rendered": {
+            "name": "admin/bulk_imports/show",
+            "file": "app/views/admin/bulk_imports/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/bulk_imports/show"
+      },
+      "user_input": "BulkImport.find(params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "ff89c07bef7e7546059e408f42cd0445d1058086ee7b07d435884fbebd0df583",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/bulk_imports/show.html.haml",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "::Haml::AttributeBuilder.build_class(true, \"badge\", BulkImportPresenter.new(BulkImport.find(params[:id])).status_badge_class)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::BulkImportsController",
+          "method": "show",
+          "line": 29,
+          "file": "app/controllers/admin/bulk_imports_controller.rb",
+          "rendered": {
+            "name": "admin/bulk_imports/show",
+            "file": "app/views/admin/bulk_imports/show.html.haml"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/bulk_imports/show"
+      },
+      "user_input": "BulkImport.find(params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
     }
   ],
-  "brakeman_version": "8.0.1"
+  "brakeman_version": "8.0.2"
 }

@@ -136,6 +136,9 @@ de:
       picture_of_the_day:
         one: Bild des Tages
         other: Bilder des Tages
+      bulk_import:
+        one: Import
+        other: Importe
     attributes:
       article:
         title: Titel
@@ -200,6 +203,17 @@ de:
         display_date: Anzeigedatum
         caption: Titel
         description: Beschreibung
+      bulk_import:
+        file: Datei
+        import_type: Import-Typ
+        status: Status
+        total_files: Dateien gesamt
+        processed_files: Verarbeitet
+        successful_imports: Erfolgreich
+        failed_imports: Fehlgeschlagen
+        created_by: Erstellt von
+        started_at: Gestartet am
+        completed_at: Abgeschlossen am
     errors:
       models:
         article:
@@ -221,6 +235,7 @@ de:
               inclusion: ist kein gültiger Typ
             file:
               blank: muss hochgeladen werden
+              duplicate: "ist ein Duplikat von '%{existing_title}'"
         media_tag:
           attributes:
             name:
@@ -342,6 +357,7 @@ de:
       dashboard: Dashboard
       articles: Artikel
       media_items: Medien
+      bulk_imports: Import
       artists: Kunstschaffende
       collections: Sammlungen
       collection_categories: Kategorien
@@ -358,6 +374,7 @@ de:
       new_article: Neuer Artikel
       new_artist: Neuer Künstler
       new_collection: Neue Sammlung
+      new_import: Import
       sections:
         media_items: Medien
         articles: Artikel
@@ -502,6 +519,7 @@ de:
     media_items:
       index:
         title: Medien
+        total_size: "Gesamtgröße: %{size}"
         new_media_item: Neues Medium
         no_media_items: Keine Medien vorhanden.
         view_toggle: Ansicht wechseln
@@ -512,6 +530,7 @@ de:
           type: Typ
           status: Status
           size: Größe
+          phash: Hash
           uploaded_by: Hochgeladen von
           created_at: Erstellt
           actions: Aktionen
@@ -536,6 +555,7 @@ de:
         copyright: Copyright
         license: Lizenz
         file_info: Datei
+        phash: Bildhash
         review_info: Prüfungsinformationen
         reviewed_by: Geprüft von
         reviewed_at: Geprüft am
@@ -846,6 +866,94 @@ de:
         item_added: Medium wurde zur Sammlung hinzugefügt.
         item_removed: Medium wurde aus der Sammlung entfernt.
         item_already_added: Dieses Medium ist bereits in der Sammlung.
+    bulk_imports:
+      index:
+        title: Import
+        new_import: Neuer Import
+        no_imports: Keine Importe vorhanden.
+        progress_detail: "%{successful} erfolgreich, %{failed} fehlgeschlagen von %{total}"
+        table:
+          file: Datei
+          status: Status
+          progress: Fortschritt
+          created_by: Erstellt von
+          created_at: Erstellt
+          actions: Aktionen
+        actions:
+          delete_confirm: Sind Sie sicher, dass Sie diesen Import löschen möchten?
+      new:
+        title: Neuer Import
+        csv_help:
+          title: CSV-Format (optional)
+          description: Sie können eine CSV-Datei mit Metadaten in das ZIP-Archiv einfügen. Die CSV-Datei wird automatisch erkannt und verarbeitet.
+          format_title: Beispiel-Format
+          columns_title: Verfügbare Spalten
+          columns:
+            filename: Dateiname des Bildes (Pflichtfeld)
+            title: Titel des Mediums
+            description: Beschreibung
+            year: Erstellungsjahr
+            source: Quelle/Herkunft
+            copyright: Copyright-Vermerk
+            tags: Tags (durch Semikolon getrennt)
+            artist_name: Name des Künstlers (muss existieren)
+            technique_name: Name der Technik (muss existieren)
+          priority_note: "Priorität der Datenquellen: CSV > EXIF-Daten > Dateiname"
+      show:
+        title: Import-Details
+        back: Zurück zur Übersicht
+        progress_title: Fortschritt
+        errors_title: Fehler
+        import_log_title: Import-Protokoll
+        entries_count:
+          one: "%{count} Eintrag"
+          other: "%{count} Einträge"
+        no_entries: Noch keine Einträge vorhanden.
+        details_title: Details
+        tabs:
+          all: Alle
+          successful: Erfolgreich
+          failed: Fehlgeschlagen
+          duplicates: Duplikate
+        stats:
+          total: Gesamt
+          processed: Verarbeitet
+          successful: Erfolgreich
+          failed: Fehlgeschlagen
+        details:
+          file: Datei
+          type: Typ
+          created_by: Erstellt von
+          created_at: Erstellt am
+          started_at: Gestartet am
+          completed_at: Abgeschlossen am
+          duration: Dauer
+        log:
+          filename: Dateiname
+          status: Status
+          sources: Datenquellen
+          actions: Aktionen
+          success: Erfolgreich
+          failed: Fehlgeschlagen
+          duplicate: Duplikat
+      form:
+        file_label: ZIP-Datei
+        file_hint: Laden Sie eine ZIP-Datei mit Bildern hoch. Optional kann eine CSV-Datei mit Metadaten enthalten sein.
+        submit: Import starten
+        cancel: Abbrechen
+      duration:
+        seconds:
+          one: "%{count} Sekunde"
+          other: "%{count} Sekunden"
+        minutes:
+          one: "%{count} Minute"
+          other: "%{count} Minuten"
+        hours:
+          one: "%{count} Stunde"
+          other: "%{count} Stunden"
+      messages:
+        created: Import wurde gestartet und wird im Hintergrund verarbeitet.
+        deleted: Import wurde erfolgreich gelöscht.
     pictures_of_the_day:
       index:
         title: Bild des Tages
@@ -961,6 +1069,19 @@ de:
     back: Zurück
     not_published: Nicht veröffentlicht
     click_to_enlarge: "%{title} vergrößern"
+
+  # Bulk import statuses
+  bulk_import_statuses:
+    pending: Ausstehend
+    processing: Wird verarbeitet
+    completed: Abgeschlossen
+    failed: Fehlgeschlagen
+
+  # Bulk import attribute sources
+  bulk_import_sources:
+    csv: CSV
+    exif: EXIF
+    filename: Dateiname
 
   # Search
   search:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_092932) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_05_091258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -88,6 +88,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_092932) do
     t.index ["status"], name: "index_artists_on_status"
   end
 
+  create_table "bulk_imports", force: :cascade do |t|
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.bigint "created_by_id", null: false
+    t.jsonb "error_messages", default: [], null: false
+    t.integer "failed_imports", default: 0, null: false
+    t.jsonb "import_log", default: [], null: false
+    t.text "import_type", default: "zip", null: false
+    t.integer "processed_files", default: 0, null: false
+    t.datetime "started_at"
+    t.text "status", default: "pending", null: false
+    t.integer "successful_imports", default: 0, null: false
+    t.integer "total_files", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_bulk_imports_on_created_at"
+    t.index ["created_by_id"], name: "index_bulk_imports_on_created_by_id"
+    t.index ["import_type"], name: "index_bulk_imports_on_import_type"
+    t.index ["status"], name: "index_bulk_imports_on_status"
+  end
+
   create_table "collection_categories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -133,12 +153,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_092932) do
 
   create_table "media_items", force: :cascade do |t|
     t.bigint "artist_id"
+    t.bigint "bulk_import_id"
     t.string "copyright"
     t.datetime "created_at", null: false
     t.text "description"
     t.jsonb "exif_metadata", default: {}
     t.string "license"
     t.string "media_type", null: false
+    t.text "phash"
+    t.datetime "phash_calculated_at"
     t.datetime "published_at"
     t.datetime "reviewed_at"
     t.bigint "reviewed_by_id"
@@ -152,7 +175,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_092932) do
     t.bigint "uploaded_by_id", null: false
     t.integer "year"
     t.index ["artist_id"], name: "index_media_items_on_artist_id"
+    t.index ["bulk_import_id"], name: "index_media_items_on_bulk_import_id"
     t.index ["media_type"], name: "index_media_items_on_media_type"
+    t.index ["phash"], name: "index_media_items_on_phash"
     t.index ["published_at"], name: "index_media_items_on_published_at"
     t.index ["reviewed_by_id"], name: "index_media_items_on_reviewed_by_id"
     t.index ["status"], name: "index_media_items_on_status"
@@ -235,12 +260,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_092932) do
   add_foreign_key "articles", "users", column: "author_id"
   add_foreign_key "artists", "media_items", column: "profile_media_item_id"
   add_foreign_key "artists", "users", column: "created_by_id"
+  add_foreign_key "bulk_imports", "users", column: "created_by_id"
   add_foreign_key "collection_items", "collections"
   add_foreign_key "collection_items", "media_items"
   add_foreign_key "collections", "collection_categories"
   add_foreign_key "collections", "media_items", column: "cover_media_item_id"
   add_foreign_key "collections", "users", column: "created_by_id"
   add_foreign_key "media_items", "artists", on_delete: :restrict
+  add_foreign_key "media_items", "bulk_imports"
   add_foreign_key "media_items", "techniques"
   add_foreign_key "media_items", "users", column: "reviewed_by_id"
   add_foreign_key "media_items", "users", column: "uploaded_by_id"

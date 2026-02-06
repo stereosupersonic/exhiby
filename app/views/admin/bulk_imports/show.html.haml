@@ -1,0 +1,112 @@
+- status_labels = { pending: t("bulk_import_statuses.pending"), processing: t("bulk_import_statuses.processing"), completed: t("bulk_import_statuses.completed"), failed: t("bulk_import_statuses.failed") }
+.admin-bulk-imports-show{ data: { testid: "admin-bulk-imports-show", controller: "bulk-import-progress", "bulk-import-progress-url-value": progress_admin_bulk_import_path(@bulk_import), "bulk-import-progress-completed-value": @presenter.completed? || @presenter.failed?, "bulk-import-progress-status-labels-value": status_labels.to_json } }
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1{ data: { testid: "bulk-import-heading" } }= t("admin.bulk_imports.show.title")
+    .d-flex.gap-2
+      = link_to t("admin.bulk_imports.show.back"), admin_bulk_imports_path, class: "btn btn-outline-secondary"
+      - unless @presenter.processing?
+        = button_to t("common.delete"), admin_bulk_import_path(@bulk_import), method: :delete, class: "btn btn-outline-danger", data: { turbo_confirm: t("admin.bulk_imports.index.actions.delete_confirm") }
+
+  .row
+    .col-lg-8
+      .card.mb-4
+        .card-header
+          .d-flex.justify-content-between.align-items-center
+            %h5.mb-0= t("admin.bulk_imports.show.progress_title")
+            %span.badge{ class: @presenter.status_badge_class, data: { "bulk-import-progress-target": "status" } }
+              = @presenter.status_name
+        .card-body
+          .progress.mb-3{ style: "height: 30px;" }
+            .progress-bar{ class: @presenter.progress_bar_class, style: "width: #{@presenter.progress_percentage}%", role: "progressbar", data: { "bulk-import-progress-target": "progressBar" }, "aria-valuenow": @presenter.progress_percentage, "aria-valuemin": "0", "aria-valuemax": "100" }
+              %span{ data: { "bulk-import-progress-target": "progressText" } }
+                = "#{@presenter.progress_percentage}%"
+
+          .row.text-center
+            .col-3
+              .h4.mb-0{ data: { "bulk-import-progress-target": "totalFiles" } }= @presenter.total_files
+              .text-muted.small= t("admin.bulk_imports.show.stats.total")
+            .col-3
+              .h4.mb-0{ data: { "bulk-import-progress-target": "processedFiles" } }= @presenter.processed_files
+              .text-muted.small= t("admin.bulk_imports.show.stats.processed")
+            .col-3
+              .h4.mb-0.text-success{ data: { "bulk-import-progress-target": "successful" } }= @presenter.successful_imports
+              .text-muted.small= t("admin.bulk_imports.show.stats.successful")
+            .col-3
+              .h4.mb-0.text-danger{ data: { "bulk-import-progress-target": "failed" } }= @presenter.failed_imports
+              .text-muted.small= t("admin.bulk_imports.show.stats.failed")
+
+      - if @presenter.error_messages.any?
+        .card.border-danger.mb-4
+          .card-header.bg-danger.text-white
+            %h5.mb-0
+              %i.bi.bi-exclamation-triangle.me-2
+              = t("admin.bulk_imports.show.errors_title")
+          .card-body
+            %ul.mb-0
+              - @presenter.error_messages.each do |error|
+                %li= error
+
+      .card.mb-4
+        .card-header
+          .d-flex.justify-content-between.align-items-center
+            %h5.mb-0= t("admin.bulk_imports.show.import_log_title")
+            .badge.bg-secondary
+              = t("admin.bulk_imports.show.entries_count", count: @presenter.log_entries.count)
+        .card-body
+          - if @presenter.log_entries.any?
+            %ul.nav.nav-tabs{ role: "tablist" }
+              %li.nav-item{ role: "presentation" }
+                %button.nav-link.active{ id: "all-tab", data: { bs_toggle: "tab", bs_target: "#all-pane" }, type: "button", role: "tab", "aria-controls": "all-pane", "aria-selected": "true" }
+                  = t("admin.bulk_imports.show.tabs.all")
+                  %span.badge.bg-secondary.ms-1= @presenter.log_entries.count
+              %li.nav-item{ role: "presentation" }
+                %button.nav-link{ id: "successful-tab", data: { bs_toggle: "tab", bs_target: "#successful-pane" }, type: "button", role: "tab", "aria-controls": "successful-pane", "aria-selected": "false" }
+                  = t("admin.bulk_imports.show.tabs.successful")
+                  %span.badge.bg-success.ms-1= @presenter.successful_log_entries.count
+              %li.nav-item{ role: "presentation" }
+                %button.nav-link{ id: "failed-tab", data: { bs_toggle: "tab", bs_target: "#failed-pane" }, type: "button", role: "tab", "aria-controls": "failed-pane", "aria-selected": "false" }
+                  = t("admin.bulk_imports.show.tabs.failed")
+                  %span.badge.bg-danger.ms-1= @presenter.failed_log_entries.count
+
+            .tab-content.pt-3
+              #all-pane.tab-pane.fade.show.active{ role: "tabpanel", "aria-labelledby": "all-tab" }
+                = render "log_entries", entries: @presenter.log_entries
+
+              #successful-pane.tab-pane.fade{ role: "tabpanel", "aria-labelledby": "successful-tab" }
+                = render "log_entries", entries: @presenter.successful_log_entries
+
+              #failed-pane.tab-pane.fade{ role: "tabpanel", "aria-labelledby": "failed-tab" }
+                = render "log_entries", entries: @presenter.failed_log_entries
+          - else
+            .text-center.text-muted.py-4
+              = t("admin.bulk_imports.show.no_entries")
+
+    .col-lg-4
+      .card
+        .card-header
+          %h5.mb-0= t("admin.bulk_imports.show.details_title")
+        .card-body
+          %dl.row.mb-0
+            %dt.col-sm-5= t("admin.bulk_imports.show.details.file")
+            %dd.col-sm-7= @presenter.file_info
+
+            %dt.col-sm-5= t("admin.bulk_imports.show.details.type")
+            %dd.col-sm-7= @presenter.import_type.upcase
+
+            %dt.col-sm-5= t("admin.bulk_imports.show.details.created_by")
+            %dd.col-sm-7= @presenter.creator_name
+
+            %dt.col-sm-5= t("admin.bulk_imports.show.details.created_at")
+            %dd.col-sm-7= @presenter.formatted_created_at
+
+            - if @presenter.started_at
+              %dt.col-sm-5= t("admin.bulk_imports.show.details.started_at")
+              %dd.col-sm-7= @presenter.formatted_started_at
+
+            - if @presenter.completed_at
+              %dt.col-sm-5= t("admin.bulk_imports.show.details.completed_at")
+              %dd.col-sm-7= @presenter.formatted_completed_at
+
+            - if @presenter.duration
+              %dt.col-sm-5= t("admin.bulk_imports.show.details.duration")
+              %dd.col-sm-7= @presenter.formatted_duration

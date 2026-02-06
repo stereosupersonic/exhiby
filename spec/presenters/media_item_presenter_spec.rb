@@ -80,4 +80,21 @@ RSpec.describe MediaItemPresenter do
       expect(presenter.file_info).to be_nil
     end
   end
+
+  describe "#phash_short" do
+    it "returns first 8 characters of phash" do
+      media_item.phash = "a1b2c3d4e5f67890"
+      expect(presenter.phash_short).to eq("a1b2c3d4")
+    end
+
+    it "returns nil when phash is blank" do
+      media_item.phash = nil
+      expect(presenter.phash_short).to be_nil
+    end
+
+    it "returns nil when phash is empty string" do
+      media_item.phash = ""
+      expect(presenter.phash_short).to be_nil
+    end
+  end
 end

@@ -1082,6 +1082,138 @@ bin/rails routes           # List all routes
 bin/rails c                # Rails console
 ```
 
+## Additional Guidelines (from Ben Sheldon's patterns)
+
+### AI Guardrails
+
+**Important restrictions - always ask for explicit approval before:**
+- Modifying Gemfile or Gemfile.lock
+- Changing Rails configuration files (config/*.rb)
+- Modifying initializers (config/initializers/*.rb)
+- Changing RSpec/test setup configuration
+- Altering database.yml or storage.yml
+
+### Migration Data Types
+
+- **Always use `text` for string fields**, never `string`/`varchar` - PostgreSQL handles `text` efficiently and avoids arbitrary length limits
+- Use `datetime` instead of `timestamp` for consistency
+- **Boolean nullability**: Consider whether booleans need three states (true/false/unknown). Only add `null: false, default: false` when you truly need a two-state field
+
+```ruby
+# Good
+create_table :articles do |t|
+  t.text :title, null: false        # Not string!
+  t.text :content
+  t.boolean :published              # Nullable - pending/true/false states
+  t.boolean :archived, default: false, null: false  # Only when truly binary
+end
+```
+
+### Controller URL/Redirect Patterns
+
+Use hash notation for same-controller actions - cleaner and more maintainable:
+
+```ruby
+# Good - hash notation for same controller
+redirect_to({ action: :index })
+redirect_to({ action: :show, id: @user.id })
+url_for(action: "edit")
+
+# Also acceptable - named routes
+redirect_to users_path
+```
+
+### I18n Best Practices
+
+```ruby
+# Prefer relative keys in views (shorter, auto-scoped)
+t(".title")                    # Good - relative to view path
+t(".submit_button")            # Good
+t("admin.users.index.title")   # Avoid - verbose absolute path
+
+# Use _md suffix for Markdown content
+# config/locales/de.yml
+de:
+  pages:
+    about:
+      intro_md: |
+        ## Willkommen
+        Dies ist **Markdown** Inhalt.
+
+# In views, Markdown keys auto-render to HTML
+= t(".intro_md")  # Returns safe HTML
+```
+
+### Testing Refinements
+
+#### Multiple Assertions Per Example
+Multiple assertions in a single example are acceptable when testing related behavior:
+
+```ruby
+it "creates a user with correct attributes" do
+  result = described_class.new(valid_params).call
+
+  expect(result).to be_success
+  expect(result.value.email).to eq("test@example.com")
+  expect(result.value.name).to eq("Test User")
+end
+```
+
+#### Prefer Real Objects Over Mocks
+Use `instance_double` only for external APIs - prefer real objects for internal code:
+
+```ruby
+# Good - real objects
+let(:user) { create(:user) }
+let(:service) { described_class.new(user) }
+
+# Only for external APIs
+let(:aws_client) { instance_double(Aws::Rekognition::Client) }
+```
+
+#### Use css_id Helper in System Specs
+Avoid string interpolation for DOM IDs:
+
+```ruby
+# Good - use css_id helper
+find(css_id(@user))
+within(css_id(@media_item)) do
+  click_button "Delete"
+end
+
+# Bad - string interpolation
+find("#user_#{@user.id}")
+within("#media_item_#{@media_item.id}") do
+```
+
+#### Use Capybara Async Matchers
+Avoid flaky `find` assertions - use async matchers instead:
+
+```ruby
+# Good - async matchers (waits for condition)
+expect(page).to have_content("Success")
+expect(page).to have_css(".alert-success")
+expect(page).to have_selector("[data-testid='user-card']")
+
+# Bad - flaky find assertions
+expect(find(".message").text).to eq("Success")
+```
+
+#### Skip Declarative Configuration Testing
+Don't test Rails framework behavior - focus on custom logic:
+
+```ruby
+# Skip - just tests Rails works
+it { should validate_presence_of(:email) }  # Only test if custom behavior
+
+# Good - test violation cases with custom messages
+it "requires email with custom message" do
+  user = build(:user, email: nil)
+  expect(user).not_to be_valid
+  expect(user.errors[:email]).to include("wird benötigt")
+end
+```
+
 ### don't do this
 
 * api (json) endpoints

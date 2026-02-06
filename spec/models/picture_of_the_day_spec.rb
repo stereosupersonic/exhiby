@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: pictures_of_the_day
+#
+#  id            :bigint           not null, primary key
+#  caption       :string
+#  description   :text
+#  display_date  :date             not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  created_by_id :bigint           not null
+#  media_item_id :bigint           not null
+#
+# Indexes
+#
+#  index_pictures_of_the_day_on_created_by_id  (created_by_id)
+#  index_pictures_of_the_day_on_display_date   (display_date) UNIQUE
+#  index_pictures_of_the_day_on_media_item_id  (media_item_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (created_by_id => users.id)
+#  fk_rails_...  (media_item_id => media_items.id) ON DELETE => restrict
+#
 require "rails_helper"
 
 RSpec.describe PictureOfTheDay do
