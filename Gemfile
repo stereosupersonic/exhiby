@@ -55,7 +55,7 @@ gem "exception_notification", "~> 5.0"
 gem "sidekiq", "~> 7.3"
 
 # ZIP file processing for bulk imports [https://github.com/rubyzip/rubyzip]
-gem "rubyzip", "~> 2.3"
+gem "rubyzip", "~> 3.2"
 
 # CSV processing (standard library until Ruby 3.4)
 gem "csv"
