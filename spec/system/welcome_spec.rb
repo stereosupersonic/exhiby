@@ -8,7 +8,7 @@ RSpec.describe "Welcome Pages", type: :system do
       expect(page).to have_selector("[data-testid='site-header']")
       expect(page).to have_selector("[data-testid='main-navigation']")
       expect(page).to have_selector("[data-testid='hero-section']")
-      expect(page).to have_selector("[data-testid='welcome-section']")
+      expect(page).to have_selector("[data-testid='stats-section']")
     end
 
     it "displays the logo in the header" do
@@ -16,16 +16,16 @@ RSpec.describe "Welcome Pages", type: :system do
 
       within "[data-testid='site-header']" do
         expect(page).to have_selector("[data-testid='logo-link']")
-        expect(page).to have_css("img[alt='OnlineMuseum Wartenberg Logo']")
+        expect(page).to have_css("img[alt='OnlineMuseum Wartenberg']")
       end
     end
 
-    it "displays the hero section with title" do
+    it "displays the search hero section with title" do
       visit root_path
 
       within "[data-testid='hero-section']" do
         expect(page).to have_css("h1", text: "OnlineMuseum Wartenberg")
-        expect(page).to have_content("ein Ort für Kunst und Kulturgeschichte")
+        expect(page).to have_content("Entdecken Sie Kunst und Kulturgeschichte")
       end
     end
 
@@ -43,21 +43,20 @@ RSpec.describe "Welcome Pages", type: :system do
       end
     end
 
-    it "displays the welcome content section" do
+    it "displays the stats section" do
       visit root_path
 
-      within "[data-testid='welcome-section']" do
-        expect(page).to have_css("h2", text: "Über uns")
-        expect(page).to have_content("Entdeckungsreise")
+      within "[data-testid='stats-section']" do
+        expect(page).to have_content("Unsere Sammlung in Zahlen")
       end
     end
 
     it "displays footer with legal links" do
       visit root_path
 
-      within ".site-footer" do
+      within "[data-testid='site-footer']" do
         expect(page).to have_link("Impressum", href: impressum_path)
-        expect(page).to have_link("Datenschutzerklärung", href: datenschutzerklaerung_path)
+        expect(page).to have_link("Datenschutz", href: datenschutzerklaerung_path)
       end
     end
 
@@ -94,8 +93,8 @@ RSpec.describe "Welcome Pages", type: :system do
     it "navigates to impressum page from footer" do
       visit root_path
 
-      within ".site-footer" do
-        click_link "Impressum"
+      within "[data-testid='site-footer']" do
+        click_link "Impressum", match: :first
       end
 
       expect(page).to have_current_path(impressum_path)
@@ -105,8 +104,8 @@ RSpec.describe "Welcome Pages", type: :system do
     it "navigates to datenschutz page from footer" do
       visit root_path
 
-      within ".site-footer" do
-        click_link "Datenschutzerklärung"
+      within "[data-testid='site-footer']" do
+        click_link "Datenschutz"
       end
 
       expect(page).to have_current_path(datenschutzerklaerung_path)
@@ -175,9 +174,9 @@ RSpec.describe "Welcome Pages", type: :system do
     it "displays footer links" do
       visit impressum_path
 
-      within ".site-footer" do
+      within "[data-testid='site-footer']" do
         expect(page).to have_link("Impressum")
-        expect(page).to have_link("Datenschutzerklärung")
+        expect(page).to have_link("Datenschutz")
       end
     end
   end
@@ -195,9 +194,9 @@ RSpec.describe "Welcome Pages", type: :system do
     it "displays footer links" do
       visit datenschutzerklaerung_path
 
-      within ".site-footer" do
+      within "[data-testid='site-footer']" do
         expect(page).to have_link("Impressum")
-        expect(page).to have_link("Datenschutzerklärung")
+        expect(page).to have_link("Datenschutz")
       end
     end
   end
@@ -207,7 +206,7 @@ RSpec.describe "Welcome Pages", type: :system do
       visit team_path
 
       expect(page).to have_selector("[data-testid='team-page']")
-      expect(page).to have_selector("[data-testid='team-title']", text: "Wir sind ein Team")
+      expect(page).to have_selector("[data-testid='team-title']", text: "Über uns")
       expect(page).to have_content("Dr. Heike Schmidt-Kronseder")
       expect(page).to have_content("Mattias Kehm")
     end
@@ -215,7 +214,9 @@ RSpec.describe "Welcome Pages", type: :system do
     it "is accessible from navigation" do
       visit root_path
 
-      click_link "Team"
+      within "[data-testid='main-navigation']" do
+        click_link "Team"
+      end
 
       expect(page).to have_current_path(team_path)
       expect(page).to have_selector("[data-testid='team-page']")
@@ -232,7 +233,9 @@ RSpec.describe "Welcome Pages", type: :system do
     it "navigation links lead to coming soon pages" do
       visit root_path
 
-      click_link "Ausstellungen"
+      within "[data-testid='main-navigation']" do
+        click_link "Ausstellungen"
+      end
       expect(page).to have_selector("[data-testid='coming-soon-page']")
     end
   end
@@ -248,7 +251,9 @@ RSpec.describe "Welcome Pages", type: :system do
     it "navigation link leads to artists page" do
       visit root_path
 
-      click_link "Kunstschaffende"
+      within "[data-testid='main-navigation']" do
+        click_link "Kunstschaffende"
+      end
       expect(page).to have_selector("[data-testid='artists-section']")
     end
   end

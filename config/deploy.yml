@@ -25,7 +25,9 @@ servers:
 #
 proxy:
   ssl: true
-  host: museum-wartenberg.de
+  hosts:
+    - museum-wartenberg.de
+    - www.museum-wartenberg.de
 
 # Where you keep your container images.
 registry:

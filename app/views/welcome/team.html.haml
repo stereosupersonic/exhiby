@@ -3,10 +3,7 @@
 
 = render "shared/site_header", active: :team
 
-%section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('team/team_om_1920.jpg')}')", data: { testid: "team-hero" } }
-  .hero-overlay
-    .container
-      %h1.hero-title{ data: { testid: "team-title" } } Wir sind ein Team
+= render "shared/page_header", title: t("seo.pages.team.title"), testid: "team-hero", title_testid: "team-title"
 
 %section.static-page.py-5{ data: { testid: "team-page" } }
   .container

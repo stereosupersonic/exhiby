@@ -1052,8 +1052,51 @@ de:
       copyright: Copyright
     not_found: Für dieses Datum gibt es kein Bild des Tages.
 
+  # Navigation
+  navigation:
+    menu: Menü
+    willkommen: Willkommen
+    kunstschaffende: Kunstschaffende
+    alle_kunstschaffende: Alle Kunstschaffende
+    land_und_leute: Land & Leute
+    alle_sammlungen: Alle Sammlungen
+    ausstellungen: Ausstellungen
+    bild_des_tages: Bild des Tages
+    archiv: Archiv
+    team: Team
+
+  # Footer
+  footer:
+    general: Allgemeines
+    about_us: Über uns
+    impressum: Impressum
+    datenschutz: Datenschutz
+    discover: Entdecken
+    search: Suche
+    browse_media: Medien durchsuchen
+    tagline: Wartenbergs digitale Schatzkammer
+    copyright: "\u00A9 %{year} OnlineMuseum Wartenberg"
+
   # Welcome/Start page
   welcome:
+    hero_title: OnlineMuseum Wartenberg
+    hero_subtitle: Entdecken Sie Kunst und Kulturgeschichte aus Wartenberg und Umgebung
+    stats:
+      title: Unsere Sammlung in Zahlen
+      objekte: Objekte
+      kunstschaffende: Kunstschaffende
+      sammlungen: Sammlungen
+      artikel: Artikel
+      bild_des_tages: Bilder des Tages
+      schlagwoerter: Schlagwörter
+    feature_cards:
+      title: Entdecken
+      kunstschaffende: Kunstschaffende
+      land_und_leute: Land & Leute
+      ausstellungen: Ausstellungen
+      bild_des_tages: Bild des Tages
+      archiv: Archiv
+      team: Unser Team
     recent_articles:
       title: Aktuelles
       view_all: Alle Artikel

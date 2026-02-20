@@ -1,0 +1,9 @@
+%section.search-hero{ data: { testid: local_assigns[:testid] || "search-hero" } }
+  .container
+    %h1.search-hero-title= local_assigns[:title] || t("welcome.hero_title")
+    %p.search-hero-subtitle= local_assigns[:subtitle] || t("welcome.hero_subtitle")
+    = form_with url: search_path, method: :get, local: true, class: "search-hero-form", data: { testid: "search-form" } do |f|
+      = label_tag :q, t("search.placeholder"), class: "visually-hidden"
+      .input-group
+        = text_field_tag :q, params[:q], class: "form-control", placeholder: t("search.placeholder"), data: { testid: "search-input" }
+        = submit_tag t("search.button"), class: "btn btn-primary", data: { testid: "search-submit" }

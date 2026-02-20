@@ -7,10 +7,7 @@
 
 = render "shared/site_header"
 
-%section.hero-section{ style: "background-image: url('#{image_path('design/coming-soon.jpg')}')", data: { testid: "coming-soon-hero" } }
-  .hero-overlay
-    .container
-      %h1.hero-title{ data: { testid: "coming-soon-title" } } Coming Soon
+= render "shared/page_header", title: "Coming Soon", testid: "coming-soon-hero", title_testid: "coming-soon-title"
 
 %section.static-page.py-5{ data: { testid: "coming-soon-page" } }
   .container

@@ -3,11 +3,7 @@
 
 = render "shared/site_header", active: :kunstschaffende
 
-%section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "artists-hero" } }
-  .hero-overlay
-    .container
-      %h1.hero-title{ data: { testid: "artists-heading" } }
-        = t("artists.index.title")
+= render "shared/page_header", title: t("artists.index.title"), testid: "artists-hero", title_testid: "artists-heading"
 
 %section.artists-section.py-5{ data: { testid: "artists-section" } }
   .container
@@ -16,7 +12,7 @@
         - @artists.each do |artist|
           - presenter = ArtistPresenter.new(artist)
           .col-md-4.col-lg-3{ data: { testid: "artist-card-#{artist.slug}" } }
-            .card.h-100.artist-card
+            .content-card
               - if artist.profile_media_item&.file&.attached?
                 = link_to artist_path(artist.slug) do
                   = image_tag artist.profile_media_item.file.variant(resize_to_fit: [300, 300]), class: "card-img-top", alt: artist.name
@@ -27,11 +23,11 @@
                 = link_to artist_path(artist.slug) do
                   .card-img-top.bg-light.d-flex.align-items-center.justify-content-center{ style: "height: 200px;" }
                     %i.bi.bi-person.text-muted{ style: "font-size: 4rem;" }
-              .card-body.text-center
-                %h5.card-title
-                  = link_to artist.name, artist_path(artist.slug), class: "text-decoration-none"
+              .content-card-body.text-center
+                .content-card-title
+                  = link_to artist.name, artist_path(artist.slug)
                 - if presenter.display_life_dates.present?
-                  %p.card-text.text-muted.small= presenter.display_life_dates
+                  .content-card-meta= presenter.display_life_dates
     - else
       .text-center.text-muted.py-5{ data: { testid: "no-artists-message" } }
         %p= t("artists.index.no_artists")

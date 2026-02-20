@@ -9,11 +9,10 @@
 = render "shared/site_header", active: :kunstschaffende
 - presenter = ArtistPresenter.new(@artist)
 
+= render "shared/page_header", title: @artist.name, title_testid: "artist-name", breadcrumbs: [[t("artists.index.title"), artists_path], [@artist.name, nil]]
+
 %section.artist-section.py-5{ data: { testid: "artist-section" } }
   .container
-    .mb-4
-      = link_to t("artists.show.back"), artists_path, class: "btn btn-outline-secondary btn-sm"
-
     .row.mb-5
       - has_image = @artist.profile_media_item&.file&.attached? || @artist.profile_image.attached?
       - if has_image
@@ -23,7 +22,6 @@
           - elsif @artist.profile_image.attached?
             = render "shared/zoomable_image", image: @artist.profile_image.variant(resize_to_fit: [300, 400]), full_image_url: url_for(@artist.profile_image), title: @artist.name, image_class: "img-fluid rounded"
         .col-md-9
-          %h1.mb-3{ data: { testid: "artist-name" } }= @artist.name
           - if presenter.full_life_info.present?
             %p.lead.text-muted{ data: { testid: "artist-life-info" } }= presenter.full_life_info
           - if @artist.biography.present?
@@ -38,7 +36,6 @@
                 = @artist.cv
       - else
         .col-12
-          %h1.mb-3{ data: { testid: "artist-name" } }= @artist.name
           - if presenter.full_life_info.present?
             %p.lead.text-muted{ data: { testid: "artist-life-info" } }= presenter.full_life_info
           - if @artist.biography.present?

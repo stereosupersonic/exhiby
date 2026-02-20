@@ -1,0 +1,33 @@
+%footer.site-footer{ data: { testid: "site-footer" } }
+  .container
+    .row.g-4
+      .col-6.col-md-3
+        %h6.footer-heading= t("footer.general")
+        %ul.footer-links
+          %li= link_to t("footer.about_us"), team_path
+          %li= link_to t("footer.impressum"), impressum_path
+          %li= link_to t("footer.datenschutz"), datenschutzerklaerung_path
+
+      .col-6.col-md-3
+        %h6.footer-heading= t("footer.discover")
+        %ul.footer-links
+          %li= link_to t("navigation.kunstschaffende"), artists_path
+          %li= link_to t("navigation.land_und_leute"), land_und_leute_path
+          %li= link_to t("navigation.archiv"), articles_path
+          %li= link_to t("navigation.bild_des_tages"), pictures_of_the_day_path
+
+      .col-6.col-md-3
+        %h6.footer-heading= t("footer.search")
+        %ul.footer-links
+          %li= link_to t("footer.browse_media"), search_path
+
+      .col-6.col-md-3
+        = link_to root_path do
+          = image_tag "logo/Logo-Online-Museum-V10-100.png", alt: "OnlineMuseum Wartenberg", class: "footer-logo-img"
+        %p.footer-tagline= t("footer.tagline")
+
+    .footer-bottom
+      .d-flex.flex-wrap.justify-content-between.align-items-center
+        %span= t("footer.copyright", year: Date.current.year)
+        %span
+          = link_to t("footer.impressum"), impressum_path, class: "text-white-50 text-decoration-none"

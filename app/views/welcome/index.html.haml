@@ -3,80 +3,53 @@
 
 = render "shared/site_header", active: :willkommen
 
--# Hero Section with Picture of the Day or Default Background
+-# Search Hero
+= render "shared/search_hero", testid: "hero-section"
+
+-# Stats Dashboard
+= render "welcome/stats_section"
+
+-# Feature Cards Grid
+= render "welcome/feature_cards"
+
+-# Picture of the Day
 - if @picture_of_the_day && @picture_of_the_day.media_item.file.attached?
   - picture_presenter = PictureOfTheDayPresenter.new(@picture_of_the_day)
-  %section.hero-section.hero-section-picture-of-the-day{ style: "background-image: url('#{url_for(picture_presenter.hero_image_url)}')", data: { testid: "hero-section-picture-of-the-day" } }
-    .hero-overlay
-      .container
-        %h1.hero-title= picture_presenter.display_title
-        .hero-picture-info
-          = link_to pictures_of_the_day_path, class: "hero-picture-link" do
-            %span.badge.bg-light.text-dark
-              %i.bi.bi-calendar3.me-1
-              Bild des Tages
-              = picture_presenter.formatted_display_date_short
-- else
-  %section.hero-section{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "hero-section" } }
-    .hero-overlay
-      .container
-        %h1.hero-title
-          OnlineMuseum Wartenberg –
-          %br
-          ein Ort für Kunst und Kulturgeschichte
-
--# Welcome Content
-%section.welcome-section{ data: { testid: "welcome-section" } }
-  .container
-    .text-center.py-2
-      %h2.section-title Über uns
-      %p.section-subtitle
-        %em
-          Kommen Sie mit auf eine Entdeckungsreise und erfahren Sie mehr über unsere Marktgemeinde
-          anhand vieler digitalisierter Exponate von Kunstwerken, Fotografien, Postkarten und
-          weiteren Archivalien.
-    %hr
-
-    .text-center.py-2
-      %p.section-subtitle
-        %em
-          Das OnlineMuseum Wartenberg bewahrt und präsentiert die kulturelle Vielfalt unserer Region.
-          Entdecken Sie historische Schätze, lokale Künstler und die Geschichte unserer Gemeinde
-          in einer digitalen Sammlung, die stetig wächst.
-
-- if @recent_articles.any?
-  %section.articles-preview{ data: { testid: "recent-articles-section" } }
+  %section.py-5.bg-white{ data: { testid: "hero-section-picture-of-the-day" } }
     .container
-      .text-center.py-5
-        %h2.section-title= t("welcome.recent_articles.title")
+      %h2.section-title.text-center.mb-4= t("navigation.bild_des_tages")
+      .row.justify-content-center
+        .col-md-8.col-lg-6
+          .content-card
+            = link_to pictures_of_the_day_path do
+              = image_tag picture_presenter.hero_image_url, class: "card-img-top", alt: picture_presenter.display_title
+            .content-card-body.text-center
+              .content-card-title= picture_presenter.display_title
+              .content-card-meta
+                %i.bi.bi-calendar3.me-1
+                = picture_presenter.formatted_display_date_short
 
-      - @recent_articles.each do |article|
-        - presenter = ArticlePresenter.new(article)
-        .article-item.py-4{ data: { testid: "recent-article-card-#{article.slug}" } }
-          .row
-            - if article.cover_media_item&.file&.attached?
-              .col-md-2
+-# Recent Articles
+- if @recent_articles.any?
+  %section.articles-preview.py-5{ data: { testid: "recent-articles-section" } }
+    .container
+      %h2.section-title.text-center.mb-4= t("welcome.recent_articles.title")
+
+      .row.g-4
+        - @recent_articles.each do |article|
+          - presenter = ArticlePresenter.new(article)
+          .col-md-4{ data: { testid: "recent-article-card-#{article.slug}" } }
+            .content-card
+              - if article.cover_media_item&.file&.attached?
                 = link_to article_path(article.slug) do
-                  = image_tag article.cover_media_item.file.variant(resize_to_limit: [400, 300]), class: "img-fluid", alt: article.title
-              .col-md-10
-                %h4
-                  = link_to article.title, article_path(article.slug), class: "text-decoration-none"
+                  = image_tag article.cover_media_item.file.variant(resize_to_limit: [400, 300]), class: "card-img-top", alt: article.title
+              .content-card-body
+                .content-card-title
+                  = link_to article.title, article_path(article.slug)
                 - if article.published_at.present?
-                  %p.text-muted= presenter.formatted_published_at_short
-                .article-excerpt
-                  = presenter.excerpt(length: 1000)
-                .mt-3
-                  = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
-            - else
-              .col-12
-                %h4
-                  = link_to article.title, article_path(article.slug), class: "text-decoration-none"
-                - if article.published_at.present?
-                  %p.text-muted= presenter.formatted_published_at_short
-                .article-excerpt
-                  = presenter.excerpt(length: 300)
-                .mt-3
-                  = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
-        %hr
-      .text-center.py-4
+                  .content-card-meta.mb-2= presenter.formatted_published_at_short
+                %p.small.text-muted= presenter.excerpt(length: 150)
+                = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
+
+      .text-center.mt-4
         = link_to t("welcome.recent_articles.view_all"), articles_path, class: "btn btn-primary", data: { testid: "view-all-articles" }

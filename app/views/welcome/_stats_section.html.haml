@@ -1,0 +1,40 @@
+%section.stats-section{ data: { testid: "stats-section" } }
+  .container
+    %h2.stats-title= t("welcome.stats.title")
+    .row.g-3
+      .col-6.col-md-4.col-lg-2
+        .stat-card
+          .stat-icon
+            %i.bi.bi-images
+          .stat-number= @stats[:objekte]
+          .stat-label= t("welcome.stats.objekte")
+      .col-6.col-md-4.col-lg-2
+        .stat-card
+          .stat-icon
+            %i.bi.bi-person-circle
+          .stat-number= @stats[:kunstschaffende]
+          .stat-label= t("welcome.stats.kunstschaffende")
+      .col-6.col-md-4.col-lg-2
+        .stat-card
+          .stat-icon
+            %i.bi.bi-collection
+          .stat-number= @stats[:sammlungen]
+          .stat-label= t("welcome.stats.sammlungen")
+      .col-6.col-md-4.col-lg-2
+        .stat-card
+          .stat-icon
+            %i.bi.bi-newspaper
+          .stat-number= @stats[:artikel]
+          .stat-label= t("welcome.stats.artikel")
+      .col-6.col-md-4.col-lg-2
+        .stat-card
+          .stat-icon
+            %i.bi.bi-calendar-heart
+          .stat-number= @stats[:bild_des_tages]
+          .stat-label= t("welcome.stats.bild_des_tages")
+      .col-6.col-md-4.col-lg-2
+        .stat-card
+          .stat-icon
+            %i.bi.bi-tags
+          .stat-number= @stats[:schlagwoerter]
+          .stat-label= t("welcome.stats.schlagwoerter")

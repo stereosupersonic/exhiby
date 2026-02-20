@@ -4,11 +4,10 @@
 
 = render "shared/site_header", active: :bild_des_tages
 
-%section.static-page.py-5{ data: { testid: "picture-of-the-day-show" } }
-  .container
-    .mb-4
-      = link_to t("pictures_of_the_day.show.back"), pictures_of_the_day_path, class: "btn btn-outline-secondary btn-sm"
+= render "shared/page_header", title: presenter.display_title, title_testid: "picture-title", breadcrumbs: [[t("pictures_of_the_day.index.title"), pictures_of_the_day_path], [presenter.display_title, nil]]
 
+%section.py-5{ data: { testid: "picture-of-the-day-show" } }
+  .container
     .row
       .col-lg-8
         - if @picture_of_the_day.media_item.file.attached?
@@ -25,7 +24,6 @@
       .col-lg-4
         .card.mb-4
           .card-body
-            %h1.h3.card-title{ data: { testid: "picture-title" } }= presenter.display_title
             %p.text-muted{ data: { testid: "display-date" } }
               %i.bi.bi-calendar3.me-2
               = presenter.formatted_display_date
@@ -48,3 +46,6 @@
                 - if presenter.copyright
                   %dt= t("pictures_of_the_day.show.copyright")
                   %dd= presenter.copyright
+
+    .mt-4
+      = link_to t("pictures_of_the_day.show.back"), pictures_of_the_day_path, class: "btn btn-outline-primary"
