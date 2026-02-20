@@ -1,0 +1,33 @@
+- if @featured_collections.present?
+  %section.collections-carousel-section.py-5{ data: { testid: "collections-carousel-section" } }
+    .container
+      %h2.section-title.text-center.mb-4= t("welcome.collections_carousel.title")
+
+      #collectionsCarousel.carousel.slide{ tabindex: "0", data: { bs_ride: "carousel", bs_interval: "5000", bs_keyboard: "true" } }
+        .carousel-indicators
+          - @featured_collections.each_with_index do |_collection, index|
+            %button{ type: "button", data: { bs_target: "#collectionsCarousel", bs_slide_to: index }, class: ("#{'active' if index.zero?}"), aria: { current: (index.zero? ? "true" : nil), label: "Slide #{index + 1}" } }
+
+        .carousel-inner
+          - @featured_collections.each_with_index do |collection, index|
+            .carousel-item{ class: ("#{'active' if index.zero?}") }
+              .row.align-items-center.justify-content-center
+                .col-md-6.col-lg-5
+                  - if collection.cover_media_item&.file&.attached?
+                    = link_to collection_path(collection.slug) do
+                      = image_tag collection.cover_media_item.file.variant(resize_to_limit: [600, 450]), class: "carousel-collection-image", alt: collection.name
+                .col-md-6.col-lg-5
+                  .carousel-collection-content.text-center
+                    %h3.carousel-collection-title= collection.name
+                    - if collection.description.present?
+                      .carousel-collection-description= truncate(collection.description.to_plain_text, length: 250)
+                    = link_to collection_path(collection.slug), class: "carousel-collection-link" do
+                      = t("welcome.collections_carousel.read_more")
+                      %i.bi.bi-chevron-right.ms-1
+
+        %button.carousel-control-prev{ type: "button", data: { bs_target: "#collectionsCarousel", bs_slide: "prev" } }
+          %span.carousel-control-prev-icon{ aria: { hidden: "true" } }
+          %span.visually-hidden= t("welcome.collections_carousel.previous")
+        %button.carousel-control-next{ type: "button", data: { bs_target: "#collectionsCarousel", bs_slide: "next" } }
+          %span.carousel-control-next-icon{ aria: { hidden: "true" } }
+          %span.visually-hidden= t("welcome.collections_carousel.next")

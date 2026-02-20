@@ -58,4 +58,45 @@ if Rails.env.development? || Rails.env.test?
     user.role = "user"
   end
   puts "Created regular user: #{regular_user.email_address}"
+
+  # Sample collections
+  category = CollectionCategory.find_or_create_by!(name: "Geschichte") do |c|
+    c.slug = "geschichte"
+    c.position = 0
+  end
+
+  collections_data = [
+    {
+      name: "Historische Ansichten von Wartenberg",
+      description: "Eine Sammlung historischer Postkarten und Fotografien, die das Ortsbild von Wartenberg im Wandel der Zeit dokumentieren. Von den ersten fotografischen Aufnahmen um 1900 bis zu den Veränderungen der Nachkriegszeit."
+    },
+    {
+      name: "Kunsthandwerk aus der Region",
+      description: "Entdecken Sie die vielfältige Tradition des regionalen Kunsthandwerks. Töpferei, Holzschnitzerei und Textilkunst zeugen von der Kreativität und dem handwerklichen Geschick der Menschen in und um Wartenberg."
+    },
+    {
+      name: "Kirchliche Kunst und Architektur",
+      description: "Die Kirchen und Kapellen der Gemeinde bergen bemerkenswerte Kunstschätze. Diese Sammlung zeigt Altäre, Skulpturen und Gemälde aus verschiedenen Epochen der sakralen Kunst in Wartenberg."
+    },
+    {
+      name: "Leben auf dem Land",
+      description: "Einblicke in den bäuerlichen Alltag vergangener Jahrhunderte. Werkzeuge, Trachten und Gebrauchsgegenstände erzählen Geschichten vom Leben und Arbeiten auf dem Land in der Region Wartenberg."
+    },
+    {
+      name: "Wartenberger Persönlichkeiten",
+      description: "Porträts und Dokumente bedeutender Persönlichkeiten, die in Wartenberg geboren wurden oder hier wirkten. Von Künstlern über Gelehrte bis hin zu Handwerkern, die das Ortsleben geprägt haben."
+    }
+  ]
+
+  collections_data.each_with_index do |data, index|
+    collection = Collection.find_or_create_by!(name: data[:name]) do |c|
+      c.collection_category = category
+      c.created_by = admin
+      c.status = "published"
+      c.published_at = Time.current
+      c.position = index
+      c.description = data[:description]
+    end
+    puts "Created collection: #{collection.name}"
+  end
 end

@@ -38,16 +38,7 @@
               - @nav_artists.each do |artist|
                 = link_to artist.name, artist_path(artist.slug), class: "dropdown-item"
 
-        .nav-dropdown{ data: { controller: "dropdown", action: "mouseenter->dropdown#show mouseleave->dropdown#hide" } }
-          = link_to t("navigation.land_und_leute"), land_und_leute_path, class: "nav-link-item#{' active' if local_assigns[:active] == :land_und_leute}", data: { testid: "nav-land-leute" }
-          %span.dropdown-arrow
-          .dropdown-menu{ data: { dropdown_target: "menu" } }
-            = link_to t("navigation.alle_sammlungen"), land_und_leute_path, class: "dropdown-item"
-            - if @nav_collection_categories&.any?
-              .dropdown-divider
-              - @nav_collection_categories.each do |category|
-                = link_to category.name, land_und_leute_path(anchor: category.slug), class: "dropdown-item"
-
+        = link_to t("navigation.alle_sammlungen"), land_und_leute_path, class: "nav-link-item#{' active' if local_assigns[:active] == :sammlungen}", data: { testid: "nav-sammlungen" }
         = link_to t("navigation.ausstellungen"), ausstellungen_path, class: "nav-link-item#{' active' if local_assigns[:active] == :ausstellungen}", data: { testid: "nav-ausstellungen" }
         = link_to t("navigation.archiv"), articles_path, class: "nav-link-item#{' active' if local_assigns[:active] == :archiv}", data: { testid: "nav-archiv" }
         = link_to t("navigation.team"), team_path, class: "nav-link-item#{' active' if local_assigns[:active] == :team}", data: { testid: "nav-team" }
@@ -82,7 +73,7 @@
       .mobile-nav-sub
         - @nav_artists.each do |artist|
           = link_to artist.name, artist_path(artist.slug), class: "mobile-nav-link"
-    = link_to t("navigation.land_und_leute"), land_und_leute_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :land_und_leute}"
+    = link_to t("navigation.alle_sammlungen"), land_und_leute_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :sammlungen}"
     = link_to t("navigation.ausstellungen"), ausstellungen_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :ausstellungen}"
     = link_to t("navigation.archiv"), articles_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :archiv}"
     = link_to t("navigation.team"), team_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :team}"

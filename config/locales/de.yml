@@ -1092,11 +1092,13 @@ de:
     feature_cards:
       title: Entdecken
       kunstschaffende: Kunstschaffende
-      land_und_leute: Land & Leute
+      sammlungen: Sammlungen
       ausstellungen: Ausstellungen
-      bild_des_tages: Bild des Tages
-      archiv: Archiv
-      team: Unser Team
+    collections_carousel:
+      title: Aktuelles
+      read_more: Weiterlesen
+      previous: Zurück
+      next: Weiter
     hero_image:
       description: Beschreibung
       artist: Künstler
