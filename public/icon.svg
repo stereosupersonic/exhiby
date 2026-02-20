@@ -1,3 +1,17 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="64" fill="#E08A1E"/>
+  <g fill="none" stroke="#fff" stroke-width="32">
+    <!-- O ring open at bottom -->
+    <path d="M185,380 A145,145 0 1 1 330,380"/>
+    <!-- Index finger -->
+    <line x1="233" y1="390" x2="233" y2="220" stroke-linecap="round"/>
+    <!-- Middle finger -->
+    <line x1="282" y1="390" x2="282" y2="250" stroke-linecap="round"/>
+    <!-- Ring finger -->
+    <line x1="330" y1="390" x2="330" y2="280" stroke-linecap="round"/>
+    <!-- Palm base -->
+    <path d="M168,400 L168,420 Q168,460 208,460 L340,460 Q370,460 370,430 L370,390" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Thumb -->
+    <line x1="168" y1="400" x2="120" y2="400" stroke-linecap="round"/>
+  </g>
 </svg>
