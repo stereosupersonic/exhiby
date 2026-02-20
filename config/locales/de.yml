@@ -1068,7 +1068,7 @@ de:
   # Footer
   footer:
     general: Allgemeines
-    about_us: Über uns
+    about_us: Team
     impressum: Impressum
     datenschutz: Datenschutz
     discover: Entdecken
@@ -1097,6 +1097,14 @@ de:
       bild_des_tages: Bild des Tages
       archiv: Archiv
       team: Unser Team
+    hero_image:
+      description: Beschreibung
+      artist: Künstler
+      year: Jahr
+      technique: Technik
+      copyright: Copyright
+      tags: Schlagwörter
+      close: Schließen
     recent_articles:
       title: Aktuelles
       view_all: Alle Artikel
@@ -1134,6 +1142,7 @@ de:
     no_query: "Bitte geben Sie einen Suchbegriff ein."
     no_results: "Keine Ergebnisse gefunden für \"%{query}\"."
     results_for: "Suchergebnisse für \"%{query}\""
+    all_objects: "Alle Objekte"
     sections:
       media_items: "Medien"
       artists: "Kunstschaffende"

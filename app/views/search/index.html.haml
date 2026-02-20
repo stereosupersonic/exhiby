@@ -8,12 +8,15 @@
 %section.search-section.py-5{ data: { testid: "search-section" } }
   .container
 
-    - if @query.blank?
+    - if @query.blank? && !params[:all].present?
       .text-center.text-muted.py-4{ data: { testid: "no-query-message" } }
         %p= t("search.no_query")
     - else
       %h2.h5.mb-4{ data: { testid: "results-heading" } }
-        = t("search.results_for", query: @query)
+        - if @query.present?
+          = t("search.results_for", query: @query)
+        - else
+          = t("search.all_objects")
 
       - has_results = @media_items.present? || @articles.present? || @collections.present? || @artists.present?
 

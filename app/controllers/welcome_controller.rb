@@ -3,13 +3,12 @@ class WelcomeController < ApplicationController
 
   def index
     @recent_articles = Article.recent(3)
-    @picture_of_the_day = PictureOfTheDay.current_or_most_recent
+    @hero_image = MediaItem.published.where(media_type: "image").order("RANDOM()").first
     @stats = {
       objekte: MediaItem.published.count,
       kunstschaffende: Artist.published.count,
       sammlungen: Collection.published.count,
       artikel: Article.published.count,
-      bild_des_tages: PictureOfTheDay.count,
       schlagwoerter: MediaTag.count
     }
   end

@@ -1,9 +1,52 @@
 %section.search-hero{ data: { testid: local_assigns[:testid] || "search-hero" } }
   .container
-    %h1.search-hero-title= local_assigns[:title] || t("welcome.hero_title")
-    %p.search-hero-subtitle= local_assigns[:subtitle] || t("welcome.hero_subtitle")
-    = form_with url: search_path, method: :get, local: true, class: "search-hero-form", data: { testid: "search-form" } do |f|
-      = label_tag :q, t("search.placeholder"), class: "visually-hidden"
-      .input-group
-        = text_field_tag :q, params[:q], class: "form-control", placeholder: t("search.placeholder"), data: { testid: "search-input" }
-        = submit_tag t("search.button"), class: "btn btn-primary", data: { testid: "search-submit" }
+    .row.align-items-center
+      .col-lg-6.mb-4.mb-lg-0
+        %h1.search-hero-title= local_assigns[:title] || t("welcome.hero_title")
+        %p.search-hero-subtitle= local_assigns[:subtitle] || t("welcome.hero_subtitle")
+        = form_with url: search_path, method: :get, local: true, class: "search-hero-form", data: { testid: "search-form" } do |f|
+          = label_tag :q, t("search.placeholder"), class: "visually-hidden"
+          .input-group
+            = text_field_tag :q, params[:q], class: "form-control", placeholder: t("search.placeholder"), data: { testid: "search-input" }
+            = submit_tag t("search.button"), class: "btn btn-primary", data: { testid: "search-submit" }
+
+      - if local_assigns[:hero_image] && hero_image&.file&.attached?
+        .col-lg-6
+          .hero-image-card{ data: { testid: "hero-random-image" } }
+            %a{ href: "#", data: { bs_toggle: "modal", bs_target: "#heroImageModal" } }
+              = image_tag hero_image.file.variant(resize_to_limit: [600, 400]), class: "hero-image-img", alt: hero_image.title
+            - if hero_image.title.present?
+              .hero-image-caption= hero_image.title
+
+          -# Hero Image Modal
+          .modal.fade#heroImageModal{ tabindex: "-1", aria: { labelledby: "heroImageModalLabel", hidden: "true" } }
+            .modal-dialog.modal-lg.modal-dialog-centered
+              .modal-content
+                .modal-header
+                  %h5.modal-title#heroImageModalLabel= hero_image.title
+                  %button.btn-close{ type: "button", data: { bs_dismiss: "modal" }, aria: { label: t("welcome.hero_image.close") } }
+                .modal-body
+                  .text-center.mb-3
+                    = image_tag hero_image.file.variant(resize_to_limit: [900, 600]), class: "img-fluid rounded", alt: hero_image.title
+                  - if hero_image.description.present?
+                    %p.text-muted= hero_image.description
+                  %dl.hero-image-details
+                    - if hero_image.artist.present?
+                      %dt= t("welcome.hero_image.artist")
+                      %dd= hero_image.artist.name
+                    - if hero_image.year.present?
+                      %dt= t("welcome.hero_image.year")
+                      %dd= hero_image.year
+                    - if hero_image.technique.present?
+                      %dt= t("welcome.hero_image.technique")
+                      %dd= hero_image.technique.name
+                    - if hero_image.copyright.present?
+                      %dt= t("welcome.hero_image.copyright")
+                      %dd= hero_image.copyright
+                    - if hero_image.media_tags.any?
+                      %dt= t("welcome.hero_image.tags")
+                      %dd
+                        - hero_image.media_tags.each do |tag|
+                          %span.badge.bg-light.text-dark.me-1= tag.name
+                .modal-footer
+                  %button.btn.btn-secondary{ type: "button", data: { bs_dismiss: "modal" } }= t("welcome.hero_image.close")

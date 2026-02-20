@@ -49,7 +49,6 @@
                 = link_to category.name, land_und_leute_path(anchor: category.slug), class: "dropdown-item"
 
         = link_to t("navigation.ausstellungen"), ausstellungen_path, class: "nav-link-item#{' active' if local_assigns[:active] == :ausstellungen}", data: { testid: "nav-ausstellungen" }
-        = link_to t("navigation.bild_des_tages"), pictures_of_the_day_path, class: "nav-link-item#{' active' if local_assigns[:active] == :bild_des_tages}", data: { testid: "nav-bild-des-tages" }
         = link_to t("navigation.archiv"), articles_path, class: "nav-link-item#{' active' if local_assigns[:active] == :archiv}", data: { testid: "nav-archiv" }
         = link_to t("navigation.team"), team_path, class: "nav-link-item#{' active' if local_assigns[:active] == :team}", data: { testid: "nav-team" }
 
@@ -85,6 +84,5 @@
           = link_to artist.name, artist_path(artist.slug), class: "mobile-nav-link"
     = link_to t("navigation.land_und_leute"), land_und_leute_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :land_und_leute}"
     = link_to t("navigation.ausstellungen"), ausstellungen_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :ausstellungen}"
-    = link_to t("navigation.bild_des_tages"), pictures_of_the_day_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :bild_des_tages}"
     = link_to t("navigation.archiv"), articles_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :archiv}"
     = link_to t("navigation.team"), team_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :team}"

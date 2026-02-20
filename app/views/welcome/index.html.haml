@@ -4,30 +4,10 @@
 = render "shared/site_header", active: :willkommen
 
 -# Search Hero
-= render "shared/search_hero", testid: "hero-section"
-
--# Stats Dashboard
-= render "welcome/stats_section"
+= render "shared/search_hero", testid: "hero-section", hero_image: @hero_image
 
 -# Feature Cards Grid
 = render "welcome/feature_cards"
-
--# Picture of the Day
-- if @picture_of_the_day && @picture_of_the_day.media_item.file.attached?
-  - picture_presenter = PictureOfTheDayPresenter.new(@picture_of_the_day)
-  %section.py-5.bg-white{ data: { testid: "hero-section-picture-of-the-day" } }
-    .container
-      %h2.section-title.text-center.mb-4= t("navigation.bild_des_tages")
-      .row.justify-content-center
-        .col-md-8.col-lg-6
-          .content-card
-            = link_to pictures_of_the_day_path do
-              = image_tag picture_presenter.hero_image_url, class: "card-img-top", alt: picture_presenter.display_title
-            .content-card-body.text-center
-              .content-card-title= picture_presenter.display_title
-              .content-card-meta
-                %i.bi.bi-calendar3.me-1
-                = picture_presenter.formatted_display_date_short
 
 -# Recent Articles
 - if @recent_articles.any?
@@ -53,3 +33,6 @@
 
       .text-center.mt-4
         = link_to t("welcome.recent_articles.view_all"), articles_path, class: "btn btn-primary", data: { testid: "view-all-articles" }
+
+-# Stats Dashboard
+= render "welcome/stats_section"

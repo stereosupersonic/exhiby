@@ -10,7 +10,6 @@ class Ability
     can :read, Artist, status: "published"
     can :read, Collection, status: "published"
     can :read, CollectionCategory
-    can :read, PictureOfTheDay
 
     return unless user.present?
 
@@ -40,7 +39,6 @@ class Ability
       can :manage, CollectionCategory
       can :manage, Collection
       can :manage, CollectionItem
-      can :manage, PictureOfTheDay
       can :manage, BulkImport
       can %i[publish reject unpublish], MediaItem
       can %i[publish unpublish], Artist

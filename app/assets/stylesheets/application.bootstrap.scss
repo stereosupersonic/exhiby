@@ -370,7 +370,6 @@ $stats-bg: #f0f4f8;
 .search-hero {
   background: $stats-bg;
   padding: 3rem 0;
-  text-align: center;
 
   .search-hero-title {
     color: $brand-navy;
@@ -388,13 +387,10 @@ $stats-bg: #f0f4f8;
     font-size: 1.05rem;
     margin-bottom: 1.5rem;
     max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .search-hero-form {
     max-width: 600px;
-    margin: 0 auto;
 
     .form-control {
       border-radius: 2rem 0 0 2rem;
@@ -414,6 +410,48 @@ $stats-bg: #f0f4f8;
       font-size: 1.05rem;
     }
   }
+
+  .hero-image-card {
+    text-align: center;
+
+    .hero-image-img {
+      width: 100%;
+      max-height: 350px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .hero-image-caption {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      color: #6c757d;
+      font-style: italic;
+    }
+  }
+
+  .hero-image-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 1rem;
+    margin-top: 1rem;
+
+    dt {
+      font-weight: 600;
+      color: $brand-navy;
+    }
+
+    dd {
+      margin-bottom: 0.5rem;
+    }
+  }
 }
 
 // Stats Section
@@ -427,6 +465,12 @@ $stats-bg: #f0f4f8;
     margin-bottom: 2rem;
     text-align: center;
   }
+}
+
+a.stat-card {
+  color: inherit;
+  text-decoration: none;
+  display: block;
 }
 
 .stat-card {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_05_091258) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_20_175539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -206,19 +206,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_091258) do
     t.index ["slug"], name: "index_media_tags_on_slug", unique: true
   end
 
-  create_table "pictures_of_the_day", force: :cascade do |t|
-    t.string "caption"
-    t.datetime "created_at", null: false
-    t.bigint "created_by_id", null: false
-    t.text "description"
-    t.date "display_date", null: false
-    t.bigint "media_item_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "index_pictures_of_the_day_on_created_by_id"
-    t.index ["display_date"], name: "index_pictures_of_the_day_on_display_date", unique: true
-    t.index ["media_item_id"], name: "index_pictures_of_the_day_on_media_item_id"
-  end
-
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -273,7 +260,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_091258) do
   add_foreign_key "media_items", "users", column: "uploaded_by_id"
   add_foreign_key "media_taggings", "media_items"
   add_foreign_key "media_taggings", "media_tags"
-  add_foreign_key "pictures_of_the_day", "media_items", on_delete: :restrict
-  add_foreign_key "pictures_of_the_day", "users", column: "created_by_id"
   add_foreign_key "sessions", "users"
 end
