@@ -12,30 +12,5 @@
 -# Feature Cards Grid
 = render "welcome/feature_cards"
 
--# Recent Articles
-- if @recent_articles.any?
-  %section.articles-preview.py-5{ data: { testid: "recent-articles-section" } }
-    .container
-      %h2.section-title.text-center.mb-4= t("welcome.recent_articles.title")
-
-      .row.g-4
-        - @recent_articles.each do |article|
-          - presenter = ArticlePresenter.new(article)
-          .col-md-4{ data: { testid: "recent-article-card-#{article.slug}" } }
-            .content-card
-              - if article.cover_media_item&.file&.attached?
-                = link_to article_path(article.slug) do
-                  = image_tag article.cover_media_item.file.variant(resize_to_limit: [400, 300]), class: "card-img-top", alt: article.title
-              .content-card-body
-                .content-card-title
-                  = link_to article.title, article_path(article.slug)
-                - if article.published_at.present?
-                  .content-card-meta.mb-2= presenter.formatted_published_at_short
-                %p.small.text-muted= presenter.excerpt(length: 150)
-                = link_to t("articles.index.read_more"), article_path(article.slug), class: "btn btn-sm btn-outline-primary"
-
-      .text-center.mt-4
-        = link_to t("welcome.recent_articles.view_all"), articles_path, class: "btn btn-primary", data: { testid: "view-all-articles" }
-
 -# Stats Dashboard
 = render "welcome/stats_section"
