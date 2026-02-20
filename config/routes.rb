@@ -3,6 +3,7 @@ require_relative "../app/constraints/admin_constraint"
 
 Rails.application.routes.draw do
   resource :session
+  get "login", to: "sessions#new"
   resources :passwords, param: :token
 
   # Sidekiq Web UI (admin only)
