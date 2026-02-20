@@ -124,7 +124,7 @@ RSpec.describe "Welcome Pages", type: :system do
       it "navigates to sign in page when clicking login" do
         visit root_path
 
-        click_link "Anmelden"
+        find("[data-testid='login-link']", match: :first).click
 
         expect(page).to have_current_path(new_session_path)
       end
@@ -152,7 +152,7 @@ RSpec.describe "Welcome Pages", type: :system do
       it "navigates to admin when clicking Admin link" do
         visit root_path
 
-        click_link "Admin"
+        find("[data-testid='admin-link']", match: :first).click
 
         expect(page).to have_current_path(admin_root_path)
       end

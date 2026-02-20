@@ -15,48 +15,49 @@ $brand-accent-light: #eaf0fb;
 $stats-bg: #f0f4f8;
 
 // Header Utility Bar (thin dark navy bar at top)
-.header-utility-bar {
-  background: $brand-navy;
-  padding: 0.35rem 0;
+// Header actions (login icons + search, right side)
+.header-actions {
+  flex: 0 0 auto;
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
 
-  .utility-inner {
+  @media (min-width: 992px) {
     display: flex;
-    justify-content: flex-end;
+  }
+}
+
+.header-login {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  .header-login-icon {
+    display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: $brand-navy;
+    text-decoration: none;
+    border-radius: 50%;
+    transition: color 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      color: $brand-accent;
+      background-color: rgba($brand-accent, 0.1);
+    }
+
+    .bi {
+      font-size: 1.1rem;
+    }
   }
 
-  .header-login {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    .header-login-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      border-radius: 50%;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: #fff;
-      }
-
-      .bi {
-        font-size: 1rem;
-      }
-    }
-
-    .header-login-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
+  .header-login-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
   }
 }
 
@@ -185,11 +186,6 @@ $stats-bg: #f0f4f8;
 
   .header-search {
     flex: 0 0 auto;
-    display: none;
-
-    @media (min-width: 992px) {
-      display: block;
-    }
 
     .header-search-form {
       display: flex;
@@ -309,6 +305,15 @@ $stats-bg: #f0f4f8;
         font-weight: 400;
         font-size: 0.9rem;
       }
+    }
+
+    .mobile-nav-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      font-size: inherit;
     }
 
     .mobile-search-form {

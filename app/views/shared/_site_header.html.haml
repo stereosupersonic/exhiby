@@ -1,20 +1,3 @@
--# Utility Bar (thin dark navy bar)
-.header-utility-bar
-  .container
-    .utility-inner
-      .header-login{ data: { testid: "header-login" } }
-        - if authenticated?
-          = link_to admin_root_path, class: "header-login-icon", title: "Admin", data: { testid: "admin-link" } do
-            %i.bi.bi-gear
-            %span.visually-hidden Admin
-          = button_to session_path, method: :delete, class: "header-login-icon header-login-button", title: "Abmelden", data: { testid: "logout-link" } do
-            %i.bi.bi-box-arrow-right
-            %span.visually-hidden Abmelden
-        - else
-          = link_to new_session_path, class: "header-login-icon", title: "Anmelden", data: { testid: "login-link" } do
-            %i.bi.bi-person
-            %span.visually-hidden Anmelden
-
 -# Main Header Bar
 %header.header-main{ data: { testid: "site-header" } }
   .container
@@ -43,14 +26,27 @@
         = link_to t("navigation.archiv"), articles_path, class: "nav-link-item#{' active' if local_assigns[:active] == :archiv}", data: { testid: "nav-archiv" }
         = link_to t("navigation.team"), team_path, class: "nav-link-item#{' active' if local_assigns[:active] == :team}", data: { testid: "nav-team" }
 
-      -# Search (right - desktop only)
-      .header-search{ class: "#{'expanded' if params[:q].present?}", data: { testid: "header-search", controller: "search-toggle", "search-toggle-expanded-value": params[:q].present? } }
-        = form_with url: search_path, method: :get, local: true, class: "header-search-form", data: { "search-toggle-target": "form" } do |f|
-          = label_tag :q, t("search.placeholder"), class: "visually-hidden"
-          .input-group.input-group-sm
-            = text_field_tag :q, params[:q], class: "form-control header-search-input", placeholder: t("search.placeholder"), data: { testid: "header-search-input", "search-toggle-target": "input" }
-            %button.btn.header-search-btn{ type: "submit", data: { testid: "header-search-submit", "search-toggle-target": "icon", action: "click->search-toggle#handleClick" } }
-              %i.bi.bi-search
+      -# Login/Admin icons + Search (right - desktop only)
+      .header-actions
+        .header-login{ data: { testid: "header-login" } }
+          - if authenticated?
+            = link_to admin_root_path, class: "header-login-icon", title: "Admin", data: { testid: "admin-link" } do
+              %i.bi.bi-gear
+              %span.visually-hidden Admin
+            = button_to session_path, method: :delete, class: "header-login-icon header-login-button", title: "Abmelden", data: { testid: "logout-link" } do
+              %i.bi.bi-box-arrow-right
+              %span.visually-hidden Abmelden
+          - else
+            = link_to new_session_path, class: "header-login-icon", title: "Anmelden", data: { testid: "login-link" } do
+              %i.bi.bi-person
+              %span.visually-hidden Anmelden
+        .header-search{ class: "#{'expanded' if params[:q].present?}", data: { testid: "header-search", controller: "search-toggle", "search-toggle-expanded-value": params[:q].present? } }
+          = form_with url: search_path, method: :get, local: true, class: "header-search-form", data: { "search-toggle-target": "form" } do |f|
+            = label_tag :q, t("search.placeholder"), class: "visually-hidden"
+            .input-group.input-group-sm
+              = text_field_tag :q, params[:q], class: "form-control header-search-input", placeholder: t("search.placeholder"), data: { testid: "header-search-input", "search-toggle-target": "input" }
+              %button.btn.header-search-btn{ type: "submit", data: { testid: "header-search-submit", "search-toggle-target": "icon", action: "click->search-toggle#handleClick" } }
+                %i.bi.bi-search
 
       -# Mobile hamburger
       %button.header-toggler{ type: "button", data: { bs_toggle: "offcanvas", bs_target: "#mobileNav" }, "aria-label": t("navigation.menu") }
@@ -77,3 +73,15 @@
     = link_to t("navigation.ausstellungen"), ausstellungen_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :ausstellungen}"
     = link_to t("navigation.archiv"), articles_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :archiv}"
     = link_to t("navigation.team"), team_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :team}"
+    %hr
+    - if authenticated?
+      = link_to admin_root_path, class: "mobile-nav-link", data: { testid: "mobile-admin-link" } do
+        %i.bi.bi-gear.me-2
+        Admin
+      = button_to session_path, method: :delete, class: "mobile-nav-link mobile-nav-button", data: { testid: "mobile-logout-link" } do
+        %i.bi.bi-box-arrow-right.me-2
+        Abmelden
+    - else
+      = link_to new_session_path, class: "mobile-nav-link", data: { testid: "mobile-login-link" } do
+        %i.bi.bi-person.me-2
+        Anmelden
