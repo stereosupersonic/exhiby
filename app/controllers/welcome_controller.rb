@@ -3,7 +3,15 @@ class WelcomeController < ApplicationController
 
   def index
     @recent_articles = Article.recent(3)
-    @picture_of_the_day = PictureOfTheDay.current_or_most_recent
+    @hero_image = MediaItem.published.where(media_type: "image").order("RANDOM()").first
+    @featured_collections = Collection.published.includes(:collection_category, cover_media_item: { file_attachment: :blob }).recent.limit(6)
+    @stats = {
+      objekte: MediaItem.published.count,
+      kunstschaffende: Artist.published.count,
+      sammlungen: Collection.published.count,
+      artikel: Article.published.count,
+      schlagwoerter: MediaTag.count
+    }
   end
 
   def impressum

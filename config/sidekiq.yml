@@ -5,7 +5,3 @@
   - [critical, 3]
   - [default, 2]
   - [low, 1]
-
-:limits:
-  :memory:
-    :soft: 1073741824

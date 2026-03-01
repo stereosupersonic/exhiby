@@ -52,8 +52,8 @@ gem "mini_exiftool", "~> 2.11"
 gem "exception_notification", "~> 5.0"
 
 # Background job processing [https://github.com/sidekiq/sidekiq]
-gem "sidekiq", "~> 7.3"
-
+gem "sidekiq", "~> 7.3.0"
+gem "connection_pool", "~> 2.5.0" # there is an issue with MemCacheStore and connection_pool >= 3.0.0
 # ZIP file processing for bulk imports [https://github.com/rubyzip/rubyzip]
 gem "rubyzip", "~> 2.3"
 

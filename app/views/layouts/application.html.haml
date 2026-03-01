@@ -10,10 +10,23 @@
     %meta{ name: "robots", content: "index, follow" }
     %link{ rel: "canonical", href: canonical_url }
 
+    /-- Open Graph
+    %meta{ property: "og:title", content: page_title }
+    %meta{ property: "og:description", content: meta_description }
+    %meta{ property: "og:url", content: canonical_url }
+    %meta{ property: "og:type", content: "website" }
+    %meta{ property: "og:site_name", content: "OnlineMuseum Wartenberg" }
+    %meta{ property: "og:locale", content: "de_DE" }
+
+    /-- Twitter Card
+    %meta{ name: "twitter:card", content: "summary" }
+    %meta{ name: "twitter:title", content: page_title }
+    %meta{ name: "twitter:description", content: meta_description }
+
     /-- Favicon
     %link{ rel: "icon", href: "/icon.svg", type: "image/svg+xml" }
     %link{ rel: "icon", href: "/icon.png", type: "image/png" }
-    %link{ rel: "apple-touch-icon", href: image_path("logo/Logo-Online-Museum-V10-180.png") }
+    %link{ rel: "apple-touch-icon", href: image_path("logo/apple-touch-icon.png") }
 
     %meta{ name: "turbo-cache-control", content: "no-cache" }
     = csrf_meta_tags
@@ -21,7 +34,8 @@
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
   %body.d-flex.flex-column.min-vh-100
-    %main.flex-grow-1
+    = link_to t("accessibility.skip_to_content"), "#main-content", class: "skip-link"
+    %main.flex-grow-1{ id: "main-content" }
       - if flash[:notice]
         .container.mt-3
           .alert.alert-success.alert-dismissible.fade.show{ role: "alert", data: { testid: "flash-notice" } }
@@ -36,8 +50,4 @@
 
       = yield
 
-    %footer.site-footer
-      .container
-        .footer-content
-          = link_to "Impressum", impressum_path, class: "footer-link"
-          = link_to "Datenschutzerklärung", datenschutzerklaerung_path, class: "footer-link"
+    = render "shared/site_footer"

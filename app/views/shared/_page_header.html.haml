@@ -1,0 +1,12 @@
+%section.page-header{ data: { testid: local_assigns[:testid] || "page-header" } }
+  .container
+    %h1.page-header-title{ data: local_assigns[:title_testid] ? { testid: title_testid } : {} }= title
+    - if local_assigns[:breadcrumbs].present?
+      %nav.page-header-breadcrumb{ "aria-label": "breadcrumb" }
+        %ol.breadcrumb
+          - breadcrumbs.each_with_index do |(label, path), index|
+            - if index == breadcrumbs.size - 1
+              %li.breadcrumb-item.active{ "aria-current": "page" }= label
+            - else
+              %li.breadcrumb-item
+                = link_to label, path

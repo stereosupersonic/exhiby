@@ -104,7 +104,9 @@ RSpec.describe "Public Collections", type: :system do
     it "is accessible from main navigation" do
       visit root_path
 
-      click_link "Land & Leute"
+      within "[data-testid='main-navigation']" do
+        click_link "Sammlungen"
+      end
 
       expect(page).to have_current_path(land_und_leute_path)
       expect(page).to have_selector("[data-testid='collections-section']")

@@ -6,7 +6,7 @@ RSpec.describe "Public Articles", type: :system do
       visit articles_path
 
       expect(page).to have_selector("[data-testid='articles-hero']")
-      expect(page).to have_selector("[data-testid='articles-heading']", text: "Archiv")
+      expect(page).to have_selector("[data-testid='articles-heading']", text: "Aktuelles")
       expect(page).to have_selector("[data-testid='articles-section']")
     end
 

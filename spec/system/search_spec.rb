@@ -6,7 +6,9 @@ RSpec.describe "Search", type: :system do
       visit search_path
 
       expect(page).to have_selector("[data-testid='search-hero']")
-      expect(page).to have_selector("[data-testid='search-heading']", text: "Suche")
+      within "[data-testid='search-hero']" do
+        expect(page).to have_css("h1", text: "Suche")
+      end
       expect(page).to have_selector("[data-testid='search-form']")
       expect(page).to have_selector("[data-testid='search-input']")
       expect(page).to have_selector("[data-testid='search-submit']")
@@ -34,8 +36,11 @@ RSpec.describe "Search", type: :system do
 
       visit root_path
 
-      fill_in "q", with: "Testbeitrag"
-      find("[data-testid='header-search-submit']").click
+      within "[data-testid='header-search']" do
+        find("[data-testid='header-search-submit']").click
+        fill_in "q", with: "Testbeitrag"
+        find("[data-testid='header-search-submit']").click
+      end
 
       expect(page).to have_selector("[data-testid='search-section']")
       expect(page).to have_content("Testbeitrag Suche")

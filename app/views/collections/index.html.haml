@@ -3,11 +3,7 @@
 
 = render "shared/site_header", active: :land_und_leute
 
-%section.hero-section.hero-section-small{ style: "background-image: url('#{image_path('design/background-pic-top-b-3.jpg')}')", data: { testid: "collections-hero" } }
-  .hero-overlay
-    .container
-      %h1.hero-title{ data: { testid: "collections-heading" } }
-        = t("collections.index.title")
+= render "shared/page_header", title: t("collections.index.title"), testid: "collections-hero", title_testid: "collections-heading"
 
 %section.collections-section.py-5{ data: { testid: "collections-section" } }
   .container
@@ -19,7 +15,7 @@
             - collections.each do |collection|
               - presenter = CollectionPresenter.new(collection)
               .col-md-4.col-lg-3{ data: { testid: "collection-card-#{collection.slug}" } }
-                .card.h-100.collection-card
+                .content-card
                   - if collection.cover_media_item&.file&.attached?
                     = link_to collection_path(collection.slug) do
                       = image_tag collection.cover_media_item.file.variant(resize_to_fill: [300, 200]), class: "card-img-top", alt: collection.name
@@ -27,11 +23,11 @@
                     = link_to collection_path(collection.slug) do
                       .card-img-top.bg-light.d-flex.align-items-center.justify-content-center{ style: "height: 150px;" }
                         %i.bi.bi-collection.text-muted{ style: "font-size: 3rem;" }
-                  .card-body
-                    %h5.card-title
-                      = link_to collection.name, collection_path(collection.slug), class: "text-decoration-none"
+                  .content-card-body
+                    .content-card-title
+                      = link_to collection.name, collection_path(collection.slug)
                     - if collection.media_items_count > 0
-                      %p.card-text.text-muted.small
+                      .content-card-meta
                         = t("collections.index.media_items_count", count: collection.media_items_count)
     - else
       .text-center.text-muted.py-5{ data: { testid: "no-collections-message" } }

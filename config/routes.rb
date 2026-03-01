@@ -3,6 +3,7 @@ require_relative "../app/constraints/admin_constraint"
 
 Rails.application.routes.draw do
   resource :session
+  get "login", to: "sessions#new"
   resources :passwords, param: :token
 
   # Sidekiq Web UI (admin only)
@@ -50,7 +51,6 @@ Rails.application.routes.draw do
         patch :activate
       end
     end
-    resources :pictures_of_the_day, path: "bild-des-tages"
     resources :bulk_imports, path: "massenimport", only: %i[index new create show destroy] do
       member do
         get :progress
@@ -92,9 +92,4 @@ Rails.application.routes.draw do
 
   # Placeholder pages (coming soon)
   get "ausstellungen", to: "welcome#coming_soon", as: :ausstellungen
-
-  # Picture of the Day (Bild des Tages)
-  get "bild-des-tages", to: "pictures_of_the_day#index", as: :pictures_of_the_day
-  get "bild-des-tages/:date", to: "pictures_of_the_day#show", as: :picture_of_the_day,
-                              constraints: { date: /\d{4}-\d{2}-\d{2}/ }
 end

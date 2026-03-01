@@ -6,18 +6,16 @@
 = render "shared/site_header", active: :land_und_leute
 - presenter = CollectionPresenter.new(@collection)
 
+= render "shared/page_header", title: @collection.name, title_testid: "collection-name", breadcrumbs: [[t("collections.index.title"), land_und_leute_path], [@collection.name, nil]]
+
 %section.collection-section.py-5{ data: { testid: "collection-section" } }
   .container
-    .mb-4
-      = link_to t("collections.show.back"), land_und_leute_path, class: "btn btn-outline-secondary btn-sm"
-
     .row.mb-5
       - has_cover = @collection.cover_media_item&.file&.attached?
       - if has_cover
         .col-md-4
           = render "shared/zoomable_image", image: @collection.cover_media_item.file.variant(resize_to_fit: [400, 300]), full_image_url: url_for(@collection.cover_media_item.file), title: @collection.name, image_class: "img-fluid rounded"
         .col-md-8
-          %h1.mb-3{ data: { testid: "collection-name" } }= @collection.name
           %p.text-muted
             %span.badge.bg-secondary= presenter.category_name
           - if @collection.description.present?
@@ -26,7 +24,6 @@
                 = @collection.description
       - else
         .col-12
-          %h1.mb-3{ data: { testid: "collection-name" } }= @collection.name
           %p.text-muted
             %span.badge.bg-secondary= presenter.category_name
           - if @collection.description.present?

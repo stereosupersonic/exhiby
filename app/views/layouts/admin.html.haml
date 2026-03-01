@@ -4,6 +4,9 @@
     %meta{ charset: "utf-8" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
     %title OnlineMuseum Wartenberg - Admin
+    %link{ rel: "icon", href: "/icon.svg", type: "image/svg+xml" }
+    %link{ rel: "icon", href: "/icon.png", type: "image/png" }
+    %link{ rel: "apple-touch-icon", href: image_path("logo/apple-touch-icon.png") }
     %meta{ name: "turbo-cache-control", content: "no-cache" }
     = csrf_meta_tags
     = csp_meta_tag
@@ -34,9 +37,6 @@
             - if can? :manage, CollectionCategory
               %li.nav-item
                 = link_to t("admin.navigation.collection_categories"), admin_collection_categories_path, class: "nav-link"
-            - if can? :manage, PictureOfTheDay
-              %li.nav-item
-                = link_to t("admin.navigation.pictures_of_the_day"), admin_pictures_of_the_day_index_path, class: "nav-link"
             - if can? :manage, MediaTag
               %li.nav-item
                 = link_to t("admin.navigation.tags"), admin_media_tags_path, class: "nav-link"
@@ -46,6 +46,9 @@
             - if can? :manage, User
               %li.nav-item
                 = link_to t("admin.navigation.users"), admin_users_path, class: "nav-link"
+            - if current_user.admin?
+              %li.nav-item
+                = link_to "Sidekiq", sidekiq_web_path, class: "nav-link"
           %ul.navbar-nav
             %li.nav-item.d-flex.align-items-center
               = link_to current_user.email_address, edit_admin_profile_path, class: "nav-link", data: { testid: "user-email" }, title: t("admin.profile.link_title")
