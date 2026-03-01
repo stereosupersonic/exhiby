@@ -105,7 +105,7 @@ RSpec.describe "Public Collections", type: :system do
       visit root_path
 
       within "[data-testid='main-navigation']" do
-        click_link "Land & Leute"
+        click_link "Sammlungen"
       end
 
       expect(page).to have_current_path(land_und_leute_path)

@@ -35,11 +35,10 @@ RSpec.describe "Welcome Pages", type: :system do
       within "[data-testid='main-navigation']" do
         expect(page).to have_selector("[data-testid='nav-willkommen']", text: "Willkommen")
         expect(page).to have_selector("[data-testid='nav-kunstschaffende']", text: "Kunstschaffende")
-        expect(page).to have_selector("[data-testid='nav-land-leute']", text: "Land & Leute")
+        expect(page).to have_selector("[data-testid='nav-sammlungen']", text: "Sammlungen")
         expect(page).to have_selector("[data-testid='nav-ausstellungen']", text: "Ausstellungen")
-        expect(page).to have_selector("[data-testid='nav-team']", text: "Team")
-        expect(page).to have_selector("[data-testid='nav-bild-des-tages']", text: "Bild des Tages")
         expect(page).to have_selector("[data-testid='nav-archiv']", text: "Archiv")
+        expect(page).to have_selector("[data-testid='nav-team']", text: "Team")
       end
     end
 
@@ -60,33 +59,15 @@ RSpec.describe "Welcome Pages", type: :system do
       end
     end
 
-    context "with recent articles" do
-      let!(:article_with_date) { create(:article, :published, title: "Article With Date") }
-      let!(:article_without_date) { create(:article, status: "published", published_at: nil, title: "Article Without Date") }
+    context "with featured collections" do
+      let!(:category) { create(:collection_category) }
+      let!(:collection) { create(:collection, :published, name: "Featured Collection", collection_category: category) }
 
-      it "displays recent articles section" do
+      it "displays collections carousel section" do
         visit root_path
 
-        expect(page).to have_selector("[data-testid='recent-articles-section']")
+        expect(page).to have_selector("[data-testid='collections-carousel-section']")
         expect(page).to have_content("Aktuelles")
-      end
-
-      it "displays article with published_at date" do
-        visit root_path
-
-        within "[data-testid='recent-article-card-#{article_with_date.slug}']" do
-          expect(page).to have_content("Article With Date")
-          expect(page).to have_content(I18n.l(article_with_date.published_at, format: :short))
-        end
-      end
-
-      it "displays article without published_at date" do
-        visit root_path
-
-        within "[data-testid='recent-article-card-#{article_without_date.slug}']" do
-          expect(page).to have_content("Article Without Date")
-          expect(page).to have_no_css(".text-muted", text: /\d{2}\.\d{2}\./)
-        end
       end
     end
 
