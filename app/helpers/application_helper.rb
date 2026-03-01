@@ -1,6 +1,5 @@
 module ApplicationHelper
   SITE_NAME = "OnlineMuseum Wartenberg".freeze
-  DEFAULT_OG_IMAGE = "logo/Logo-Online-Museum-V10-250.png".freeze
 
   # Page title with site name suffix
   # Usage: page_title("Kunstschaffende") => "Kunstschaffende | OnlineMuseum Wartenberg"
@@ -20,24 +19,6 @@ module ApplicationHelper
   # Canonical URL
   def canonical_url
     content_for(:canonical_url).presence || request.original_url.split("?").first
-  end
-
-  # Open Graph image URL
-  def og_image_url
-    if content_for?(:og_image)
-      content_for(:og_image)
-    else
-      image_url(DEFAULT_OG_IMAGE)
-    end
-  end
-
-  # Set page SEO metadata from controller/view
-  # Usage: set_meta(title: "Page Title", description: "Page description")
-  def set_meta(title: nil, description: nil, image: nil, canonical: nil)
-    content_for(:title, title) if title.present?
-    content_for(:meta_description, description) if description.present?
-    content_for(:og_image, image) if image.present?
-    content_for(:canonical_url, canonical) if canonical.present?
   end
 
   # Truncate text for meta description (120-160 chars recommended)

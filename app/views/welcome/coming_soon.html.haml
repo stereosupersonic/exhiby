@@ -1,9 +1,6 @@
 - if request.path == "/ausstellungen"
   - content_for :title, t("seo.pages.ausstellungen.title")
   - content_for :meta_description, t("seo.pages.ausstellungen.description")
-- elsif request.path == "/bild-der-woche"
-  - content_for :title, t("seo.pages.bild_der_woche.title")
-  - content_for :meta_description, t("seo.pages.bild_der_woche.description")
 
 = render "shared/site_header"
 

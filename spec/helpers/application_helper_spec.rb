@@ -58,53 +58,6 @@ RSpec.describe ApplicationHelper do
     end
   end
 
-  describe "#og_image_url" do
-    it "returns content_for og_image when set" do
-      helper.content_for(:og_image, "https://example.com/custom-image.jpg")
-      expect(helper.og_image_url).to eq("https://example.com/custom-image.jpg")
-    end
-
-    it "returns default OG image URL when not set" do
-      allow(helper).to receive(:image_url).with(described_class::DEFAULT_OG_IMAGE)
-        .and_return("https://example.com/default-og.png")
-      expect(helper.og_image_url).to eq("https://example.com/default-og.png")
-    end
-  end
-
-  describe "#set_meta" do
-    it "sets title content_for" do
-      helper.set_meta(title: "Test Title")
-      expect(helper.content_for(:title)).to eq("Test Title")
-    end
-
-    it "sets description content_for" do
-      helper.set_meta(description: "Test description")
-      expect(helper.content_for(:meta_description)).to eq("Test description")
-    end
-
-    it "sets image content_for" do
-      helper.set_meta(image: "https://example.com/image.jpg")
-      expect(helper.content_for(:og_image)).to eq("https://example.com/image.jpg")
-    end
-
-    it "sets canonical content_for" do
-      helper.set_meta(canonical: "https://example.com/canonical")
-      expect(helper.content_for(:canonical_url)).to eq("https://example.com/canonical")
-    end
-
-    it "sets multiple values at once" do
-      helper.set_meta(title: "Title", description: "Desc")
-      expect(helper.content_for(:title)).to eq("Title")
-      expect(helper.content_for(:meta_description)).to eq("Desc")
-    end
-
-    it "does not set content_for when value is blank" do
-      helper.set_meta(title: "", description: nil)
-      expect(helper.content_for?(:title)).to be false
-      expect(helper.content_for?(:meta_description)).to be false
-    end
-  end
-
   describe "#truncate_for_meta" do
     it "truncates text to specified length" do
       long_text = "A" * 200

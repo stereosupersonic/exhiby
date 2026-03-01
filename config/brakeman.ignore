@@ -71,40 +71,6 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
-      "fingerprint": "336bf6f89ebe2a7a7c7e0165a055c74e048934081a1d90e6f60a430c29f913a7",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/admin/pictures_of_the_day/show.html.haml",
-      "line": 28,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "::Haml::AttributeBuilder.build_class(true, \"badge\", PictureOfTheDayPresenter.new(PictureOfTheDay.find(params[:id])).status_badge_class)",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Admin::PicturesOfTheDayController",
-          "method": "show",
-          "line": 11,
-          "file": "app/controllers/admin/pictures_of_the_day_controller.rb",
-          "rendered": {
-            "name": "admin/pictures_of_the_day/show",
-            "file": "app/views/admin/pictures_of_the_day/show.html.haml"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "admin/pictures_of_the_day/show"
-      },
-      "user_input": "PictureOfTheDay.find(params[:id])",
-      "confidence": "Weak",
-      "cwe_id": [
-        79
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
       "fingerprint": "6936e0d612ebe4cb9c0d8633b43220a8fc7e9d05934a25197808ba037756b13d",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
