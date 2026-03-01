@@ -92,5 +92,4 @@ Rails.application.routes.draw do
 
   # Placeholder pages (coming soon)
   get "ausstellungen", to: "welcome#coming_soon", as: :ausstellungen
-
 end
