@@ -96,9 +96,6 @@ group :test do
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
-
   # Convert ERB templates to HAML [https://github.com/haml/html2haml]
   gem "html2haml", require: false
 end
