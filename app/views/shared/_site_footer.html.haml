@@ -2,21 +2,21 @@
   .container
     .row.g-4
       .col-6.col-md-3
-        %h6.footer-heading= t("footer.general")
+        %p.footer-heading= t("footer.general")
         %ul.footer-links
           %li= link_to t("footer.about_us"), team_path
           %li= link_to t("footer.impressum"), impressum_path
           %li= link_to t("footer.datenschutz"), datenschutzerklaerung_path
 
       .col-6.col-md-3
-        %h6.footer-heading= t("footer.discover")
+        %p.footer-heading= t("footer.discover")
         %ul.footer-links
           %li= link_to t("navigation.kunstschaffende"), artists_path
           %li= link_to t("navigation.alle_sammlungen"), land_und_leute_path
           %li= link_to t("navigation.ausstellungen"), ausstellungen_path
 
       .col-6.col-md-3
-        %h6.footer-heading= t("footer.search")
+        %p.footer-heading= t("footer.search")
         %ul.footer-links
           %li= link_to t("footer.browse_media"), search_path
 

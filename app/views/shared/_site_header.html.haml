@@ -45,7 +45,7 @@
             = label_tag :q, t("search.placeholder"), class: "visually-hidden"
             .input-group.input-group-sm
               = text_field_tag :q, params[:q], class: "form-control header-search-input", placeholder: t("search.placeholder"), data: { testid: "header-search-input", "search-toggle-target": "input" }
-              %button.btn.header-search-btn{ type: "submit", data: { testid: "header-search-submit", "search-toggle-target": "icon", action: "click->search-toggle#handleClick" } }
+              %button.btn.header-search-btn{ type: "submit", "aria-label": t("search.button"), data: { testid: "header-search-submit", "search-toggle-target": "icon", action: "click->search-toggle#handleClick" } }
                 %i.bi.bi-search
 
       -# Mobile hamburger
@@ -55,13 +55,13 @@
 -# Mobile Offcanvas Navigation
 .offcanvas.offcanvas-end.offcanvas-nav#mobileNav{ tabindex: "-1", "aria-label": t("navigation.menu") }
   .offcanvas-header
-    %h5.offcanvas-title OnlineMuseum Wartenberg
+    %span.offcanvas-title.h5 OnlineMuseum Wartenberg
     %button.btn-close{ type: "button", data: { bs_dismiss: "offcanvas" }, "aria-label": "Close" }
   .offcanvas-body
     .mobile-search-form
       = form_with url: search_path, method: :get, local: true, class: "d-flex gap-2" do |f|
         = text_field_tag :q, params[:q], class: "form-control", placeholder: t("search.placeholder")
-        %button.btn.btn-primary{ type: "submit" }
+        %button.btn.btn-primary{ type: "submit", "aria-label": t("search.button") }
           %i.bi.bi-search
     = link_to t("navigation.willkommen"), root_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :willkommen}"
     = link_to t("navigation.kunstschaffende"), artists_path, class: "mobile-nav-link#{' active' if local_assigns[:active] == :kunstschaffende}"
