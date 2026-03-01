@@ -205,6 +205,10 @@ The audit checks 140+ rules including:
 - Content (heading structure, thin content, keyword stuffing)
 
 
+## Documentation
+
+- [Pulling Production Data to Local Development](doc/pull_production.md) - How to sync the production database and storage files to your local machine
+
 ## Contributing
 
 1. Create a feature branch from `master`

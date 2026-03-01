@@ -1,0 +1,209 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ─── Production Configuration (from config/deploy.yml) ─────────────────────────
+PROD_HOST="37.120.188.157"
+PROD_USER="stereosonic"
+PROD_DB="exhiby_production"
+PROD_DB_USER="postgres"
+PROD_CONTAINER="exhiby-postgres"
+REMOTE_STORAGE_PATH="/rails/storage"
+LOCAL_STORAGE_PATH="storage"
+DUMP_FILE="/tmp/exhiby_production.dump"
+
+# ─── Local DB Configuration (from config/database.yml via Rails) ───────────────
+read_rails_db_config() {
+  bin/rails runner "
+    config = ActiveRecord::Base.configurations.configs_for(env_name: 'development').first.configuration_hash
+    puts config[:database]
+    puts config[:host] || ''
+    puts config[:port] || ''
+    puts config[:username] || ''
+    puts config[:password] || ''
+  "
+}
+
+load_local_db_config() {
+  local config
+  config=$(read_rails_db_config) || { echo "ERROR: Failed to read database.yml via Rails" >&2; exit 1; }
+
+  LOCAL_DB=$(echo "$config" | sed -n '1p')
+  LOCAL_DB_HOST=$(echo "$config" | sed -n '2p')
+  LOCAL_DB_PORT=$(echo "$config" | sed -n '3p')
+  LOCAL_DB_USER=$(echo "$config" | sed -n '4p')
+  LOCAL_DB_PASS=$(echo "$config" | sed -n '5p')
+
+  if [ -z "$LOCAL_DB" ]; then
+    echo "ERROR: Could not determine local database name from config/database.yml" >&2
+    exit 1
+  fi
+}
+
+# Build psql/pg_restore connection flags from database.yml settings
+local_db_flags() {
+  local flags=""
+  [ -n "$LOCAL_DB_HOST" ] && flags="$flags --host=$LOCAL_DB_HOST"
+  [ -n "$LOCAL_DB_PORT" ] && flags="$flags --port=$LOCAL_DB_PORT"
+  [ -n "$LOCAL_DB_USER" ] && flags="$flags --username=$LOCAL_DB_USER"
+  echo "$flags"
+}
+
+# ─── Flags ──────────────────────────────────────────────────────────────────────
+PULL_DB=true
+PULL_MEDIA=true
+SANITIZE=true
+
+for arg in "$@"; do
+  case "$arg" in
+    --db-only)     PULL_MEDIA=false ;;
+    --media-only)  PULL_DB=false ;;
+    --no-sanitize) SANITIZE=false ;;
+    --help|-h)
+      echo "Usage: bin/pull_production [OPTIONS]"
+      echo ""
+      echo "Pull production database and storage files to local development."
+      echo ""
+      echo "Options:"
+      echo "  --db-only       Pull database only (skip storage files)"
+      echo "  --media-only    Pull storage files only (skip database)"
+      echo "  --no-sanitize   Skip password sanitization after DB restore"
+      echo "  -h, --help      Show this help message"
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $arg (use --help for usage)"
+      exit 1
+      ;;
+  esac
+done
+
+# ─── Helpers ────────────────────────────────────────────────────────────────────
+info()  { echo "==> $*"; }
+error() { echo "ERROR: $*" >&2; exit 1; }
+
+check_dependencies() {
+  for cmd in ssh pg_restore psql; do
+    command -v "$cmd" >/dev/null || error "$cmd is required but not found"
+  done
+}
+
+# ─── Database Pull ──────────────────────────────────────────────────────────────
+pull_database() {
+  local db_flags
+  db_flags=$(local_db_flags)
+
+  # Export password for psql/pg_restore if configured in database.yml
+  if [ -n "$LOCAL_DB_PASS" ]; then
+    export PGPASSWORD="$LOCAL_DB_PASS"
+  fi
+
+  info "Dumping production database via SSH..."
+  ssh "${PROD_USER}@${PROD_HOST}" \
+    "docker exec ${PROD_CONTAINER} pg_dump \
+      --username=${PROD_DB_USER} \
+      --format=custom \
+      --no-owner \
+      --no-acl \
+      --compress=6 \
+      ${PROD_DB}" > "$DUMP_FILE"
+
+  dump_size=$(du -h "$DUMP_FILE" | cut -f1)
+  info "Dump received: ${dump_size}"
+
+  info "Terminating local connections to ${LOCAL_DB}..."
+  # shellcheck disable=SC2086
+  psql $db_flags -d postgres -c "
+    SELECT pg_terminate_backend(pid)
+    FROM pg_stat_activity
+    WHERE datname = '${LOCAL_DB}' AND pid <> pg_backend_pid();
+  " >/dev/null 2>&1 || true
+
+  info "Dropping and recreating ${LOCAL_DB}..."
+  # shellcheck disable=SC2086
+  dropdb $db_flags --if-exists "$LOCAL_DB"
+  # shellcheck disable=SC2086
+  createdb $db_flags "$LOCAL_DB"
+
+  info "Restoring database (parallel jobs=4)..."
+  # shellcheck disable=SC2086
+  pg_restore \
+    $db_flags \
+    --dbname="$LOCAL_DB" \
+    --no-owner \
+    --no-acl \
+    --jobs=4 \
+    "$DUMP_FILE" || true
+  # pg_restore exits non-zero on warnings (e.g. missing roles), which is fine
+
+  info "Cleaning up dump file..."
+  rm -f "$DUMP_FILE"
+
+  info "Database restored successfully."
+}
+
+# ─── Storage Pull ───────────────────────────────────────────────────────────────
+pull_storage() {
+  info "Finding production web container..."
+  WEB_CONTAINER=$(ssh "${PROD_USER}@${PROD_HOST}" \
+    "docker ps --filter name=exhiby-web --format '{{.Names}}' | grep -v job | head -1")
+
+  if [ -z "$WEB_CONTAINER" ]; then
+    error "Could not find exhiby web container on production"
+  fi
+  info "Using container: ${WEB_CONTAINER}"
+
+  info "Streaming storage files via tar over SSH..."
+  mkdir -p "$LOCAL_STORAGE_PATH"
+
+  ssh "${PROD_USER}@${PROD_HOST}" \
+    "docker exec ${WEB_CONTAINER} tar cf - -C ${REMOTE_STORAGE_PATH} ." \
+    | tar xf - -C "$LOCAL_STORAGE_PATH"
+
+  file_count=$(find "$LOCAL_STORAGE_PATH" -type f | wc -l | tr -d ' ')
+  info "Storage synced: ${file_count} files"
+}
+
+# ─── Sanitize ───────────────────────────────────────────────────────────────────
+sanitize_data() {
+  info "Sanitizing local data..."
+  bin/rails db:sanitize
+}
+
+# ─── Main ───────────────────────────────────────────────────────────────────────
+main() {
+  check_dependencies
+
+  info "Reading local database config from config/database.yml..."
+  load_local_db_config
+
+  echo ""
+  echo "╔══════════════════════════════════════════╗"
+  echo "║    Exhiby Production → Local Pull        ║"
+  echo "╠══════════════════════════════════════════╣"
+  printf "║  Database:  %-28s ║\n" "$([ "$PULL_DB" = true ] && echo "yes → ${LOCAL_DB}" || echo "skip")"
+  printf "║  Storage:   %-28s ║\n" "$([ "$PULL_MEDIA" = true ] && echo "yes" || echo "skip")"
+  printf "║  Sanitize:  %-28s ║\n" "$([ "$SANITIZE" = true ] && echo "yes" || echo "skip")"
+  echo "╚══════════════════════════════════════════╝"
+  echo ""
+
+  if [ "$PULL_DB" = true ]; then
+    pull_database
+  fi
+
+  if [ "$PULL_MEDIA" = true ]; then
+    pull_storage
+  fi
+
+  if [ "$PULL_DB" = true ] && [ "$SANITIZE" = true ]; then
+    sanitize_data
+  fi
+
+  echo ""
+  info "Done! Your local environment is ready."
+
+  if [ "$PULL_DB" = true ] && [ "$SANITIZE" = true ]; then
+    echo "     All user passwords have been set to 'password'."
+  fi
+}
+
+main
