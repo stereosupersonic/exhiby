@@ -204,7 +204,6 @@ The audit checks 140+ rules including:
 - Security (HTTPS, HSTS, leaked secrets detection)
 - Content (heading structure, thin content, keyword stuffing)
 
-
 ## Documentation
 
 - [Pulling Production Data to Local Development](doc/pull_production.md) - How to sync the production database and storage files to your local machine
