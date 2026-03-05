@@ -33,6 +33,9 @@
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
+    - if ENV["UMAMI_WEBSITE_ID"].present?
+      %script{defer: true, src: "https://cloud.umami.is/script.js", "data-website-id": ENV["UMAMI_WEBSITE_ID"]}{}
+
   %body.d-flex.flex-column.min-vh-100
     = link_to t("accessibility.skip_to_content"), "#main-content", class: "skip-link"
     %main.flex-grow-1{ id: "main-content" }
