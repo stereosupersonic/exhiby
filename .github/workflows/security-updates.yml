@@ -78,6 +78,9 @@ jobs:
         if: steps.js_audit.outputs.has_js_vulnerabilities == 'true'
         run: yarn upgrade
 
+      - name: Run bundler patch
+        run: bundle update --patch
+
       - name: Run RuboCop auto-fix
         run: bundle exec rubocop -a --fail-level fatal || true
 
