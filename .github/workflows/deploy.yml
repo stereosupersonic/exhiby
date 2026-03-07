@@ -40,8 +40,11 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keygen -R 37.120.188.157 2>/dev/null || true
-          ssh-keyscan -t ed25519,rsa,ecdsa -H 37.120.188.157 >> ~/.ssh/known_hosts
+          cat >> ~/.ssh/known_hosts <<'EOF'
+          37.120.188.157 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILDORNXS0WqMQL+BkZ6KRZON1Fpd13fOeGxzUPmVElCS
+          37.120.188.157 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDIvP/tcWzDX5g7JHSdUovfsu7kYztjo/bo1VFiebCV7TEGNy9AzwGy3lMYDJqin1G0FzZWzAyfW+ShzsA9ey2XXdLlsGu42mylXEP0mM1ivRz4VsZ0k/S0+a/SO7L41zNggpbflb8gSPoYgFgKnp/heGp5rk/DVQdCIC3rKo69IK8HZ60HrpVQoz0b/IixuY43UZ0CY/3e7/Gy7TEwD1XBUimeSoS9eEfQSaNtCiuBn/gcAqmH/mdkpYmKPIjstl0EFM0stJ98EYudJuEyPhEFv/OExv5lJGSBx/M+gbYch4hNyWWUGQVxPEy1OgPHkqYU3bkV2FiC9/C0aU3VZBfM+rMRRGfGIZPOE81y9ou2JMiGpvkxKoW935N33IdQ98vP2eeNfCtg/VFd8S0GtUbmVoL51cmFTyLeZy2/8QnLwOj0GZ+K82lcGgfdAM/fjmKEhhl9b2cgt50gpkjhEv0mo6vMOfagwKs/EGb2MufEDxNmCtRyCu5QcYQeSh9Jt2U=
+          37.120.188.157 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNGIBpfq7H61NrmwOmS4npWFZIsJuURB4Xh47BL3p2IMnlLW2jTpXsCh6lgOgkkiX584eQp4nubMMNDCbtfcP0I=
+          EOF
 
       - name: Create Kamal secrets file
         env:
